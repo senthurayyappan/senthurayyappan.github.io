@@ -15,6 +15,16 @@
   --sh-jsxliterals: #6266d1;
   --sh-property: #e25a1c;
   --sh-entity: #e25a1c;
+
+  --sa-black: #262626;
+  --sa-white: #d9d3c7;
+  --sa-gray: #595959;
+  --sa-green: #647360;
+  --sa-light-green: #9da193;
+  --sa-blue: #2c2f40;
+  --sa-light-blue: #556574;
+  --sa-orange: #bf6735;
+  --sa-light-orange: #c09664;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -31,6 +41,7 @@
 
 html {
   min-width: 360px;
+  background-color: var(--sa-black);
 }
 
 .prose .anchor {

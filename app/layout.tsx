@@ -11,15 +11,15 @@ import { baseUrl } from './sitemap'
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: 'Next.js Portfolio Starter',
-    template: '%s | Next.js Portfolio Starter',
+    default: 'Senthur Ayyappan',
+    template: '%s | Senthur Ayyappan',
   },
-  description: 'This is my portfolio.',
+  description: 'Robotics Engineer: developing open-source tools that (mostly) work',
   openGraph: {
-    title: 'My Portfolio',
-    description: 'This is my portfolio.',
+    title: 'Senthur Ayyappan | Robotics Engineer',
+    description: 'Robotics Engineer: developing open-source tools that (mostly) work',
     url: baseUrl,
-    siteName: 'My Portfolio',
+    siteName: 'Senthur Ayyappan',
     locale: 'en_US',
     type: 'website',
   },
@@ -38,6 +38,16 @@ export const metadata: Metadata = {
 
 const cx = (...classes) => classes.filter(Boolean).join(' ')
 
+function getRandomSAColor() {
+  const saColors = [
+    'var(--sa-black)',
+    'var(--sa-gray)',
+    'var(--sa-green)',
+    'var(--sa-blue)',
+  ];
+  return saColors[Math.floor(Math.random() * saColors.length)];
+}
+
 export default function RootLayout({
   children,
 }: {
@@ -47,15 +57,20 @@ export default function RootLayout({
     <html
       lang="en"
       className={cx(
-        'text-black bg-white dark:text-white dark:bg-black',
+        'text-white h-full',
         GeistSans.variable,
         GeistMono.variable
       )}
+      style={{ backgroundColor: getRandomSAColor() }}
     >
-      <body className="antialiased max-w-xl mx-4 mt-8 lg:mx-auto">
-        <main className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0">
+      <body 
+        className="antialiased max-w-xl mx-4 lg:mx-auto h-full flex items-center justify-center"
+      >
+        <main className="flex flex-col h-[75vh] w-[640px] justify-between px-2 md:px-0">
           <Navbar />
-          {children}
+          <div className="flex-grow w-full">
+            {children}
+          </div>
           <Footer />
           <Analytics />
           <SpeedInsights />
