@@ -7,6 +7,7 @@ import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import Footer from './components/footer'
 import { baseUrl } from './sitemap'
+import { ThemeProvider } from 'next-themes'
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -61,20 +62,22 @@ export default function RootLayout({
         GeistSans.variable,
         GeistMono.variable
       )}
-      style={{ backgroundColor: getRandomSAColor() }}
+      suppressHydrationWarning
     >
       <body 
         className="antialiased max-w-xl mx-4 lg:mx-auto h-full flex items-center justify-center"
       >
-        <main className="flex flex-col h-[75vh] w-[640px] justify-between px-2 md:px-0">
-          <Navbar />
-          <div className="flex-grow w-full">
-            {children}
-          </div>
-          <Footer />
-          <Analytics />
-          <SpeedInsights />
-        </main>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <main className="flex flex-col h-[75vh] w-[640px] justify-between px-2 md:px-0">
+            <Navbar />
+            <div className="flex-grow w-full">
+              {children}
+            </div>
+            <Footer />
+            <Analytics />
+            <SpeedInsights />
+          </main>
+        </ThemeProvider>
       </body>
     </html>
   )

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { ThemeSwitch } from './theme-switch'
 
 const navItems = {
   '/': {
@@ -29,13 +30,15 @@ export function Navbar() {
                   key={path}
                   href={path}
                   className="transition-all hover:text-neutral-800 dark:hover:text-neutral-200 flex items-center py-1 px-2 m-1"
+                  target="_blank"
                 >
                   {name}
                 </Link>
               )
             })}
           </div>
-          <div className="flex items-center">
+          <div className="flex items-center space-x-4">
+            <ThemeSwitch />
             <Link href="/">
               <Image
                 src="/logo.png"
