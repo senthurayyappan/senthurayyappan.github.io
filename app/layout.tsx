@@ -58,25 +58,33 @@ export default function RootLayout({
     <html
       lang="en"
       className={cx(
-        'text-white h-full',
+        'text-white',
         GeistSans.variable,
         GeistMono.variable
       )}
       suppressHydrationWarning
     >
       <body 
-        className="antialiased max-w-xl mx-4 lg:mx-auto h-full flex items-center justify-center"
+        className="antialiased h-screen flex flex-col overflow-hidden"
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <main className="flex flex-col h-[75vh] w-[640px] justify-between px-2 md:px-0">
-            <Navbar />
-            <div className="flex-grow w-full">
-              {children}
-            </div>
-            <Footer />
+          <div className="flex flex-col h-full">
+            <main className="w-full h-full flex flex-col px-4 sm:px-4 md:px-6 lg:px-20">
+              <div className="py-4 sm:py-6 md:py-12">
+                <Navbar />
+              </div>
+              <div className="flex-1 min-h-0 flex items-start justify-center">
+                <div className="w-full w-full h-full overflow-y-auto scrollbar-hide">
+                  {children}
+                </div>
+              </div>
+              <div className="py-4 sm:py-6 md:py-12">
+                <Footer />
+              </div>
+            </main>
             <Analytics />
             <SpeedInsights />
-          </main>
+          </div>
         </ThemeProvider>
       </body>
     </html>

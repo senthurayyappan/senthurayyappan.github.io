@@ -33,7 +33,7 @@ html {
 
 /* Light mode styles */
 :root {
-  --background: var(--sa-white);
+  --background: var(--sa-light-green);
   --text: var(--sa-black);
 }
 
@@ -46,6 +46,19 @@ html {
 body {
   background-color: var(--background);
   color: var(--text);
+}
+
+.sa-link {
+  background: linear-gradient(120deg, var(--sa-light-orange) 0%, var(--sa-light-orange) 100%) no-repeat 0 100%;
+  background-size: 0% 2px;
+  transition: all 250ms ease-in-out;
+  text-decoration: none;
+  color: inherit;
+  line-height: 1;
+}
+
+.sa-link:where(:hover, :focus-visible) {
+  background-size: 100% 2px;
 }
 
 .prose .anchor {
@@ -162,4 +175,13 @@ table {
 
 .title {
   text-wrap: balance;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
 }

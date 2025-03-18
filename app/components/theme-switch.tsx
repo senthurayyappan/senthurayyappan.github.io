@@ -19,7 +19,7 @@ export function ThemeSwitch() {
   return (
     <button
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      className="border rounded-md w-6 h-6 flex items-center justify-center"
+      className="border border-neutral-300 dark:border-neutral-600 rounded-md w-6 h-6 flex items-center justify-center"
       aria-label="Toggle Dark Mode"
     >
       {theme === 'dark' ? '🌙' : '☀️'}

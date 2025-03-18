@@ -6,6 +6,7 @@ function ArrowIcon() {
       viewBox="0 0 12 12"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className="-translate-y-[2px]"
     >
       <path
         d="M2.07102 11.3494L0.963068 10.2415L9.2017 1.98864H2.83807L2.85227 0.454545H11.8438V9.46023H10.2955L10.3097 3.09659L2.07102 11.3494Z"
@@ -21,29 +22,29 @@ export default function Footer() {
       <ul className="font-sm flex flex-row space-x-4 text-neutral-600 dark:text-neutral-300">
         <li>
           <a
-            className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
+            className="flex items-center transition-all hover:var(--sa-white) dark:hover:var(--sa-black)"
             rel="noopener noreferrer"
             target="_blank"
             href="/rss"
           >
             <ArrowIcon />
-            <p className="ml-2 h-7">rss</p>
+            <p className="ml-2 h-7 sa-link">rss</p>
           </a>
         </li>
         <li>
           <a
-            className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
+            className="flex items-center transition-all hover:var(--sa-white) dark:hover:var(--sa-black)"
             rel="noopener noreferrer"
             target="_blank"
             href="https://github.com/senthurayyappan/senthurayyappan.github.io"
           >
             <ArrowIcon />
-            <p className="ml-2 h-7">view source</p>
+            <p className="ml-2 h-7 sa-link">source</p>
           </a>
         </li>
       </ul>
       <p className="text-muted text-sm">
-        © {new Date().getFullYear()} Senthur Ayyappan
+        © {new Date().getFullYear()} <span className="hidden sm:inline">Senthur Ayyappan</span><span className="sm:hidden">SA</span>
       </p>
     </footer>
   )
