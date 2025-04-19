@@ -9,14 +9,14 @@
   /* --- Light Mode Syntax Highlighting Vars --- */
   --sh-class: #2d5e9d;
   --sh-identifier: #354150;
-  --sh-sign: #8996a3;
+  --sh-sign: #595959;
   --sh-string: #007f7a;
   --sh-keyword: #e02518;
-  --sh-comment: #a19595;
+  --sh-comment: #2c2f40;
   --sh-jsxliterals: #6266d1;
   --sh-property: #e25a1c;
   --sh-entity: #e25a1c;
-  --sh-background: #d9d3c7;
+  --sh-background: #9da193;
 
   /* --- Other Light Mode Vars --- */
   --sa-black: #262626;
@@ -28,7 +28,7 @@
   --sa-light-blue: #556574;
   --sa-orange: #bf6735;
   --sa-light-orange: #c09664;
-  --background: var(--sa-light-green);
+  --background: var(--sa-white);
   --text: var(--sa-black);
 }
 
@@ -115,8 +115,12 @@ body {
 }
 
 .prose pre {
-  @apply rounded-lg overflow-x-auto border border-neutral-200 dark:border-neutral-900 py-2 px-3 text-sm; 
+  @apply rounded-lg overflow-x-auto border border-neutral-800 py-2 px-3 text-sm; 
   background-color: var(--sh-background);
+}
+
+.dark .prose pre {
+  @apply border-neutral-400;
 }
 
 .prose code {

@@ -19,10 +19,10 @@ function ArrowIcon() {
 export default function Footer() {
   return (
     <footer className="mt-auto flex flex-row justify-between">
-      <ul className="font-sm flex flex-row space-x-4 text-neutral-600 dark:text-neutral-300">
+      <ul className="font-sm flex flex-row space-x-4">
         <li>
           <a
-            className="flex items-center transition-all hover:var(--sa-white) dark:hover:var(--sa-black)"
+            className="flex items-center hover:var(--sa-white) dark:hover:var(--sa-black)"
             rel="noopener noreferrer"
             target="_blank"
             href="/rss"
@@ -33,7 +33,7 @@ export default function Footer() {
         </li>
         <li>
           <a
-            className="flex items-center transition-all hover:var(--sa-white) dark:hover:var(--sa-black)"
+            className="flex items-center hover:var(--sa-white) dark:hover:var(--sa-black)"
             rel="noopener noreferrer"
             target="_blank"
             href="https://github.com/senthurayyappan/senthurayyappan.github.io"
