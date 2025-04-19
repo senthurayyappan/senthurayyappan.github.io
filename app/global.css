@@ -7,29 +7,31 @@
 
 :root {
   /* --- Light Mode Syntax Highlighting Vars --- */
-  --sh-class: #2d5e9d;
-  --sh-identifier: #354150;
-  --sh-sign: #595959;
-  --sh-string: #007f7a;
-  --sh-keyword: #e02518;
-  --sh-comment: #2c2f40;
-  --sh-jsxliterals: #6266d1;
-  --sh-property: #e25a1c;
-  --sh-entity: #e25a1c;
-  --sh-background: #9da193;
+  --sh-class: #4c97f8;        /* Example: Brighter blue */
+  --sh-identifier: #d1d5db;   /* Example: Light gray */
+  --sh-sign: #8996a3;        /* Example: Same as light */
+  --sh-string: #5eead4;       /* Example: Teal */
+  --sh-keyword: #f47067;      /* Example: Brighter red */
+  --sh-comment: #9ca3af;      /* Example: Gray */
+  --sh-jsxliterals: #a5b4fc;  /* Example: Indigo */
+  --sh-property: #f59e0b;     /* Example: Amber */
+  --sh-entity: #f59e0b;      /* Example: Amber */
+  --sh-background: #2c2f40;
 
   /* --- Other Light Mode Vars --- */
   --sa-black: #262626;
   --sa-white: #d9d3c7;
   --sa-gray: #595959;
   --sa-green: #647360;
-  --sa-light-green: #9da193;
   --sa-blue: #2c2f40;
-  --sa-light-blue: #556574;
   --sa-orange: #bf6735;
-  --sa-light-orange: #c09664;
+  --sa-accent: #ffb22c;
   --background: var(--sa-white);
   --text: var(--sa-black);
+
+  --sa-light-green: #9da193;
+  --sa-light-blue: #556574;
+  --sa-light-orange: #c09664;  
 }
 
 html {
@@ -62,16 +64,7 @@ body {
 }
 
 .sa-link {
-  background: linear-gradient(120deg, var(--sa-blue) 0%, var(--sa-blue) 100%) no-repeat 0 100%;
-  background-size: 0% 2px;
-  transition: all 250ms ease-in-out;
-  text-decoration: none;
-  color: inherit;
-  line-height: 1;
-}
-
-.dark .sa-link {
-  background: linear-gradient(120deg, var(--sa-light-blue) 0%, var(--sa-light-blue) 100%) no-repeat 0 100%;
+  background: linear-gradient(120deg, var(--sa-accent) 0%, var(--sa-accent) 100%) no-repeat 0 100%;
   background-size: 0% 2px;
   transition: all 250ms ease-in-out;
   text-decoration: none;
