@@ -8,7 +8,7 @@ const navItems = {
     shortName: 'h',
   },
   '/blog': {
-    name: 'blog',
+    name: 'articles',
     shortName: 'b',
   },
   '/projects': {
