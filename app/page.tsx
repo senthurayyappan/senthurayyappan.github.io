@@ -8,7 +8,7 @@ export default function Page() {
     { name: 'DRDO', logo: '/drdo.png', url: 'https://www.drdo.gov.in/', width: 80, height: 100 },      
     { name: 'Michigan Robotics', logo: '/mrobotics.png', url: 'https://robotics.umich.edu/', width: 75, height: 100 },
     { name: 'NSF', logo: '/nsf.png', url: 'https://www.nsf.gov/', width: 90, height: 100 },
-    { name: 'RAI', logo: '/rai.jpg', url: 'https://rai.usc.edu/', width: 75, height: 100 },
+    { name: 'RAI', logo: '/rai.jpg', url: 'https://rai-inst.com/', width: 75, height: 100 },
   ];
 
   return (
