@@ -60,23 +60,19 @@ export default function RootLayout({
         className="antialiased h-screen flex flex-col overflow-hidden"
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="flex flex-col h-full">
-            <main className="w-full h-full flex flex-col px-4 sm:px-4 md:px-6 lg:px-20">
-              <div className="py-4">
-                <Navbar />
-              </div>
-              <div className="flex-1 min-h-0 flex items-start justify-center">
-                <div className="w-full w-full h-full overflow-y-auto scrollbar-hide">
-                  {children}
-                </div>
-              </div>
-              <div className="py-4 sm:py-6 md:py-12">
-                <Footer />
-              </div>
-            </main>
-            <Analytics />
-            <SpeedInsights />
-          </div>
+          <main className="w-full h-full flex flex-col px-4 sm:px-4 md:px-6 lg:px-20">
+            <div className="pt-4 md:pt-6 pb-2 md:pb-6">
+              <Navbar />
+            </div>
+            <div className="flex-1 min-h-0 overflow-y-auto scrollbar-hide py-4">
+              {children}
+            </div>
+            <div className="pb-4 pt-4 md:pb-6 md:pt-6">
+              <Footer />
+            </div>
+          </main>
+          <Analytics />
+          <SpeedInsights />
         </ThemeProvider>
       </body>
     </html>

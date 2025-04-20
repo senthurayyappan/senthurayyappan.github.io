@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ThemeSwitch } from './theme-switch'
 import { useState } from 'react';
+import { Transition, Dialog } from '@headlessui/react'
 
 const navItems = {
   '/': {
@@ -38,7 +39,7 @@ export function Navbar() {
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
   return (
-    <aside className="-ml-[8px] mb-4 tracking-tight">
+    <aside className="-ml-[8px] tracking-tight">
       <div className="lg:sticky lg:top-20">
         {/* --- Main Nav for Medium and Up --- */}
         <nav
@@ -46,17 +47,17 @@ export function Navbar() {
           id="nav-large"
         >
           {/* Logo */}
-          <div className="flex items-center">
-            <Link href="/" onClick={() => setSidebarOpen(false)}>
-              {/* Responsive Logo */}
-              <Image
-                src="/logo/160.png"
-                alt="SA"
-                width={160} // Base width (used for aspect ratio)
-                height={160} // Base height (used for aspect ratio)
-                className="w-32 h-32 lg:w-40 lg:h-40 object-contain" // Responsive classes
-                priority
-              />
+          <div className="hidden md:flex items-center">
+            <Link href="/">
+              <div className="relative w-32 h-12 lg:w-40 lg:h-20 overflow-hidden">
+                <Image
+                  src="/logo/160.png"
+                  alt="SA"
+                  layout="fill"
+                  objectFit="cover"
+                  priority
+                />
+              </div>
             </Link>
           </div>
           {/* Nav Links */}
@@ -81,18 +82,20 @@ export function Navbar() {
           </div>
         </nav>
 
-        {/* --- Mobile Nav Trigger --- */}
+        {/* --- Mobile Nav Trigger (Header Bar) --- */}
         <div className="md:hidden flex items-center justify-between px-4 py-2">
-          {/* Logo (smaller for mobile header) */}
+          {/* Logo (resized for mobile header) */}
           <Link href="/" onClick={() => setSidebarOpen(false)} className="flex-shrink-0">
-            <Image
-              src="/logo/160.png"
-              alt="SA"
-              width={100} // Smaller base for mobile header
-              height={100}
-              className="w-16 h-16 object-contain" // Small fixed size for header
-              priority
-            />
+            {/* Container Div: Sets the display dimensions */}
+            <div className="relative w-24 h-12 overflow-hidden">
+              <Image
+                src="/logo/160.png"
+                alt="SA"
+                layout="fill"
+                objectFit="cover"
+                priority
+              />
+            </div>
           </Link>
           {/* Right side controls: Theme Toggle + Hamburger */}
           <div className="flex items-center space-x-2">
@@ -111,7 +114,7 @@ export function Navbar() {
           </div>
         </div>
 
-        {/* --- Sidebar (Mobile) --- */}
+        {/* --- Sidebar (Mobile - Opens on click) --- */}
         {/* Overlay */}
         {isSidebarOpen && (
           <div
@@ -127,14 +130,15 @@ export function Navbar() {
           <div className="flex justify-between items-center p-4 border-b border-neutral-200 dark:border-neutral-700">
             {/* Sidebar Logo */}
              <Link href="/" onClick={() => setSidebarOpen(false)}>
-              <Image
-                src="/logo/160.png"
-                alt="SA"
-                width={100}
-                height={100}
-                className="w-16 h-16 object-contain"
-                priority
-              />
+              <div className="relative w-24 h-12 overflow-hidden">
+                <Image
+                  src="/logo/160.png"
+                  alt="SA"
+                  layout="fill"
+                  objectFit="cover"
+                  priority
+                />
+              </div>
             </Link>
             {/* Close Button */}
             <button

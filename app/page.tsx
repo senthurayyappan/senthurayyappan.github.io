@@ -24,20 +24,20 @@ export default function Page() {
 
       <ScrollAnimation delay={0.2}>
         <div className="my-8">
-          <div className="flex flex-wrap items-center justify-center gap-8">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 md:gap-4">
             {affiliations.map((affiliation) => (
-              <a 
-                key={affiliation.name} 
-                href={affiliation.url} 
-                target="_blank" 
+              <a
+                key={affiliation.name}
+                href={affiliation.url}
+                target="_blank"
                 rel="noopener noreferrer"
+                className="relative block w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 p-1 bg-neutral-100 dark:bg-neutral-800 rounded-md shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden"
               >
                 <Image
                   src={affiliation.logo}
                   alt={`${affiliation.name} logo`}
-                  width={100} // Adjust width as needed
-                  height={100} // Adjust height as needed
-                  className="object-contain" 
+                  layout="fill"
+                  objectFit="contain"
                 />
               </a>
             ))}
