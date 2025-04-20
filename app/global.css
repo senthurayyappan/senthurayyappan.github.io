@@ -92,6 +92,10 @@ body {
   cursor: pointer;
 }
 
+.sidebar {
+  background-color: var(--background);
+}
+
 .anchor:hover {
   @apply visible;
 }

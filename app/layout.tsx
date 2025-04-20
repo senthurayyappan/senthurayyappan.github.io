@@ -62,7 +62,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <div className="flex flex-col h-full">
             <main className="w-full h-full flex flex-col px-4 sm:px-4 md:px-6 lg:px-20">
-              <div className="py-4 sm:py-6 md:py-12">
+              <div className="py-4">
                 <Navbar />
               </div>
               <div className="flex-1 min-h-0 flex items-start justify-center">

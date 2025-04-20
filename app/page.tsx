@@ -46,10 +46,10 @@ export default function Page() {
       </ScrollAnimation>
 
       {/* Bento Grid Section */}
+      {/*
       <ScrollAnimation delay={0.25}>
         <h2 className="text-2xl font-semibold my-8 text-center">Highlights</h2>
         <BentoGrid className="mb-8">
-          {/* Example Items - Customize these */}
           <BentoItem
             title="Research Focus"
             description="Developing robust control strategies for legged robots."
@@ -78,6 +78,7 @@ export default function Page() {
           />
         </BentoGrid>
       </ScrollAnimation>
+      */}
 
       <ScrollAnimation delay={0.3}>
         <div className="my-8">
