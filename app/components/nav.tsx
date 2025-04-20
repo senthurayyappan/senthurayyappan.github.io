@@ -40,10 +40,10 @@ export function Navbar() {
           <div className="flex items-center space-x-4 hidden sm:block">
             <Link href="/">
               <Image
-                src="/logo.png"
+                src="/logo/160.png"
                 alt="SA"
-                width={200}
-                height={200}
+                width={160}
+                height={160}
                 priority
               />
             </Link>
