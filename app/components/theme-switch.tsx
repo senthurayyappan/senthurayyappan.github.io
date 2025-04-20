@@ -19,11 +19,15 @@ export function ThemeSwitch() {
   return (
     <button
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      className="rounded-md w-6 h-6 flex items-center justify-center"
+      className="rounded-md w-12 h-12 md:w-14 md:h-14 flex items-center justify-center"
       aria-label="Toggle Dark Mode"
       style={{ cursor: 'pointer' }}
     >
-      {resolvedTheme === 'dark' ? '🌙' : '☀️'}
+      {resolvedTheme === 'dark' ? (
+        <img src="/icons/dark.svg" alt="Dark Mode Icon" /> 
+      ) : (
+        <img src="/icons/light.svg" alt="Light Mode Icon" />
+      )}
     </button>
   )
 } 
