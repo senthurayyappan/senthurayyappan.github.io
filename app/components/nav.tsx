@@ -42,8 +42,8 @@ export function Navbar() {
               <Image
                 src="/logo.png"
                 alt="SA"
-                width={128}
-                height={128}
+                width={200}
+                height={200}
                 priority
               />
             </Link>
