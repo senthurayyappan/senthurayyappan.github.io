@@ -4,7 +4,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ThemeSwitch } from './theme-switch'
 import { useState } from 'react';
-import { Transition, Dialog } from '@headlessui/react'
 
 const navItems = {
   '/': {

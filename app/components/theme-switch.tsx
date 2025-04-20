@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 
 export function ThemeSwitch() {
   const [mounted, setMounted] = useState(false)
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme, resolvedTheme } = useTheme()
 
   // useEffect only runs on the client, so now we can safely show the UI
   useEffect(() => {
@@ -13,7 +13,7 @@ export function ThemeSwitch() {
   }, [])
 
   if (!mounted) {
-    return null
+    return <div className="rounded-md w-6 h-6" />;
   }
 
   return (
@@ -23,7 +23,7 @@ export function ThemeSwitch() {
       aria-label="Toggle Dark Mode"
       style={{ cursor: 'pointer' }}
     >
-      {theme === 'dark' ? '🌙' : '☀️'}
+      {resolvedTheme === 'dark' ? '🌙' : '☀️'}
     </button>
   )
 } 
