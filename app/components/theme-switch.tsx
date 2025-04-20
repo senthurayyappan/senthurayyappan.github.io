@@ -24,9 +24,9 @@ export function ThemeSwitch() {
       style={{ cursor: 'pointer' }}
     >
       {resolvedTheme === 'dark' ? (
-        <img src="/icons/dark.svg" alt="Dark Mode Icon" /> 
+        <img src="/icons/dark-mode.png" alt="Dark Mode Icon" /> 
       ) : (
-        <img src="/icons/light.svg" alt="Light Mode Icon" />
+        <img src="/icons/light-mode.png" alt="Light Mode Icon" />
       )}
     </button>
   )
