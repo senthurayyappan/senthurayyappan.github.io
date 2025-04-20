@@ -1,11 +1,14 @@
 @import 'tailwindcss';
 
-::selection {
-  background-color: #47a3f3;
-  color: #fefefe;
-}
-
 :root {
+  /* --- Other Light Mode Vars --- */
+  --sa-black: #26231C;
+  --sa-white: #D9C8A9;
+  --sa-yellow: #F9C90A;
+  --sa-red: #A6382E;
+  --sa-blue: #007D7E;
+  --sa-green: #728C16;
+
   /* --- Light Mode Syntax Highlighting Vars --- */
   --sh-class: #4c97f8;        /* Example: Brighter blue */
   --sh-identifier: #d1d5db;   /* Example: Light gray */
@@ -16,22 +19,12 @@
   --sh-jsxliterals: #a5b4fc;  /* Example: Indigo */
   --sh-property: #f59e0b;     /* Example: Amber */
   --sh-entity: #f59e0b;      /* Example: Amber */
-  --sh-background: #2c2f40;
+  --sh-background: var(--sa-black);
 
-  /* --- Other Light Mode Vars --- */
-  --sa-black: #262626;
-  --sa-white: #d9d3c7;
-  --sa-gray: #595959;
-  --sa-green: #647360;
-  --sa-blue: #2c2f40;
-  --sa-orange: #bf6735;
-  --sa-accent: #ffb22c;
   --background: var(--sa-white);
+  --muted: var(--sa-red);
+  --accent: var(--sa-red);
   --text: var(--sa-black);
-
-  --sa-light-green: #9da193;
-  --sa-light-blue: #556574;
-  --sa-light-orange: #c09664;  
 }
 
 html {
@@ -51,10 +44,11 @@ html {
   --sh-jsxliterals: #a5b4fc;  /* Example: Indigo */
   --sh-property: #f59e0b;     /* Example: Amber */
   --sh-entity: #f59e0b;      /* Example: Amber */
-  --sh-background: #1a1a1a;   /* Example: Dark background */
-
+  --sh-background: var(--sa-black);
   /* --- Other Dark Mode Vars --- */
   --background: var(--sa-black);
+  --muted: var(--sa-green);
+  --accent: var(--sa-green);
   --text: var(--sa-white);
 }
 
@@ -64,7 +58,7 @@ body {
 }
 
 .sa-link {
-  background: linear-gradient(120deg, var(--sa-accent) 0%, var(--sa-accent) 100%) no-repeat 0 100%;
+  background: linear-gradient(120deg, var(--accent) 0%, var(--accent) 100%) no-repeat 0 100%;
   background-size: 0% 2px;
   transition: all 250ms ease-in-out;
   text-decoration: none;
@@ -78,6 +72,14 @@ body {
 
 .dark .sa-link:where(:hover, :focus-visible) {
   background-size: 100% 2px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.accent {
+  color: var(--accent);
 }
 
 .prose .anchor {
@@ -99,7 +101,7 @@ body {
 }
 
 .prose .anchor:after {
-  @apply text-neutral-300 dark:text-neutral-700;
+  @apply text-neutral-800 dark:text-neutral-700;
   content: '#';
 }
 

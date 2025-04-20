@@ -42,16 +42,6 @@ export const metadata: Metadata = {
 
 const cx = (...classes) => classes.filter(Boolean).join(' ')
 
-function getRandomSAColor() {
-  const saColors = [
-    'var(--sa-black)',
-    'var(--sa-gray)',
-    'var(--sa-green)',
-    'var(--sa-blue)',
-  ];
-  return saColors[Math.floor(Math.random() * saColors.length)];
-}
-
 export default function RootLayout({
   children,
 }: {
