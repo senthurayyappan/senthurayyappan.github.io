@@ -52,8 +52,8 @@ export function Navbar() {
                 <Image
                   src="/logo/160.png"
                   alt="SA"
-                  layout="fill"
-                  objectFit="cover"
+                  fill
+                  style={{ objectFit: 'cover' }}
                   priority
                 />
               </div>
@@ -90,8 +90,8 @@ export function Navbar() {
               <Image
                 src="/logo/160.png"
                 alt="SA"
-                layout="fill"
-                objectFit="cover"
+                fill
+                style={{ objectFit: 'cover' }}
                 priority
               />
             </div>
@@ -133,8 +133,8 @@ export function Navbar() {
                 <Image
                   src="/logo/160.png"
                   alt="SA"
-                  layout="fill"
-                  objectFit="cover"
+                  fill
+                  style={{ objectFit: 'cover' }}
                   priority
                 />
               </div>

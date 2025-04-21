@@ -2,6 +2,10 @@ import { BlogPosts } from 'app/components/posts'
 import Image from 'next/image'
 import ScrollAnimation from 'app/components/ScrollAnimation'
 import { BentoGrid, BentoItem } from 'app/components/BentoGrid'
+import { ShaderCanvas } from 'app/components/ShaderCanvas'
+// Import shader source code
+import vertexShaderSource from '/shaders/quad.vert'
+import fragmentShaderSource from '/shaders/metaball.frag'
 
 export default function Page() {
   const affiliations = [
@@ -13,8 +17,16 @@ export default function Page() {
     { name: 'RAI', logo: '/rai.jpg', url: 'https://rai-inst.com/' },
   ];
 
+
   return (
     <section>
+      {/* Pass shader sources as props */}
+      <ShaderCanvas 
+        vertexShaderSource={vertexShaderSource} 
+        fragmentShaderSource={fragmentShaderSource}
+        height="h-[50vh]"
+      />
+
       <ScrollAnimation delay={0.1}>
         <p className="mb-4 text-center">
           I'm a Robotics Engineer at University of Michigan's Robotics Department, <br />
@@ -36,8 +48,8 @@ export default function Page() {
                 <Image
                   src={affiliation.logo}
                   alt={`${affiliation.name} logo`}
-                  layout="fill"
-                  objectFit="contain"
+                  fill
+                  style={{ objectFit: 'contain' }}
                 />
               </a>
             ))}
