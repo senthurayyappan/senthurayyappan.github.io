@@ -28,7 +28,8 @@
 }
 
 html {
-  min-width: 360px;
+  min-width: 320px;
+  background-color: var(--background);
 }
 
 /* --- Dark Mode Overrides --- */
@@ -53,7 +54,7 @@ html {
 }
 
 body {
-  background-color: var(--background);
+  background-color: transparent;
   color: var(--text);
 }
 
@@ -218,4 +219,31 @@ table {
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;  /* Chrome, Safari and Opera */
+}
+
+/* --- Halftone Effect --- */
+html::before {
+  content: '';
+  position: fixed; /* Cover the viewport */
+  inset: 0;
+  /* Use two offset radial gradients for a staggered effect */
+  background-image: 
+    radial-gradient(circle, rgba(0, 0, 0, 0.18) 1.5px, transparent 1.5px), /* Increased dot opacity slightly */
+    radial-gradient(circle, rgba(0, 0, 0, 0.18) 1.5px, transparent 1.5px);
+  background-size: 6px 6px; /* Dot spacing */
+  background-position: 0 0, 3px 3px; /* Offset the second layer */
+  opacity: 0.4; /* Keep overall opacity < 50% */
+  z-index: -1; /* Position behind content */
+  pointer-events: none; /* Allow clicks to pass through */
+}
+
+.dark html::before {
+   /* Use two offset radial gradients for dark mode */
+   background-image: 
+    radial-gradient(circle, rgba(255, 255, 255, 0.3) 1.5px, transparent 1.5px), 
+    radial-gradient(circle, rgba(255, 255, 255, 0.3) 1.5px, transparent 1.5px);
+   /* Keep size and position same as light mode */
+   background-size: 6px 6px; 
+   background-position: 0 0, 3px 3px; 
+   opacity: 0.7; 
 }
