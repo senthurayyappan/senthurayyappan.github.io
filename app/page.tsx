@@ -1,7 +1,8 @@
 import { BlogPosts } from 'app/components/posts'
 import Image from 'next/image'
 import ScrollAnimation from 'app/components/ScrollAnimation'
-import { BentoGrid, BentoItem } from 'app/components/BentoGrid'
+import { ComicLayout } from 'app/components/ComicLayout'
+import { ComicItem } from 'app/components/ComicItem'
 import { ShaderCanvas } from 'app/components/ShaderCanvas'
 // Import shader source code
 import vertexShaderSource from '/shaders/metaball.vert'
@@ -59,40 +60,45 @@ export default function Page() {
         </div>
       </ScrollAnimation>
 
-      {/* Bento Grid Section */}
-      {/*
+      {/* Comic Layout Section */}
       <ScrollAnimation delay={0.25}>
         <h2 className="text-2xl font-semibold my-8 text-center">Highlights</h2>
-        <BentoGrid className="mb-8">
-          <BentoItem
+        <ComicLayout className="mb-8">
+          {/* Item 1 */}
+          <ComicItem
             title="Research Focus"
-            description="Developing robust control strategies for legged robots."
-            className="col-span-3" // Spans 1 column on medium screens and up
+            topLeftCaption="Main Area"
+            bottomRightCaption=""
+            basis="basis-full md:basis-1/2 lg:basis-2/5"
+            backgroundClass="bg-gradient-to-br from-yellow-200 to-orange-400"
             animationDelay={0.3}
           />
-          <BentoItem
+          {/* Item 2 - with image */}
+          <ComicItem
             title="Open Source Leg"
-            description="Contributing to the maintenance and development of the OSL project."
-            imageSrc="/placeholder.png" // Replace with an actual image path if desired
-            imageAlt="Open Source Leg diagram"
-            className="md:col-span-2" // Spans 2 columns
+            caption="Maintenance and development of the OSL project."
+            basis="basis-1/2 lg:basis-3/5"
+            backgroundClass="bg-gradient-to-br from-blue-200 to-sky-400"
             animationDelay={0.35}
           />
-          <BentoItem
-            title="Neurobionics Lab"
-            description="Building tools and software for biomechanics research."
-            className="md:col-span-2" // Spans 2 columns
+          {/* Item 3 */}
+          <ComicItem
+            title=""
+            topLeftCaption="Tools & Software"
+            bottomRightCaption="Biomechanics"
+            basis="basis-1/2 lg:basis-2/5"
+            backgroundClass="bg-gradient-to-br from-green-200 to-lime-400"
             animationDelay={0.4}
           />
-           <BentoItem
+          {/* Item 4 */}
+          <ComicItem
             title="Skills"
-            description="C++, Python, ROS, Control Systems, Machine Learning."
-            className="md:col-span-1" // Spans 1 column
+            basis="basis-full md:basis-1/2 lg:basis-3/5"
+            backgroundClass="bg-gradient-to-br from-red-200 to-rose-400"
             animationDelay={0.45}
           />
-        </BentoGrid>
+        </ComicLayout>
       </ScrollAnimation>
-      */}
 
       <ScrollAnimation delay={0.3}>
         <div className="my-8">
