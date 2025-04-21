@@ -22,7 +22,7 @@
   --sh-background: var(--sa-black);
 
   --background: var(--sa-white);
-  --muted: var(--sa-red);
+  --muted: var(--sa-blue);
   --accent: var(--sa-red);
   --text: var(--sa-black);
 }
@@ -47,7 +47,7 @@ html {
   --sh-background: var(--sa-black);
   /* --- Other Dark Mode Vars --- */
   --background: var(--sa-black);
-  --muted: var(--sa-green);
+  --muted: var(--sa-blue);
   --accent: var(--sa-green);
   --text: var(--sa-white);
 }
@@ -58,20 +58,19 @@ body {
 }
 
 .sa-link {
-  background: linear-gradient(120deg, var(--accent) 0%, var(--accent) 100%) no-repeat 0 100%;
-  background-size: 0% 2px;
-  transition: all 250ms ease-in-out;
-  text-decoration: none;
+  /* Removed background properties */
+  transition: text-decoration-color 250ms ease-in-out; /* Transition color */
+  text-decoration: underline;
+  text-decoration-color: transparent; /* Start transparent */
+  text-underline-offset: 4px; /* Adjust vertical spacing */
+  text-decoration-thickness: 2px; /* Match previous thickness */
   color: inherit;
-  line-height: 1;
+  /* Removed line-height: 1; - let parent control line height */
 }
 
 .sa-link:where(:hover, :focus-visible) {
-  background-size: 100% 2px;
-}
-
-.dark .sa-link:where(:hover, :focus-visible) {
-  background-size: 100% 2px;
+  /* Change color on hover */
+  text-decoration-color: var(--accent);
 }
 
 .muted {
@@ -209,6 +208,7 @@ table {
 
 .title {
   text-wrap: balance;
+  color: var(--accent);
 }
 
 .scrollbar-hide {

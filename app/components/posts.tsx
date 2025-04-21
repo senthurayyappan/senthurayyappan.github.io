@@ -23,7 +23,7 @@ export function BlogPosts() {
               </p>
               <Link
                 href={`/blog/${post.slug}`}
-                className="tracking-tight font-semibold sa-link"
+                className="tracking-tight font-semibold sa-link accent"
               >
                 {post.metadata.title}
               </Link>

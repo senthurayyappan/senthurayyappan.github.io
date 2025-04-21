@@ -4,8 +4,9 @@ import ScrollAnimation from 'app/components/ScrollAnimation'
 import { BentoGrid, BentoItem } from 'app/components/BentoGrid'
 import { ShaderCanvas } from 'app/components/ShaderCanvas'
 // Import shader source code
-import vertexShaderSource from '/shaders/quad.vert'
+import vertexShaderSource from '/shaders/metaball.vert'
 import fragmentShaderSource from '/shaders/metaball.frag'
+import Link from 'next/link'
 
 export default function Page() {
   const affiliations = [
@@ -24,13 +25,14 @@ export default function Page() {
       <ShaderCanvas 
         vertexShaderSource={vertexShaderSource} 
         fragmentShaderSource={fragmentShaderSource}
-        height="h-[50vh]"
+        height="h-[40vh]"
       />
 
       <ScrollAnimation delay={0.1}>
         <p className="mb-4 text-center">
-          I'm a Robotics Engineer at University of Michigan's Robotics Department, <br />
-          where I maintain the Open-Source Leg project and develop tools for the Neurobionics Lab, directed by Prof. Elliott Rouse.
+          I'm a <span className="font-bold muted">Robotics Research Engineer</span> at University of Michigan's Robotics Department, <br />
+          where I maintain the <Link href="https://opensourceleg.org/" className="font-bold accent sa-link">Open-Source Leg</Link> 
+          {" "}project and develop tools for the <Link href="https://neurobionics.robotics.umich.edu/" className="font-bold accent sa-link">Neurobionics Lab</Link>.
         </p>
       </ScrollAnimation>
 
