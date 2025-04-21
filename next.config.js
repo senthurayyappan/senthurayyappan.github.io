@@ -2,8 +2,6 @@
 const nextConfig = {
   output: 'export',
   // Your existing config might be here
-  basePath: process.env.NODE_ENV === 'production' ? '/senthurayyappan.github.io' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/senthurayyappan.github.io/' : '',
   images: {
     unoptimized: true,
   },
