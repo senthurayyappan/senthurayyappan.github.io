@@ -247,3 +247,45 @@ html::before {
    background-position: 0 0, 3px 3px; 
    opacity: 0.7; 
 }
+
+/* comic book effect */
+.comic {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr); /* Use a 12-column grid */
+  grid-auto-rows: auto; /* Let rows size automatically */
+  gap: 12px; /* Keep existing gap */
+  align-items: stretch; /* Add this: Make items in a row the same height */
+}
+
+/* Add base styling for panels within .comic */
+.comic > [class^="panel-"] {
+  @apply border rounded-md p-4 overflow-hidden;
+}
+
+/* Panel 1: Row 1, Full Width */
+.panel-1 {
+  grid-column: 1 / -1; /* Span all 12 columns */
+  grid-row: 1;
+  @apply p-0 border-0 rounded-none; /* Remove base panel styling for ShaderCanvas */
+}
+
+/* Panel 2: Row 2, Long Panel (e.g., 8 columns) */
+.panel-2 {
+  grid-column: span 8;
+  grid-row: 2;
+}
+
+/* Panel 3: Row 2, Short Panel (e.g., 4 columns) */
+.panel-3 {
+  grid-column: span 4;
+  grid-row: 2;
+}
+
+/* Panel 4: Row 3, Full Width */
+.panel-4 {
+  grid-column: 1 / -1; /* Span all 12 columns */
+  grid-row: 3;
+}
+
+/* Remove unused panel definitions */
+/* .panel-5 to .panel-11 definitions removed */

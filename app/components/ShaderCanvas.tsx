@@ -51,7 +51,7 @@ function ShaderDisplay({ material }) {
 export function ShaderCanvas({ 
   vertexShaderSource, 
   fragmentShaderSource, 
-  height = 'h-80' // Default height if not provided
+  height = 'h-80',
 }: ShaderCanvasProps) {
 
   // Define material inside the component using props
@@ -75,7 +75,7 @@ export function ShaderCanvas({
   const material = useMemo(() => new CustomShaderMaterial(), [CustomShaderMaterial]);
 
   return (
-    <div className={`w-full ${height} mb-4 mx-auto bg-transparent border-2 border-bg-color rounded-md`}>
+    <div className={`w-full ${height} bg-transparent`}>
       <Canvas
         gl={{ alpha: true }}
         camera={{ position: [0, 0, 2] }}

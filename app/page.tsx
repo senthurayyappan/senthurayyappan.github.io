@@ -20,20 +20,22 @@ export default function Page() {
 
   return (
     <section>
-      <ScrollAnimation delay={0.1}>
-        <ShaderCanvas 
-          vertexShaderSource={vertexShaderSource} 
-          fragmentShaderSource={fragmentShaderSource}
-          height="h-[40vh]"
-        />
-        <p className="mb-4 text-center">
+      <ScrollAnimation delay={0.1} className='comic'>
+        <div className="panel-1 border">
+          <ShaderCanvas 
+            vertexShaderSource={vertexShaderSource} 
+            fragmentShaderSource={fragmentShaderSource}
+            height="h-[40vh]"
+          />
+        </div>
+
+        <p className="panel-2 text-left items-center align-middle">
           I'm a <span className="font-bold muted">Robotics Research Engineer</span> at University of Michigan's Robotics Department, <br />
           where I maintain the <Link href="https://opensourceleg.org/" className="font-bold accent sa-link">Open-Source Leg</Link> 
           {" "}project and develop tools for the <Link href="https://neurobionics.robotics.umich.edu/" className="font-bold accent sa-link">Neurobionics Lab</Link>.
         </p>
 
-        <div className="my-8">
-          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 md:gap-4">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 md:gap-4 panel-3 border rounded-md">
             {affiliations.map((affiliation) => (
               <a
                 key={affiliation.name}
@@ -51,10 +53,9 @@ export default function Page() {
               </a>
             ))}
           </div>
-        </div>
 
-        <div className="my-8">
-          <h2 className="text-2xl font-semibold mb-4">Recent Articles</h2>
+        <div className="panel-4 my-8">
+          <h2 className="text-xl font-semibold mb-4">Recent Articles</h2>
           <BlogPosts />
         </div>      
       </ScrollAnimation>
