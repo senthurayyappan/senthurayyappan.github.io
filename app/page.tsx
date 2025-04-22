@@ -6,6 +6,7 @@ import { ShaderCanvas } from 'app/components/ShaderCanvas'
 import vertexShaderSource from '/shaders/metaball.vert'
 import fragmentShaderSource from '/shaders/metaball.frag'
 import Link from 'next/link'
+import ComicPanel from '@/components/ComicPanel'
 
 export default function Page() {
   const affiliations = [
@@ -19,46 +20,44 @@ export default function Page() {
 
 
   return (
-    <section>
-      <ScrollAnimation delay={0.1} className='comic'>
-        <div className="panel-1 border">
-          <ShaderCanvas 
-            vertexShaderSource={vertexShaderSource} 
+      <div className="comic grid grid-cols-3 auto-rows-fr">
+        <ComicPanel
+          className="col-span-3 row-span-2 items-center justify-center" // Example grid class
+          imageSrc="/images/panel-1.jpg"
+          title="SOME GARDEN VARIETY IMPLICIT SURFACES ..."
+          titlePosition="bottom-left"
+        >
+          <ShaderCanvas
             fragmentShaderSource={fragmentShaderSource}
-            height="h-[40vh]"
+            vertexShaderSource={vertexShaderSource}
           />
-        </div>
+        </ComicPanel>
 
-        <p className="panel-2 text-left items-center align-middle">
-          I'm a <span className="font-bold muted">Robotics Research Engineer</span> at University of Michigan's Robotics Department, <br />
-          where I maintain the <Link href="https://opensourceleg.org/" className="font-bold accent sa-link">Open-Source Leg</Link> 
-          {" "}project and develop tools for the <Link href="https://neurobionics.robotics.umich.edu/" className="font-bold accent sa-link">Neurobionics Lab</Link>.
-        </p>
+        <ComicPanel
+          imageSrc="/images/panel-2.jpg"
+          title="...it's responsive"
+          titlePosition="bottom-right"
+        />
 
-          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 md:gap-4 panel-3 border rounded-md">
-            {affiliations.map((affiliation) => (
-              <a
-                key={affiliation.name}
-                href={affiliation.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="relative block w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 p-1 bg-neutral-100 dark:bg-neutral-800 rounded-md shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden"
-              >
-                <Image
-                  src={affiliation.logo}
-                  alt={`${affiliation.name} logo`}
-                  fill
-                  style={{ objectFit: 'contain' }}
-                />
-              </a>
-            ))}
-          </div>
+        <ComicPanel imageSrc="/images/panel-3.jpg">
+          <p className="speech" style={{ position: 'absolute', top: '5%', right: '2%' }}>
+            This is something
+          </p>
+        </ComicPanel>
 
-        <div className="panel-4 my-8">
-          <h2 className="text-xl font-semibold mb-4">Recent Articles</h2>
-          <BlogPosts />
-        </div>      
-      </ScrollAnimation>
-    </section>
+        <ComicPanel title="Just text" className='row-span-2' titlePosition='bottom-right'/>
+
+        <ComicPanel className="col-span-1 row-span-2" imageSrc="/images/tall-panel.jpg" />
+
+        <ComicPanel imageSrc="/images/panel-5.jpg" />
+
+        <ComicPanel
+             className="col-span-3"
+             imageSrc="/images/the-end.jpg"
+             title="THE END"
+             titlePosition="bottom-right"
+        />
+      </div>
+
   )
 }

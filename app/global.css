@@ -1,6 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;600&display=swap');
 @import 'tailwindcss';
 
 :root {
+  --white: #ffffff;
+  --black: #000000;
   /* --- Other Light Mode Vars --- */
   --sa-black: #26231C;
   --sa-white: #D9C8A9;
@@ -27,6 +30,13 @@
   --text: var(--sa-black);
 }
 
+.bangers-regular {
+  font-family: "Bangers", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
 html {
   min-width: 320px;
   background-color: var(--background);
@@ -46,6 +56,7 @@ html {
   --sh-property: #f59e0b;     /* Example: Amber */
   --sh-entity: #f59e0b;      /* Example: Amber */
   --sh-background: var(--sa-black);
+
   /* --- Other Dark Mode Vars --- */
   --background: var(--sa-black);
   --muted: var(--sa-blue);
@@ -250,41 +261,143 @@ html::before {
 
 /* comic book effect */
 .comic {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr); /* Use a 12-column grid */
-  grid-auto-rows: auto; /* Let rows size automatically */
-  gap: 12px; /* Keep existing gap */
-  align-items: stretch; /* Add this: Make items in a row the same height */
+  /* Removed original grid styles */
+  display: grid; /* Or flex, depending on your outer layout */
+  gap: 12px; /* Adjust gap as needed */
+  font-family: 'Comic Neue', cursive; /* Use Comic Neue font with cursive fallback */
+  font-style: normal;
+  padding: 1vmin; /* Add padding like reference */
 }
 
-/* Add base styling for panels within .comic */
-.comic > [class^="panel-"] {
-  @apply border rounded-md p-4 overflow-hidden;
+
+/* Remove previous grid-specific panel rules */
+/* .panel-1 to .panel-5 definitions removed */
+
+/* --- NEW Comic Panel Styles --- */
+.panel {
+  background-color: var(--background-color); /* Fallback color */
+  border:solid 2px var(--sa-black); /* Use theme color */
+  box-shadow:0 6px 6px -6px rgba(0, 0, 0, 0.5); /* Adjusted shadow */
+  /* display:inline-block; Remove, let grid/flex control display */
+  /* flex:1 1; Remove, let grid/flex control sizing */
+  min-height: 200px; /* Set minimum height, allow stretching */
+  /* margin:1vmin; Remove, use grid gap */
+  overflow:hidden;
+  position:relative;
+  background-size: cover; /* Ensure background image covers */
+  background-position: center; /* Center background image */
+  /* font-family: 'Comic Sans MS', cursive; Moved to .comic parent */
 }
 
-/* Panel 1: Row 1, Full Width */
-.panel-1 {
-  grid-column: 1 / -1; /* Span all 12 columns */
-  grid-row: 1;
-  @apply p-0 border-0 rounded-none; /* Remove base panel styling for ShaderCanvas */
+/* Ensure panel works in dark mode */
+.dark .panel {
+  background-color: var(--sa-black); /* Dark fallback */
+  border-color: var(--sa-white);
+  box-shadow:0 6px 6px -6px rgba(255, 255, 255, 0.3);
 }
 
-/* Panel 2: Row 2, Long Panel (e.g., 8 columns) */
-.panel-2 {
-  grid-column: span 8;
-  grid-row: 2;
+.panel .text {
+  background-color: var(--white); /* Use theme color */
+  color: var(--black); /* Ensure text is readable */
+  border:solid 2px var(--sa-black);
+  margin:0;
+  padding:3px 10px;
+  /* Ensure text is above background image */
+  position: absolute; /* Changed from reference for better control */
+  z-index: 1;
 }
 
-/* Panel 3: Row 2, Short Panel (e.g., 4 columns) */
-.panel-3 {
-  grid-column: span 4;
-  grid-row: 2;
+.dark .panel .text {
+  background-color: var(--white);
+  color: var(--black);
+  border-color: var(--sa-white);
 }
 
-/* Panel 4: Row 3, Full Width */
-.panel-4 {
-  grid-column: 1 / -1; /* Span all 12 columns */
-  grid-row: 3;
+
+.panel .top-left {
+  left:-6px;
+  /* position:absolute; Already set on .text */
+  top:-2px;
+  transform:skew(-15deg);
+}
+
+.panel .bottom-right {
+  bottom:-2px;
+  /* position:absolute; Already set on .text */
+  right:-6px;
+  transform:skew(-15deg);
+}
+
+.panel .top-right {
+  right:-6px;
+  top:-2px;
+  transform:skew(-15deg);
+}
+
+.panel .bottom-left {
+  bottom:-2px;
+  /* position:absolute; Already set on .text */
+  left:-6px;
+  transform:skew(-15deg);
+}
+
+.panel .speech {
+  background-color: var(--white); /* Use theme color */
+  /* color: var(--sa-black); */ /* Removed previously for utility class compatibility */
+  border:solid 2px var(--sa-black);
+  border-radius:4px;
+  display:inline-block; /* Keep inline-block for bubble */
+  margin:.5em;
+  padding:.5em 1em;
+  position:relative; /* Keep relative for pseudo-elements */
+  z-index: 1; /* Ensure bubble is above background */
+  color: var(--black);
+  font-family: inherit; /* Explicitly inherit font */
+  font-weight: 600; /* Add this to make the text bold */
+  font-style: italic;
+}
+
+.dark .panel .speech {
+  background-color: var(--white);
+  /* color: var(--black); */ /* Removed previously for utility class compatibility */
+  border-color: var(--white);
+  /* NOTE: font-weight will be inherited from the light mode rule unless overridden here */
+}
+
+.panel .speech:before {
+  border:solid 12px transparent;
+  border-left:solid 12px var(--black);
+  border-top:solid 12px var(--black);
+  bottom:-24px; /* Adjust as needed */
+  content:"";
+  height:0;
+  left:24px; /* Adjust as needed */
+  position:absolute;
+  transform:skew(-15deg);
+  width:0;
+}
+
+.dark .panel .speech:before {
+  border-left-color: var(--white);
+  border-top-color: var(--white);
+}
+
+.panel .speech:after {
+  border:solid 10px transparent;
+  border-left:solid 10px var(--white); /* Use theme color */
+  border-top:solid 10px var(--white); /* Use theme color */
+  bottom:-19px; /* Adjust as needed */
+  content:"";
+  height:0;
+  left:27px; /* Adjust as needed */
+  position:absolute;
+  transform:skew(-15deg);
+  width:0;
+}
+
+.dark .panel .speech:after {
+  border-left-color: var(--white); /* Invert for dark mode */
+  border-top-color: var(--white); /* Invert for dark mode */
 }
 
 /* Remove unused panel definitions */

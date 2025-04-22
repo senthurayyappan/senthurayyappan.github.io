@@ -51,7 +51,7 @@ function ShaderDisplay({ material }) {
 export function ShaderCanvas({ 
   vertexShaderSource, 
   fragmentShaderSource, 
-  height = 'h-80',
+  height = 'h-full',
 }: ShaderCanvasProps) {
 
   // Define material inside the component using props
