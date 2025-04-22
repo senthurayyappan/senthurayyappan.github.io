@@ -1,9 +1,8 @@
 import { BlogPosts } from 'app/components/posts'
 import Image from 'next/image'
 import ScrollAnimation from 'app/components/ScrollAnimation'
-import { BentoGrid, BentoItem } from 'app/components/BentoGrid'
 import { ShaderCanvas } from 'app/components/ShaderCanvas'
-// Import shader source code
+
 import vertexShaderSource from '/shaders/metaball.vert'
 import fragmentShaderSource from '/shaders/metaball.frag'
 import Link from 'next/link'
@@ -21,22 +20,18 @@ export default function Page() {
 
   return (
     <section>
-      {/* Pass shader sources as props */}
-      <ShaderCanvas 
-        vertexShaderSource={vertexShaderSource} 
-        fragmentShaderSource={fragmentShaderSource}
-        height="h-[40vh]"
-      />
-
       <ScrollAnimation delay={0.1}>
+        <ShaderCanvas 
+          vertexShaderSource={vertexShaderSource} 
+          fragmentShaderSource={fragmentShaderSource}
+          height="h-[40vh]"
+        />
         <p className="mb-4 text-center">
           I'm a <span className="font-bold muted">Robotics Research Engineer</span> at University of Michigan's Robotics Department, <br />
           where I maintain the <Link href="https://opensourceleg.org/" className="font-bold accent sa-link">Open-Source Leg</Link> 
           {" "}project and develop tools for the <Link href="https://neurobionics.robotics.umich.edu/" className="font-bold accent sa-link">Neurobionics Lab</Link>.
         </p>
-      </ScrollAnimation>
 
-      <ScrollAnimation delay={0.2}>
         <div className="my-8">
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 md:gap-4">
             {affiliations.map((affiliation) => (
@@ -57,44 +52,7 @@ export default function Page() {
             ))}
           </div>
         </div>
-      </ScrollAnimation>
 
-      {/* Bento Grid Section */}
-      {/*
-      <ScrollAnimation delay={0.25}>
-        <h2 className="text-2xl font-semibold my-8 text-center">Highlights</h2>
-        <BentoGrid className="mb-8">
-          <BentoItem
-            title="Research Focus"
-            description="Developing robust control strategies for legged robots."
-            className="col-span-3" // Spans 1 column on medium screens and up
-            animationDelay={0.3}
-          />
-          <BentoItem
-            title="Open Source Leg"
-            description="Contributing to the maintenance and development of the OSL project."
-            imageSrc="/placeholder.png" // Replace with an actual image path if desired
-            imageAlt="Open Source Leg diagram"
-            className="md:col-span-2" // Spans 2 columns
-            animationDelay={0.35}
-          />
-          <BentoItem
-            title="Neurobionics Lab"
-            description="Building tools and software for biomechanics research."
-            className="md:col-span-2" // Spans 2 columns
-            animationDelay={0.4}
-          />
-           <BentoItem
-            title="Skills"
-            description="C++, Python, ROS, Control Systems, Machine Learning."
-            className="md:col-span-1" // Spans 1 column
-            animationDelay={0.45}
-          />
-        </BentoGrid>
-      </ScrollAnimation>
-      */}
-
-      <ScrollAnimation delay={0.3}>
         <div className="my-8">
           <h2 className="text-2xl font-semibold mb-4">Recent Articles</h2>
           <BlogPosts />
