@@ -24,7 +24,7 @@ export default function Page() {
         <ComicPanel
           className="col-span-3 row-span-2 items-center justify-center" // Example grid class
           imageSrc="/images/panel-1.jpg"
-          title="SOME GARDEN VARIETY IMPLICIT SURFACES ..."
+          title="Some garden variety implicit surfaces..."
           titlePosition="bottom-left"
         >
           <ShaderCanvas
@@ -37,6 +37,8 @@ export default function Page() {
           imageSrc="/images/panel-2.jpg"
           title="...it's responsive"
           titlePosition="bottom-right"
+          description="A description placed at the top."
+          descriptionPosition="top"          
         />
 
         <ComicPanel imageSrc="/images/panel-3.jpg">

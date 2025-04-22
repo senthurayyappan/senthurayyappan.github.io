@@ -303,10 +303,13 @@ html::before {
   color: var(--black); /* Ensure text is readable */
   border:solid 2px var(--sa-black);
   margin:0;
-  padding:3px 10px;
+  padding:3px 16px;
   /* Ensure text is above background image */
   position: absolute; /* Changed from reference for better control */
   z-index: 1;
+  font-weight: 600;
+  font-style: italic;
+  font-size: 1.0rem;
 }
 
 .dark .panel .text {
@@ -320,27 +323,23 @@ html::before {
   left:-6px;
   /* position:absolute; Already set on .text */
   top:-2px;
-  transform:skew(-15deg);
 }
 
 .panel .bottom-right {
   bottom:-2px;
   /* position:absolute; Already set on .text */
   right:-6px;
-  transform:skew(-15deg);
 }
 
 .panel .top-right {
   right:-6px;
   top:-2px;
-  transform:skew(-15deg);
 }
 
 .panel .bottom-left {
   bottom:-2px;
   /* position:absolute; Already set on .text */
   left:-6px;
-  transform:skew(-15deg);
 }
 
 .panel .speech {
@@ -404,3 +403,37 @@ html::before {
 
 /* Remove unused panel definitions */
 /* .panel-5 to .panel-11 definitions removed */
+
+/* --- NEW Description Styles --- */
+.panel .description {
+  position: absolute;
+  left: 0;
+  right: 0; /* Or width: 100%; */
+  background-color: rgba(255, 255, 255, 1.0); /* Semi-transparent white background */
+  color: var(--sa-black);
+  padding: 6px 12px; /* Adjust padding as needed */
+  margin: 0;
+  border-top: solid 2px var(--sa-black); /* Add borders for definition */
+  border-bottom: solid 2px var(--sa-black);
+  font-family: inherit; /* Ensure correct font */
+  font-size: 1rem; /* Slightly smaller text? Optional */
+  text-align: center; /* Center align? Optional */
+  z-index: 1; /* Ensure it's above background image */
+  box-sizing: border-box; /* Include padding/border in width */
+  font-style: italic;
+  font-weight: 600;
+}
+
+.panel .description-top {
+  top: 0;
+  border-bottom-width: 2px; /* Only bottom border when at top */
+  border-top-width: 0;
+}
+
+.panel .description-bottom {
+  bottom: 0;
+  border-top-width: 2px; /* Only top border when at bottom */
+  border-bottom-width: 0;
+}
+
+/* --- End NEW Description Styles --- */
