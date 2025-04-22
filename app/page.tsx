@@ -1,7 +1,7 @@
-import { BlogPosts } from 'app/components/posts'
+import { BlogPosts } from '@/components/posts'
 import Image from 'next/image'
-import ScrollAnimation from 'app/components/ScrollAnimation'
-import { ShaderCanvas } from 'app/components/ShaderCanvas'
+import ScrollAnimation from '@/components/ScrollAnimation'
+import { ShaderCanvas } from '@/components/ShaderCanvas'
 
 import vertexShaderSource from '/shaders/metaball.vert'
 import fragmentShaderSource from '/shaders/metaball.frag'
