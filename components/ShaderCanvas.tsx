@@ -20,6 +20,7 @@ interface ShaderCanvasProps {
   vertexShaderSource: string;
   fragmentShaderSource: string;
   height?: string; // Add optional height prop (e.g., "h-80", "h-96")
+  className?: string;
   // Add any other uniforms you might want to pass as props
 }
 
@@ -52,6 +53,7 @@ export function ShaderCanvas({
   vertexShaderSource, 
   fragmentShaderSource, 
   height = 'h-full',
+  className = '',
 }: ShaderCanvasProps) {
 
   // Define material inside the component using props
@@ -75,15 +77,14 @@ export function ShaderCanvas({
   const material = useMemo(() => new CustomShaderMaterial(), [CustomShaderMaterial]);
 
   return (
-    <div className={`w-full ${height} bg-transparent`}>
       <Canvas
         gl={{ alpha: true }}
         camera={{ position: [0, 0, 2] }}
+        className='w-full h-full'
       >
         <color attach="background" args={['rgba(0,0,0,0)']} />
         {/* Pass the created material instance to the inner component */} 
         <ShaderDisplay material={material} />
       </Canvas>
-    </div>
   )
 } 

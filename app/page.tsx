@@ -30,6 +30,7 @@ export default function Page() {
           <ShaderCanvas
             fragmentShaderSource={fragmentShaderSource}
             vertexShaderSource={vertexShaderSource}
+            className="-z-10"
           />
         </ComicPanel>
 
@@ -38,8 +39,14 @@ export default function Page() {
           title="...it's responsive"
           titlePosition="bottom-right"
           description="A description placed at the top."
-          descriptionPosition="top"          
-        />
+          descriptionPosition="top"
+          childrenClassName="pt-12 px-4"
+        >
+          <p className='text-justify'>
+            I'm a Robotics Research Engineer at University of Michigan, Department of Robotics, where I lead 
+            the Open-Source Leg project and build tools for the Neurobionics lab.
+          </p>
+        </ComicPanel>
 
         <ComicPanel imageSrc="/images/panel-3.jpg">
           <p className="speech" style={{ position: 'absolute', top: '5%', right: '2%' }}>

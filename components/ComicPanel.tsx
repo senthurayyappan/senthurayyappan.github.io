@@ -15,6 +15,8 @@ interface ComicPanelProps {
   children?: React.ReactNode;
   /** Additional CSS classes for grid layout or custom styling */
   className?: string;
+  /** Additional CSS classes for the children */
+  childrenClassName?: string;
 }
 
 const ComicPanel: React.FC<ComicPanelProps> = ({
@@ -25,6 +27,7 @@ const ComicPanel: React.FC<ComicPanelProps> = ({
   descriptionPosition = 'bottom', // Default description position
   children,
   className = '',
+  childrenClassName = '',
 }) => {
   // Set background image style if imageSrc is provided
   const panelStyle: React.CSSProperties = imageSrc
@@ -37,6 +40,8 @@ const ComicPanel: React.FC<ComicPanelProps> = ({
   const descriptionClass = `description description-${descriptionPosition}`;
 
   return (
+    // Ensure the main panel div has position: relative if it doesn't already
+    // (It does have it from the global CSS '.panel' rule)
     <div className={`panel ${className}`} style={panelStyle}>
       {/* Render the title/caption if provided */}
       {title && <p className={titleClass}>{title}</p>}
@@ -44,8 +49,12 @@ const ComicPanel: React.FC<ComicPanelProps> = ({
       {/* Render the description block if provided */}
       {description && <p className={descriptionClass}>{description}</p>}
 
-      {/* Render any children passed to the component */}
-      {children}
+      {/* --- New wrapper for children --- */}
+      {/* This div contains the children, applies padding, and handles overflow */}
+      <div className={`relative z-0 ${childrenClassName} h-full overflow-auto`}>
+        {/* Render any children passed to the component */}
+        {children}
+      </div>
     </div>
   );
 };
