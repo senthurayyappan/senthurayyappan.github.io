@@ -61,10 +61,10 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <main className="w-full flex flex-col px-4 sm:px-4 md:px-6 lg:px-20">
-            <div className="pt-4 md:pt-6 pb-2 md:pb-6">
+            <div className="sticky top-0 z-50 bg-[var(--background)] pt-2 pb-2 border-b">
               <Navbar />
             </div>
-            <div className="flex-1 overflow-y-auto scrollbar-hide py-4">
+            <div className="flex-1 overflow-y-auto scrollbar-hide">
                 {children}
             </div>
             <div className="pb-4 pt-4 md:pb-6 md:pt-6">

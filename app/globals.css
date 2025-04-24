@@ -267,7 +267,6 @@ html::before {
   gap: 12px; /* Adjust gap as needed */
   font-family: 'Comic Neue', cursive; /* Use Comic Neue font with cursive fallback */
   font-style: normal;
-  padding: 1vmin; /* Add padding like reference */
   box-sizing: border-box; /* Keep this - it's generally good practice */
   /* The height will now be determined by the grid content */
 }
