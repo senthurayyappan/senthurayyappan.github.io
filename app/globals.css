@@ -447,3 +447,8 @@ html::before {
   /* Only transition properties that actually change */
   transition: filter 100ms ease-in-out, border-width 100ms ease-in-out, border-color 100ms ease-in-out;
 }
+
+/* Add this to the CSS file */
+.hover\:shadow-glow:hover {
+  box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.7);
+}

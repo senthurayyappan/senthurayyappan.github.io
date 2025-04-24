@@ -2,7 +2,6 @@ import { BlogPosts } from '@/components/posts'
 import Image from 'next/image'
 import ScrollAnimation from '@/components/ScrollAnimation'
 import { ShaderCanvas } from '@/components/ShaderCanvas'
-import { GitHubIcon, LinkedInIcon, InstagramIcon } from '@/components/SocialIcons'
 import Link from 'next/link'
 import ComicPanel from '@/components/ComicPanel'
 
@@ -52,9 +51,7 @@ export default function Page() {
         </ComicPanel>
 
         {/* <ComicPanel imageSrc="/images/panel-3.jpg">
-          <p className="speech" style={{ position: 'absolute', top: '5%', right: '2%' }}>
-            This is something
-          </p>
+
         </ComicPanel> */}
 
 
@@ -74,16 +71,18 @@ export default function Page() {
              title="THE END"
              titlePosition="bottom-right"
         >
-          <div className='flex gap-4 md:gap-10' style={{ position: 'absolute', top: '40%', right: '20%' }}>
-            <Link href="https://github.com/senthurayyappan" target="_blank" className="hover:opacity-80 transition-opacity">
-              <GitHubIcon size={36} color="#fff" />
-            </Link>
-            <Link href="https://www.linkedin.com/in/imsenthur/" target="_blank" className="hover:opacity-80 transition-opacity">
-              <LinkedInIcon size={36} color="#fff" />
-            </Link>
-            <Link href="https://www.instagram.com/senthurayyappan/" target="_blank" className="hover:opacity-80 transition-opacity">
-              <InstagramIcon size={36} color="#fff" />
-            </Link>
+          <div className='speech' style={{ position: 'absolute', top: '20%', right: '20%' }}>
+            <div className="flex gap-3 p-2">
+              <Link href="https://github.com/senthurayyappan" target="_blank" className="rounded-full border-4 border-transparent hover:border-black transition-colors">
+                <Image src="/icons/github.png" alt="GitHub" width={42} height={42} />
+              </Link>
+              <Link href="https://www.linkedin.com/in/imsenthur/" target="_blank" className="rounded-full border-4 border-transparent hover:border-black transition-colors">
+                <Image src="/icons/linkedin.png" alt="LinkedIn" width={42} height={42} />
+              </Link>
+              <Link href="https://www.instagram.com/senthurayyappan/" target="_blank" className="rounded-full border-4 border-transparent hover:border-black transition-colors">
+                <Image src="/icons/instagram.png" alt="Instagram" width={42} height={42} />
+              </Link>
+            </div>
           </div>
         </ComicPanel>
       </div>
