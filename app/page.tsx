@@ -56,7 +56,7 @@ export default function Page() {
 
         <ComicPanel title="Just text" className='row-span-2' titlePosition='bottom-right'/>
 
-        <ComicPanel className="col-span-1 row-span-2" imageSrc="/images/tall-panel.jpg" />
+        <ComicPanel className="col-span-1 row-span-2" imageSrc="/projects/ballbot-main.jpg" title="Projects" titlePosition='bottom-right' href="/projects"/>
 
         <ComicPanel imageSrc="/images/panel-5.jpg" />
 

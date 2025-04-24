@@ -2,8 +2,8 @@
 @import 'tailwindcss';
 
 :root {
-  --dot-spacing: 8px;
-  --dot-opacity: 0.05;
+  --dot-spacing: 4px;
+  --dot-opacity: 0.01;
   --dot-color: var(--sa-black);
 
   --white: #ffffff;
@@ -295,13 +295,13 @@ html::before {
 /* Ensure panel works in dark mode */
 .dark .panel {
   border-color: var(--sa-white);
-  box-shadow:0 6px 6px -6px rgba(255, 255, 255, 0.3);
+  box-shadow:0 6px 6px -6px rgba(0, 0, 0, 0.3);
 }
 
 .panel .text {
   background-color: var(--white); /* Use theme color */
   color: var(--black); /* Ensure text is readable */
-  border:solid 2px var(--sa-black);
+  border:solid 2px var(--black);
   margin:0;
   padding:3px 16px;
   /* Ensure text is above background image */
@@ -315,7 +315,7 @@ html::before {
 .dark .panel .text {
   background-color: var(--white);
   color: var(--black);
-  border-color: var(--sa-white);
+  border-color: var(--black);
 }
 
 
@@ -437,3 +437,13 @@ html::before {
 }
 
 /* --- End NEW Description Styles --- */
+
+/* --- NEW Hover effect for linked panels --- */
+.panel-link-hover:hover {
+  /* Use Tailwind's @apply directive if you prefer, or define styles directly */
+  transform: scale(1.02);
+  filter: brightness(1.1);
+  border-width: 3px;
+  border-color: var(--accent); /* Use the CSS variable for accent color */
+  transition: transform 200ms ease-in-out, filter 200ms ease-in-out, border-width 200ms ease-in-out, border-color 200ms ease-in-out;
+}
