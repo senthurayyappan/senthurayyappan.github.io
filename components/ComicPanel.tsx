@@ -43,10 +43,11 @@ const ComicPanel: React.FC<ComicPanelProps> = ({
   // Determine the CSS class for the description
   const descriptionClass = `description description-${descriptionPosition}`;
 
-  // Hover effect classes - applied to the inner styling div
-  // const hoverClasses = href
-  //   ? 'hover:scale-[1.02] hover:brightness-110 hover:border-4 hover:border-accent transition-all duration-200 ease-in-out'
-  //   : '';
+  // Add will-change hint if the panel is linkable to potentially improve transition rendering
+  const dynamicStyles: React.CSSProperties = {
+    ...panelStyle,
+    ...(href && { willChange: 'filter, border-width, border-color' }),
+  };
 
   return (
     // 1. Outermost div: Always present, receives grid layout classes.
@@ -55,8 +56,8 @@ const ComicPanel: React.FC<ComicPanelProps> = ({
       {/* 2. Inner div: Handles visual styling (panel class, background) */}
       {/* Conditionally add the panel-link-hover class if href is present */}
       <div
-        className={`panel ${href ? 'panel-link-hover' : ''} h-full w-full transition-all duration-200 ease-in-out`} // Add base transition here
-        style={panelStyle}
+        className={`panel ${href ? 'panel-link-hover' : ''} h-full w-full transition-all duration-200 ease-in-out`} // Base transition still useful
+        style={dynamicStyles} // Apply combined styles here
       >
         {/* Render title/caption - Add z-index to ensure they are above the link overlay */}
         {title && <p className={`${titleClass} relative z-10`}>{title}</p>}

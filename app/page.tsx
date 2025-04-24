@@ -20,9 +20,9 @@ export default function Page() {
 
 
   return (
-      <div className="comic grid grid-cols-3 auto-rows-fr">
+      <div className="comic grid grid-cols-2 md:grid-cols-3 auto-rows-fr">
         <ComicPanel
-          className="col-span-3 row-span-2 items-center justify-center" // Example grid class
+          className="col-span-2 row-span-2 items-center justify-center" // Example grid class
           imageSrc="/images/panel-1.jpg"
           title="Some garden variety implicit surfaces..."
           titlePosition="bottom-left"
@@ -34,12 +34,16 @@ export default function Page() {
           />
         </ComicPanel>
 
+        <ComicPanel title="About" className='row-span-2' titlePosition='bottom-right' imageSrc='sa-main.jpg' href='/about'/>
+
+        <ComicPanel className="col-span-1 row-span-2" imageSrc="/projects/ballbot-main.jpg" title="Projects" titlePosition='bottom-right' href="/projects"/>
+
+
         <ComicPanel
+          className='col-span-2'
           imageSrc="/images/panel-2.jpg"
           title="...it's responsive"
           titlePosition="bottom-right"
-          description="A description placed at the top."
-          descriptionPosition="top"
           childrenClassName="pt-12 px-4"
         >
           <p className='text-justify'>
@@ -48,17 +52,17 @@ export default function Page() {
           </p>
         </ComicPanel>
 
-        <ComicPanel imageSrc="/images/panel-3.jpg">
+        {/* <ComicPanel imageSrc="/images/panel-3.jpg">
           <p className="speech" style={{ position: 'absolute', top: '5%', right: '2%' }}>
             This is something
           </p>
-        </ComicPanel>
+        </ComicPanel> */}
 
-        <ComicPanel title="Just text" className='row-span-2' titlePosition='bottom-right'/>
 
-        <ComicPanel className="col-span-1 row-span-2" imageSrc="/projects/ballbot-main.jpg" title="Projects" titlePosition='bottom-right' href="/projects"/>
+        <ComicPanel imageSrc="sa-publications.jpg" title='Publications' titlePosition='bottom-right' href="/publications"/>
 
-        <ComicPanel imageSrc="/images/panel-5.jpg" />
+        <ComicPanel imageSrc="sa-articles.jpg" title='Articles' titlePosition='bottom-right' href="/articles"/>
+
 
         <ComicPanel
              className="col-span-3"

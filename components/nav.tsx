@@ -8,27 +8,21 @@ import { useState } from 'react';
 const navItems = {
   '/': {
     name: 'home',
-    shortName: 'h',
+  },
+  '/about': {
+    name: 'about',
   },
   '/blog': {
     name: 'articles',
-    shortName: 'b',
   },
   '/projects': {
     name: 'projects',
-    shortName: 'pr',
   },
   '/publications': {
     name: 'publications',
-    shortName: `pu`
-  },
-  '/tutorials': {
-    name: 'tutorials',
-    shortName: 't',
   },
   '/gallery': {
     name: 'gallery',
-    shortName: 'g',
   },
 }
 
@@ -61,7 +55,7 @@ export function Navbar() {
           </div>
           {/* Nav Links */}
           <div className="flex flex-row items-center space-x-0 gap-4">
-            {Object.entries(navItems).map(([path, { name, shortName }]) => {
+            {Object.entries(navItems).map(([path, { name }]) => {
               if (path === '/') return null;
               return (
                 <Link
@@ -70,7 +64,6 @@ export function Navbar() {
                   className="transition-all hover:text-neutral-800 dark:hover:text-neutral-200 flex items-center py-1 px-2 m-1 sa-link"
                 >
                   <span className="hidden sm:inline">{name}</span>
-                  <span className="sm:hidden font-semibold">{shortName}</span>
                 </Link>
               )
             })}
