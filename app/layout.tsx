@@ -57,14 +57,14 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body 
-        className="antialiased h-screen max-w-6xl mx-auto flex flex-col overflow-hidden"
+        className="antialiased max-w-6xl mx-auto flex flex-col"
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <main className="w-full h-full flex flex-col px-4 sm:px-4 md:px-6 lg:px-20">
+          <main className="w-full flex flex-col px-4 sm:px-4 md:px-6 lg:px-20">
             <div className="pt-4 md:pt-6 pb-2 md:pb-6">
               <Navbar />
             </div>
-            <div className="flex-1 min-h-0 overflow-y-auto scrollbar-hide py-4 h-screen">
+            <div className="flex-1 overflow-y-auto scrollbar-hide py-4">
                 {children}
             </div>
             <div className="pb-4 pt-4 md:pb-6 md:pt-6">

@@ -299,17 +299,16 @@ html::before {
 }
 
 .panel .text {
-  background-color: var(--white); /* Use theme color */
-  color: var(--black); /* Ensure text is readable */
+  background-color: var(--white);
+  color: var(--black);
   border:solid 2px var(--black);
   margin:0;
   padding:3px 16px;
-  /* Ensure text is above background image */
-  position: absolute; /* Changed from reference for better control */
+  position: absolute;
   z-index: 1;
   font-weight: 600;
   font-style: italic;
-  font-size: 1.0rem;
+  font-size: clamp(0.75rem, 2vw, 1rem);
 }
 
 .dark .panel .text {
@@ -343,25 +342,25 @@ html::before {
 }
 
 .panel .speech {
-  background-color: var(--white); /* Use theme color */
-  /* color: var(--sa-black); */ /* Removed previously for utility class compatibility */
+  background-color: var(--white);
   border:solid 2px var(--sa-black);
   border-radius:4px;
-  display:inline-block; /* Keep inline-block for bubble */
+  display:inline-block;
   margin:.5em;
   padding:.5em 1em;
-  position:relative; /* Keep relative for pseudo-elements */
-  z-index: 1; /* Ensure bubble is above background */
+  position:relative;
+  z-index: 1;
   color: var(--black);
-  font-family: inherit; /* Explicitly inherit font */
-  font-weight: 600; /* Add this to make the text bold */
+  font-family: inherit;
+  font-weight: 600;
   font-style: italic;
+  font-size: clamp(0.75rem, 2vw, 1rem);
 }
 
 .dark .panel .speech {
   background-color: var(--white);
   /* color: var(--black); */ /* Removed previously for utility class compatibility */
-  border-color: var(--white);
+  border-color: var(--black);
   /* NOTE: font-weight will be inherited from the light mode rule unless overridden here */
 }
 
@@ -408,20 +407,21 @@ html::before {
 .panel .description {
   position: absolute;
   left: 0;
-  right: 0; /* Or width: 100%; */
-  background-color: rgba(255, 255, 255, 1.0); /* Semi-transparent white background */
+  right: 0;
+  background-color: rgba(255, 255, 255, 1.0);
   color: var(--sa-black);
-  padding: 6px 12px; /* Adjust padding as needed */
+  padding: clamp(4px, 1vw, 6px) clamp(8px, 1.5vw, 12px);
   margin: 0;
-  border-top: solid 2px var(--sa-black); /* Add borders for definition */
+  border-top: solid 2px var(--sa-black);
   border-bottom: solid 2px var(--sa-black);
-  font-family: inherit; /* Ensure correct font */
-  font-size: 1rem; /* Slightly smaller text? Optional */
-  text-align: center; /* Center align? Optional */
-  z-index: 1; /* Ensure it's above background image */
-  box-sizing: border-box; /* Include padding/border in width */
+  font-family: inherit;
+  font-size: clamp(0.75rem, 2vw, 1rem);
+  text-align: center;
+  z-index: 1;
+  box-sizing: border-box;
   font-style: italic;
   font-weight: 600;
+  line-height: normal;
 }
 
 .panel .description-top {
@@ -451,4 +451,12 @@ html::before {
 /* Add this to the CSS file */
 .hover\:shadow-glow:hover {
   box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.7);
+}
+
+.panel-button {
+  @apply border-4 border-transparent;
+}
+
+.panel-button:hover {
+  border-color: var(--accent);
 }
