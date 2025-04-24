@@ -4,6 +4,8 @@ import React from 'react';
 interface ComicPanelProps {
   /** Optional: URL for the background image */
   imageSrc?: string;
+  /** Optional: Position for the background image (CSS background-position) */
+  imagePosition?: string;
   /** Optional: Text for the corner caption */
   title?: string;
   /** Optional: Position for the corner caption */
@@ -24,6 +26,7 @@ interface ComicPanelProps {
 
 const ComicPanel: React.FC<ComicPanelProps> = ({
   imageSrc,
+  imagePosition = 'center', // Default center position
   title,
   titlePosition = 'top-left', // Default title position
   description,
@@ -35,7 +38,10 @@ const ComicPanel: React.FC<ComicPanelProps> = ({
 }) => {
   // Set background image style if imageSrc is provided
   const panelStyle: React.CSSProperties = imageSrc
-    ? { backgroundImage: `url(${imageSrc})` }
+    ? { 
+        backgroundImage: `url(${imageSrc})`,
+        backgroundPosition: imagePosition,
+      }
     : {};
 
   // Determine the CSS class for the title/caption
