@@ -78,7 +78,7 @@ const ComicPanel: React.FC<ComicPanelProps> = ({
 
         {/* 3. Conditionally render the Link overlay */}
         {href && (
-          <Link href={href} legacyBehavior>
+          <Link href={href} target='_blank' legacyBehavior>
             {/* Make the link cover the entire panel area using absolute positioning */}
             {/* z-0 places it below text (z-10) but clickable */}
             <a className="absolute inset-0 z-0" aria-label={title || 'Panel link'}></a>

@@ -458,3 +458,23 @@ html::before {
 .panel-button:hover {
   border-color: var(--accent);
 }
+
+@media screen and (min-height: 800px) {
+  .comic {
+    grid-template-rows: minmax(250px, 1fr) minmax(250px, 1fr) auto auto;
+  }
+  
+  .panel {
+    min-height: 250px;
+  }
+}
+
+@media screen and (min-height: 1200px) {
+  .comic {
+    grid-template-rows: minmax(300px, 1fr) minmax(300px, 1fr) auto auto;
+  }
+  
+  .panel {
+    min-height: 300px;
+  }
+}

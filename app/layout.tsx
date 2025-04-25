@@ -52,15 +52,17 @@ export default function RootLayout({
       lang="en"
       className={cx(
         GeistSans.variable,
-        GeistMono.variable
+        GeistMono.variable,
+        "h-full"
       )}
       suppressHydrationWarning
     >
       <body 
-        className="antialiased max-w-6xl mx-auto flex flex-col"
+        className="antialiased mx-auto flex flex-col min-h-full"
+        style={{ maxWidth: "min(90vw, 120rem)" }}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <main className="w-full flex flex-col px-4 sm:px-4 md:px-6 lg:px-20">
+          <main className="w-full flex flex-col flex-grow px-4 sm:px-4 md:px-6 lg:px-20 min-h-[calc(100vh-2rem)]">
             <div className="sticky top-0 z-50 bg-[var(--background)] pt-2 pb-2 border-b">
               <Navbar />
             </div>

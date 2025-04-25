@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { formatDate, getBlogPosts } from 'app/blog/utils'
-
+import ComicPanel from './ComicPanel'
 export function BlogPosts() {
   let allBlogs = getBlogPosts()
 
@@ -16,19 +16,14 @@ export function BlogPosts() {
           return 1
         })
         .map((post) => (
-          <div key={post.slug} className="flex flex-col space-y-1 mb-4">
-            <div className="w-full flex flex-col md:flex-row space-x-0 md:space-x-2">
-              <p className="w-[100px] tabular-nums">
-                {formatDate(post.metadata.publishedAt, false)}
-              </p>
-              <Link
-                href={`/blog/${post.slug}`}
-                className="tracking-tight font-semibold sa-link accent"
-              >
-                {post.metadata.title}
-              </Link>
-            </div>
-          </div>
+          <ComicPanel
+            key={post.slug}
+            description={post.metadata.title}
+            title={formatDate(post.metadata.publishedAt, false)}
+            className='col-span-1 row-span-2'
+            titlePosition='top-right'
+            href={`/blog/${post.slug}`}/>
+
         ))}
     </div>
   )
