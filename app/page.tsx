@@ -44,8 +44,8 @@ export default function Page() {
           titlePosition="bottom-right"
           childrenClassName="pt-12 px-8"
           imagePosition="0% 40%"
-          description='I am a Robotics Research Engineer at University of Michigan, Department of Robotics, where I lead 
-            the Open-Source Leg project and build tools for the Neurobionics lab.'
+          description='I am a Robotics Research Engineer at the University of Michigan, Department of Robotics, where I lead 
+            the Open-Source Leg project and build tools & libraries for the Neurobionics lab.'
         >
         </ComicPanel>
 
@@ -63,12 +63,12 @@ export default function Page() {
         <ComicPanel imageSrc="sa-articles.jpg" title='Articles' titlePosition='bottom-right' href="/articles"/>
         <ComicPanel
              className="col-span-2 md:col-span-3 row-span-1"
-             imageSrc="sa-footer.jpg"
-             imagePosition="0% 30%"
+             imageSrc="sa-socials.jpg"
+             imagePosition="0% 32%"
              title="THE END"
-             titlePosition="bottom-right"
+             titlePosition="bottom-left"
         >
-          <div className='speech' style={{ position: 'absolute', top: '20%', right: '20%' }}>
+          <div className='speech' style={{ position: 'absolute', top: '5%', right: '1%' }}>
             <div className="flex gap-2">
               <Link href="https://github.com/senthurayyappan" target="_blank" className="rounded-full panel-button">
                 <Image src="/icons/github.png" alt="GitHub" width={32} height={32} />

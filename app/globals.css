@@ -415,7 +415,7 @@ html::before {
   border-bottom: solid 2px var(--sa-black);
   font-family: inherit;
   font-size: clamp(0.75rem, 2vw, 1rem);
-  text-align: center;
+  text-align: justify;
   z-index: 1;
   box-sizing: border-box;
   font-style: italic;
