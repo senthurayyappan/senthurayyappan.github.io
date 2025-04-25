@@ -440,7 +440,6 @@ html::before {
 /* --- NEW Hover effect for linked panels --- */
 .panel-link-hover:hover {
   /* Use Tailwind's @apply directive if you prefer, or define styles directly */
-  filter: brightness(1.1);
   border-width: 6px;
   border-color: var(--accent); /* Use the CSS variable for accent color */
   /* Only transition properties that actually change */

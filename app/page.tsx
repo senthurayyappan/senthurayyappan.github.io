@@ -34,7 +34,7 @@ export default function Page() {
           />
         </ComicPanel>
 
-        <ComicPanel title="About" className='col-span-1 row-span-2' titlePosition='bottom-right' imageSrc='sa-main.jpg' href='/about'/>
+        <ComicPanel title="About" className='col-span-1 row-span-2' titlePosition='bottom-right' imageSrc='sa-about.jpg' href='/about'/>
 
         <ComicPanel className="col-span-1 md:row-span-2" imageSrc="/projects/ballbot-main.jpg" title="Projects" titlePosition='bottom-right' href="/projects"/>
 
