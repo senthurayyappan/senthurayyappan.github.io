@@ -62,7 +62,7 @@ export default function RootLayout({
         style={{ maxWidth: "min(90vw, 120rem)" }}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <main className="w-full flex flex-col flex-grow px-4 sm:px-4 md:px-6 lg:px-20 min-h-[calc(100vh-2rem)]">
+          <main className="w-full flex flex-col flex-grow md:px-6 lg:px-20 min-h-[calc(100vh-2rem)]">
             <div className="sticky top-0 z-50 bg-[var(--background)] pt-2 pb-2 border-b">
               <Navbar />
             </div>

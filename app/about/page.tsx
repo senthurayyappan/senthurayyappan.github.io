@@ -15,7 +15,7 @@ export default function Page() {
         <div className='speech' style={{position: 'absolute', bottom: '10%', left: '5%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
           <p className='font-bold'>Gym Badges</p>
           
-          <div className="grid grid-cols-3 grid-rows-2 gap-2 p-2">
+          <div className="grid grid-cols-3 grid-rows-2 gap-2 pb-1">
             <Link href="https://www.nitt.edu/" target="_blank" className="rounded-full panel-button">
               <Image src="/nitt.png" alt="LinkedIn" width={48} height={48} className='p-1'/>
             </Link>
@@ -39,7 +39,7 @@ export default function Page() {
       </ComicPanel>
 
       <ComicPanel 
-        className="col-span-1 row-span-2 h-full" 
+        className="col-span-2 md:col-span-1 row-span-2 h-full" 
         title="Project Lead @ Open-Source Leg"
         imageSrc='/about/sa-main.jpg'
         titlePosition="top-right"
@@ -49,7 +49,7 @@ export default function Page() {
       </ComicPanel>
 
       <ComicPanel 
-        className="col-span-1 row-span-2 h-full" 
+        className="col-span-2 md:col-span-1 row-span-2 h-full" 
         title="Consultant @ Robotics and AI Institute"
         titlePosition="top-right"
         imageSrc='/about/rai.jpg'
@@ -59,7 +59,7 @@ export default function Page() {
       </ComicPanel>
 
       <ComicPanel 
-        className="col-span-1 row-span-1 h-full" 
+        className="col-span-2 md:col-span-1 row-span-1 h-full" 
         title="Research Intern @ DRDO | DEBEL"
         imageSrc='/about/exo.jpg'
         imagePosition='0% 90%'
@@ -70,13 +70,13 @@ export default function Page() {
       </ComicPanel>
 
       <ComicPanel 
-        className="col-span-1 row-span-1 h-full" 
+        className="col-span-2 md:col-span-1 row-span-1 h-full" 
         title="Research Intern @ IIT Madras"
         imageSrc='/about/iitm.jpg'
         imagePosition='10% 0%'
         titlePosition="top-right"
         href='https://ed.iitm.ac.in/~robotics_lab/index.html'
-        description='Proposed a novel methodology for determining impedance parameters for teleoperated surgical robots'
+        description='Developed a transformation-based approach to determine impedance parameters for teleoperated surgical robots'
       >
       </ComicPanel>
 
