@@ -5,7 +5,7 @@ export function BlogPosts() {
   let allBlogs = getBlogPosts()
 
   return (
-    <div>
+    <>
       {allBlogs
         .sort((a, b) => {
           if (
@@ -20,11 +20,15 @@ export function BlogPosts() {
             key={post.slug}
             description={post.metadata.title}
             title={formatDate(post.metadata.publishedAt, false)}
-            className='col-span-1 row-span-2'
+            imageSrc={post.metadata.image}
+            imagePosition={post.metadata.imagePosition}
+            className={post.metadata.className}
             titlePosition='top-right'
-            href={`/blog/${post.slug}`}/>
+            href={`/blog/${post.slug}`}
+            newTab={false}
+          />
 
         ))}
-    </div>
+    </>
   )
 }
