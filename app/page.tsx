@@ -34,13 +34,13 @@ export default function Page() {
           />
         </ComicPanel>
 
-        <ComicPanel title="About" className='col-span-1 row-span-2' titlePosition='bottom-right' imageSrc='sa-about.jpg' href='/about' newTab={false}/>
+        <ComicPanel title="About" className='col-span-1 row-span-2' titlePosition='bottom-right' imageSrc='/sa-about.jpg' href='/about' newTab={false}/>
 
         <ComicPanel className="col-span-1 md:row-span-2" imageSrc="/projects/ballbot-main.jpg" title="Projects" titlePosition='bottom-right' href="/projects" newTab={false}/>
 
         <ComicPanel
           className='col-span-2 row-span-1'
-          imageSrc="sa-intro.jpg"
+          imageSrc="/sa-intro.jpg"
           titlePosition="bottom-right"
           childrenClassName="pt-12 px-8"
           imagePosition="0% 40%"
@@ -54,16 +54,16 @@ export default function Page() {
         </ComicPanel> */}
 
 
-        <ComicPanel imageSrc="sa-publications.jpg" href="/publications" newTab={false}>
+        <ComicPanel imageSrc="/sa-publications.jpg" href="/publications" newTab={false}>
           <p className="speech" style={{ position: 'absolute', top: '5%', right: '5%' }}>
             Publications
           </p>
         </ComicPanel>
 
-        <ComicPanel imageSrc="sa-articles.jpg" title='Articles' titlePosition='bottom-right' href="/blog" newTab={false}/>
+        <ComicPanel imageSrc="/sa-articles.jpg" title='Articles' titlePosition='bottom-right' href="/blog" newTab={false}/>
         <ComicPanel
              className="col-span-2 md:col-span-3 row-span-1"
-             imageSrc="sa-socials.jpg"
+             imageSrc="/sa-socials.jpg"
              imagePosition="0% 32%"
              title="THE END"
              titlePosition="bottom-left"
