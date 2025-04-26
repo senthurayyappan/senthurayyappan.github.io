@@ -22,6 +22,8 @@ interface ComicPanelProps {
   childrenClassName?: string;
   /** Optional: URL to link the panel to */
   href?: string;
+  /** Whether links open in a new tab (default: true) */
+  newTab?: boolean;
 }
 
 const ComicPanel: React.FC<ComicPanelProps> = ({
@@ -35,6 +37,7 @@ const ComicPanel: React.FC<ComicPanelProps> = ({
   className = '',
   childrenClassName = '',
   href, // Destructure the new href prop
+  newTab = true, // Default to opening in new tab
 }) => {
   // Set background image style if imageSrc is provided
   const panelStyle: React.CSSProperties = imageSrc
@@ -78,10 +81,14 @@ const ComicPanel: React.FC<ComicPanelProps> = ({
 
         {/* 3. Conditionally render the Link overlay */}
         {href && (
-          <Link href={href} target='_blank' legacyBehavior>
+          <Link href={href} legacyBehavior>
             {/* Make the link cover the entire panel area using absolute positioning */}
             {/* z-0 places it below text (z-10) but clickable */}
-            <a className="absolute inset-0 z-0" aria-label={title || 'Panel link'}></a>
+            <a 
+              className="absolute inset-0 z-0" 
+              {...(newTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              aria-label={title || 'Panel link'}
+            ></a>
           </Link>
         )}
       </div>

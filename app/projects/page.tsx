@@ -2,8 +2,8 @@ import ComicPanel from '@/components/ComicPanel'
 
 const Projects = [
   {
-    title: 'opensourceleg',
-    description: 'A python software library for numerical computation, data acquisition, and control of lower-limb robotic prosthesis.',
+    title: 'Open-Source Leg',
+    description: 'A modular, open-source powered prosthetic leg',
     href: 'https://github.com/neurobionics/opensourceleg',
     colSize: 'col-span-1',
     rowSize: 'row-span-1'
@@ -51,7 +51,7 @@ export const metadata = {
 
   export default function Page() {
     return (       
-        <div className="comic grid grid-cols-1 md:grid-cols-2 gap-2 h-full">
+        <div className="comic grid grid-cols-2 md:grid-cols-2 gap-2 grid-rows-[minmax(200px,1fr)_minmax(200px,1fr)_auto_auto]">
           {Projects.map((project, index) => (
             <ComicPanel 
               key={index}
