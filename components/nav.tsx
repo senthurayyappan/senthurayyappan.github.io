@@ -42,7 +42,7 @@ export function Navbar() {
           {/* Logo */}
           <div className="hidden md:flex items-center">
             <Link href="/">
-              <div className="relative w-24 h-12 overflow-hidden">
+              <div className="relative w-32 h-16 overflow-hidden">
                 <Image
                   src="/logo/160.png"
                   alt="SA"

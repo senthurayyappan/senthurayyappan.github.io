@@ -11,8 +11,8 @@ export default function Page() {
   return (
     <div className="comic grid grid-cols-2 md:grid-cols-3 gap-2 grid-rows-[minmax(200px,1fr)_minmax(200px,1fr)_auto_auto]">
       {/* Header Panel */}    
-      <ComicPanel description="Senthur Ayyappan, Research Engineer @ Neurobionics Lab, U-M" className='col-span-2 row-span-2' titlePosition='bottom-right' imageSrc='/about/header.jpg'>
-        <div className='speech' style={{position: 'absolute', top: '8%', right: '5%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+      <ComicPanel description="Senthur Ayyappan, Research Engineer @ Neurobionics Lab, U-M" className='col-span-2 row-span-2' titlePosition='bottom-right' imageSrc='/about/sa-header.jpg'>
+        <div className='speech' style={{position: 'absolute', bottom: '10%', left: '5%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
           <p className='font-bold'>Gym Badges</p>
           
           <div className="grid grid-cols-3 grid-rows-2 gap-2 p-2">
@@ -52,8 +52,8 @@ export default function Page() {
         className="col-span-1 row-span-2 h-full" 
         title="Consultant @ Robotics and AI Institute"
         titlePosition="top-right"
-        imageSrc='/about/umv.webp'
-        href='https://www.opensourceleg.org/'
+        imageSrc='/about/rai.jpg'
+        href='https://rai-inst.com/'
         description='Worked on co-design of the next-generation Ultra-Mobility Vehicle (UMV)'
       >
       </ComicPanel>
@@ -73,7 +73,7 @@ export default function Page() {
         className="col-span-1 row-span-1 h-full" 
         title="Research Intern @ IIT Madras"
         imageSrc='/about/iitm.jpg'
-        imagePosition='0% 15%'
+        imagePosition='10% 0%'
         titlePosition="top-right"
         href='https://ed.iitm.ac.in/~robotics_lab/index.html'
         description='Proposed a novel methodology for determining impedance parameters for teleoperated surgical robots'
