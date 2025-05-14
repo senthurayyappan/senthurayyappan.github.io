@@ -4,6 +4,7 @@ import ScrollAnimation from '@/components/ScrollAnimation'
 import { ShaderCanvas } from '@/components/ShaderCanvas'
 import Link from 'next/link'
 import ComicPanel from '@/components/ComicPanel'
+import { useEffect, useState } from 'react'
 
 import vertexShaderSource from '/shaders/metaball.vert'
 import fragmentShaderSource from '/shaders/metaball.frag'
@@ -18,8 +19,8 @@ export default function Page() {
     { name: 'RAI', logo: '/rai.jpg', url: 'https://rai-inst.com/' },
   ];
 
-
   return (
+    <>
       <div className="comic grid grid-cols-2 md:grid-cols-3 gap-2 grid-rows-[minmax(200px,1fr)_minmax(200px,1fr)_auto_auto]">
         <ComicPanel
           className="col-span-2 row-span-2 items-center justify-center"
@@ -83,6 +84,6 @@ export default function Page() {
           </div>
         </ComicPanel>
       </div>
-
+    </>
   )
 }
