@@ -20,6 +20,32 @@ function ArrowIcon() {
   )
 }
 
+function EyeIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width="24"
+      height="24"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="w-5 h-5"
+      fill="none"
+    >
+      {/* Eye outline */}
+      <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z" fill="none"/>
+      {/* Iris (transparent) */}
+      <circle cx="12" cy="12" r="3.5" fill="none"/>
+      {/* Pupil */}
+      <circle cx="12" cy="12" r="1.6" fill="#000"/>
+      {/* Highlight */}
+      <circle cx="13.2" cy="11" r="0.75" fill="#fff"/>
+    </svg>
+  );
+}
+
 export default function Footer() {
   const views = useVisitorCount();
 
@@ -49,15 +75,10 @@ export default function Footer() {
           </a>
         </li>
       </ul>
-      <span className="text-sm font-semibold text-black bg-white border rounded-sm px-4 py-1" 
-      style={{
-        fontFamily: "Comic Neue",
-        fontStyle: "italic"
-      }}>
+      <span className="text-sm font-semibold flex flex-row text-[var(--accent)]">
+          <EyeIcon />
           {views !== null ? (
-            <>
-              Hello, <span className="text-[var(--sa-blue)]">{views}{getOrdinalSuffix(views)}</span> visitor!
-            </>
+              <span className="ml-1">{views}</span>
           ) : '...'}
       </span>
       <p className="text-muted text-sm">
