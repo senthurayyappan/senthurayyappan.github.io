@@ -96,7 +96,7 @@ export function Navbar() {
             <button
               onClick={toggleSidebar}
               aria-label="Toggle navigation"
-              className="p-2 rounded focus:outline-none focus:ring-2 focus:ring-neutral-500"
+              className="p-1 bg-white border focus:outline-none focus:ring-2 focus:ring-neutral-500"
             >
               {/* Simple Hamburger Icon */}
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">

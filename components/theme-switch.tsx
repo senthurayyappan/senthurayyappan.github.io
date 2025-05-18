@@ -2,6 +2,7 @@
 
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 
 export function ThemeSwitch() {
   const [mounted, setMounted] = useState(false)
@@ -19,14 +20,14 @@ export function ThemeSwitch() {
   return (
     <button
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      className="rounded-md w-12 h-12 md:w-14 md:h-14 flex items-center justify-center"
+      className="border flex items-center justify-center bg-white p-1"
       aria-label="Toggle Dark Mode"
       style={{ cursor: 'pointer' }}
     >
       {resolvedTheme === 'dark' ? (
-        <img src="/icons/dark-mode.png" alt="Dark Mode Icon" /> 
+        <Image src="/icons/sun.svg" alt="GitHub" width={24} height={24} />
       ) : (
-        <img src="/icons/light-mode.png" alt="Light Mode Icon" />
+        <Image src="/icons/moon.svg" alt="GitHub" width={24} height={24} />
       )}
     </button>
   )
