@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;600&display=swap');
 @import 'tailwindcss';
 
 :root {
@@ -34,13 +33,6 @@
   --accent: var(--sa-red);
   --text: var(--sa-black);
 }
-
-.bangers-regular {
-  font-family: "Bangers", system-ui;
-  font-weight: 400;
-  font-style: normal;
-}
-
 
 html {
   min-width: 320px;
@@ -266,8 +258,6 @@ html::before {
   /* Removed original grid styles */
   display: grid; /* Or flex, depending on your outer layout */
   gap: 12px; /* Adjust gap as needed */
-  font-family: 'Comic Neue', cursive; /* Use Comic Neue font with cursive fallback */
-  font-style: normal;
   box-sizing: border-box; /* Keep this - it's generally good practice */
   /* The height will now be determined by the grid content */
 }
@@ -303,11 +293,10 @@ html::before {
   color: var(--black);
   border:solid 2px var(--black);
   margin:0;
-  padding:3px 16px;
+  padding:3px 16px 6px;
   position: absolute;
   z-index: 1;
-  font-weight: 600;
-  font-style: italic;
+  /* font-weight: 600; */
   font-size: clamp(0.75rem, 2vw, 1rem);
 }
 
@@ -352,8 +341,6 @@ html::before {
   z-index: 1;
   color: var(--black);
   font-family: inherit;
-  font-weight: 600;
-  font-style: italic;
   font-size: clamp(0.75rem, 2vw, 1rem);
 }
 
@@ -410,7 +397,7 @@ html::before {
   right: 0;
   background-color: rgba(255, 255, 255, 1.0);
   color: var(--sa-black);
-  padding: clamp(4px, 1vw, 6px) clamp(8px, 1.5vw, 12px);
+  padding: clamp(4px, 1vw, 6px) clamp(8px, 1.5vw, 12px) clamp(8px, 1.5vw, 12px);
   margin: 0;
   border-top: solid 2px var(--sa-black);
   border-bottom: solid 2px var(--sa-black);
@@ -419,8 +406,8 @@ html::before {
   text-align: justify;
   z-index: 1;
   box-sizing: border-box;
-  font-style: italic;
-  font-weight: 600;
+  /* font-style: italic; */
+  /* font-weight: 600; */
   line-height: normal;
 }
 
