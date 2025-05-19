@@ -79,7 +79,7 @@ export default function Footer() {
           <EyeIcon />
           {views !== null ? (
               <span className="ml-1">{views}</span>
-          ) : '...'}
+          ) : '000'}
       </span>
       <p className="text-muted text-sm">
         © {new Date().getFullYear()} <span className="hidden sm:inline">Senthur Ayyappan</span><span className="sm:hidden">SA</span>
