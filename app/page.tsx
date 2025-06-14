@@ -25,7 +25,6 @@ export default function Page() {
       <div className="comic grid grid-cols-2 md:grid-cols-3 gap-2 grid-rows-[minmax(200px,1fr)_minmax(200px,1fr)_auto_auto]">
         <ComicPanel
           className="col-span-2 row-span-2 items-center justify-center"
-          imageSrc="/images/panel-1.jpg"
           title="Some garden variety implicit surfaces..."
           titlePosition="bottom-left"
           priority={true}
