@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import React from 'react';
 
 interface ComicPanelProps {
@@ -24,6 +25,8 @@ interface ComicPanelProps {
   href?: string;
   /** Whether links open in a new tab (default: true) */
   newTab?: boolean;
+  /** Whether to prioritize this image loading (default: false) */
+  priority?: boolean;
 }
 
 const ComicPanel: React.FC<ComicPanelProps> = ({
@@ -38,12 +41,15 @@ const ComicPanel: React.FC<ComicPanelProps> = ({
   childrenClassName = '',
   href, // Destructure the new href prop
   newTab = true, // Default to opening in new tab
+  priority = false, // Default to not prioritizing
 }) => {
   // Set background image style if imageSrc is provided
   const panelStyle: React.CSSProperties = imageSrc
     ? { 
         backgroundImage: `url(${imageSrc})`,
         backgroundPosition: imagePosition,
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
       }
     : {};
 
@@ -68,6 +74,18 @@ const ComicPanel: React.FC<ComicPanelProps> = ({
         className={`panel ${href ? 'panel-link-hover' : ''} h-full w-full transition-all duration-200 ease-in-out`} // Base transition still useful
         style={dynamicStyles} // Apply combined styles here
       >
+        {/* Preload critical images using Next.js Image component for better performance */}
+        {imageSrc && priority && (
+          <Image
+            src={imageSrc}
+            alt=""
+            fill
+            className="object-cover opacity-0 pointer-events-none"
+            priority={priority}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+        )}
+
         {/* Render title/caption - Add z-index to ensure they are above the link overlay */}
         {title && <p className={`${titleClass} relative z-10`}>{title}</p>}
 

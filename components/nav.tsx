@@ -96,7 +96,7 @@ export function Navbar() {
             <button
               onClick={toggleSidebar}
               aria-label="Toggle navigation"
-              className="p-1 bg-white border focus:outline-none focus:ring-2 focus:ring-neutral-500"
+              className="p-2 bg-transparent border border-neutral-300 dark:border-neutral-600 rounded-md focus:outline-none focus:ring-2 focus:ring-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
             >
               {/* Simple Hamburger Icon */}
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -117,7 +117,7 @@ export function Navbar() {
 
         {/* Sidebar Container */}
         <div
-          className={`fixed top-0 left-0 h-full w-64 shadow-lg transform transition-transform duration-300 ease-in-out z-40 md:hidden ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
+          className={`fixed top-0 left-0 h-full w-64 bg-white dark:bg-neutral-900 shadow-lg transform transition-transform duration-300 ease-in-out z-40 md:hidden ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
         >
           <div className="flex justify-between items-center p-4 border-b border-neutral-200 dark:border-neutral-700">
             {/* Sidebar Logo */}

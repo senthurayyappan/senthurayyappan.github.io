@@ -8,6 +8,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import Footer from '@/components/footer'
 import { baseUrl } from './sitemap'
 import { ThemeProvider } from 'next-themes'
+import PerformanceMonitor from '@/components/PerformanceMonitor'
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -75,6 +76,7 @@ export default function RootLayout({
           </main>
           <Analytics />
           <SpeedInsights />
+          <PerformanceMonitor />
         </ThemeProvider>
       </body>
     </html>

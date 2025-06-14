@@ -1,10 +1,11 @@
+'use client'
+
 import { BlogPosts } from '@/components/posts'
 import Image from 'next/image'
 import ScrollAnimation from '@/components/ScrollAnimation'
 import { ShaderCanvas } from '@/components/ShaderCanvas'
 import Link from 'next/link'
 import ComicPanel from '@/components/ComicPanel'
-import { useEffect, useState } from 'react'
 
 import vertexShaderSource from '/shaders/metaball.vert'
 import fragmentShaderSource from '/shaders/metaball.frag'
@@ -27,6 +28,7 @@ export default function Page() {
           imageSrc="/images/panel-1.jpg"
           title="Some garden variety implicit surfaces..."
           titlePosition="bottom-left"
+          priority={true}
         >
           <ShaderCanvas
             fragmentShaderSource={fragmentShaderSource}
@@ -35,9 +37,25 @@ export default function Page() {
           />
         </ComicPanel>
 
-        <ComicPanel title="About" className='col-span-1 row-span-2' titlePosition='bottom-right' imageSrc='/sa-about.jpg' href='/about' newTab={false}/>
+        <ComicPanel 
+          title="About" 
+          className='col-span-1 row-span-2' 
+          titlePosition='bottom-right' 
+          imageSrc='/sa-about.jpg' 
+          href='/about' 
+          newTab={false}
+          priority={true}
+        />
 
-        <ComicPanel className="col-span-1 md:row-span-2" imageSrc="/projects/ballbot-main.jpg" title="Projects" titlePosition='bottom-right' href="/projects" newTab={false}/>
+        <ComicPanel 
+          className="col-span-1 md:row-span-2" 
+          imageSrc="/projects/ballbot-main.jpg" 
+          title="Projects" 
+          titlePosition='bottom-right' 
+          href="/projects" 
+          newTab={false}
+          priority={true}
+        />
 
         <ComicPanel
           className='col-span-2 row-span-1'
@@ -47,6 +65,7 @@ export default function Page() {
           imagePosition="0% 40%"
           description='I am a Robotics Research Engineer at the University of Michigan, Department of Robotics, where I lead 
             the Open-Source Leg project and build tools & libraries for the Neurobionics lab.'
+          priority={true}
         >
         </ComicPanel>
 

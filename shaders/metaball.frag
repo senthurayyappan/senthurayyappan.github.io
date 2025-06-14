@@ -1,5 +1,6 @@
 uniform vec2 resolution;
 uniform float time;
+uniform float performanceLevel; // Performance level: 0.5 for low-end, 1.0 for high-end
 // uniform vec2 mouse; // We'll add mouse later
 varying vec2 vUv;
 
@@ -56,14 +57,26 @@ void main() {
     ray_origin.xz *= rot2D(-m.x);
     ray_direction.xz *= rot2D(-m.x);
     
-    for (int i=0; i < 80; i++)
+    // Adaptive iteration count based on performance level
+    int maxIterations = int(mix(40.0, 80.0, performanceLevel));
+    float minDistance = mix(0.01, 0.001, performanceLevel);
+    
+    for (int i = 0; i < 80; i++)
     {
+        if (i >= maxIterations) break;
+        
         vec3 p = ray_origin + ray_direction * t;
         float d = sdf(p);
-        if (d < 0.001) {
+        
+        if (d < minDistance) {
             break;
         }
-        t += d;
+        
+        // Adaptive step size for better performance
+        t += d * mix(1.2, 1.0, performanceLevel);
+        
+        // Early exit for distant rays
+        if (t > 10.0) break;
     }
     
     vec3 color = palette(t * 0.1);
