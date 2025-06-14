@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { Redis } from '@upstash/redis'
 import { Ratelimit } from '@upstash/ratelimit'
+import { getBlogPosts } from '@/app/blog/utils'
 
 const UPSTASH_REST_URL = process.env.UPSTASH_REDIS_REST_URL || 'https://arriving-tadpole-30279.upstash.io'
 const UPSTASH_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN || 'AXZHAAIjcDEyZWI5MGE5M2I1Y2Q0NTEwODUxZDcxMzk5YmRjYWZjM3AxMA'
@@ -34,6 +35,14 @@ function errorResponse(message: string, status: number = 400) {
     { error: message },
     { status }
   )
+}
+
+// Generate static params for all blog posts
+export async function generateStaticParams() {
+  const posts = getBlogPosts()
+  return posts.map((post) => ({
+    slug: post.slug,
+  }))
 }
 
 export async function GET(

@@ -1,8 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export',
   images: {
     unoptimized: true,
   },
+  // Disable API routes in static export
+  rewrites: async () => {
+    return []
+  },
+  // Add trailing slashes for static export
+  trailingSlash: true,
 
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // Add rule for GLSL files

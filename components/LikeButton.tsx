@@ -1,7 +1,6 @@
 'use client'
 
-import { useLikeCount } from '@/lib/utils'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 function HeartIcon({ filled }: { filled: boolean }) {
   return (
@@ -24,8 +23,24 @@ function HeartIcon({ filled }: { filled: boolean }) {
 }
 
 export default function LikeButton({ slug }: { slug: string }) {
-  const { likes, hasLiked, incrementLike } = useLikeCount(slug)
+  const [likes, setLikes] = useState<number | null>(null)
+  const [hasLiked, setHasLiked] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+
+  // Initialize likes count
+  useEffect(() => {
+    const fetchLikes = async () => {
+      try {
+        const response = await fetch(`/api/likes?slug=${slug}`)
+        const data = await response.json()
+        setLikes(data.likes)
+        setHasLiked(localStorage.getItem(`liked_${slug}`) === 'true')
+      } catch (error) {
+        console.error('Error fetching likes:', error)
+      }
+    }
+    fetchLikes()
+  }, [slug])
 
   const handleLike = async () => {
     if (hasLiked || isLoading) return
@@ -33,9 +48,15 @@ export default function LikeButton({ slug }: { slug: string }) {
     setIsLoading(true)
 
     try {
-      await incrementLike()
-    } catch {
-      // Silently handle any errors
+      const response = await fetch(`/api/likes?slug=${slug}`, {
+        method: 'POST',
+      })
+      const data = await response.json()
+      setLikes(data.likes)
+      setHasLiked(true)
+      localStorage.setItem(`liked_${slug}`, 'true')
+    } catch (error) {
+      console.error('Error processing like:', error)
     } finally {
       setIsLoading(false)
     }
