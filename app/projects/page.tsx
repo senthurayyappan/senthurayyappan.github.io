@@ -5,7 +5,7 @@ const Projects = [
   {
     title: 'Open-Source Leg',
     description: 'An end-to-end open-source powered robotic leg for prosthetics research',
-    href: 'https://cad.onshape.com/documents/3520551dd01cf402179e8687/w/87da2fb0a553b44a27833624/e/d9c95c04904f8d6a753006a4',
+    href: 'https://opensourceleg.org/',
     imageSrc: '/projects/osl-v2.jpg',
     imagePosition: 'center center',
     className: 'col-span-2 row-span-2'

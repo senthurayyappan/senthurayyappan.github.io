@@ -2,10 +2,11 @@ import { notFound } from 'next/navigation'
 import { CustomMDX } from '@/components/mdx'
 import { formatDate, getBlogPosts } from 'app/blog/utils'
 import { baseUrl } from 'app/sitemap'
+import Image from 'next/image'
+import ComicPanel from '@/components/ComicPanel'
 
 export async function generateStaticParams() {
   let posts = getBlogPosts()
-
   return posts.map((post) => ({
     slug: post.slug,
   }))
@@ -24,7 +25,6 @@ export function generateMetadata({ params }) {
     image,
   } = post.metadata
   
-  // Use the post's image if it exists, otherwise use the default OG image
   let ogImage = image ? `${baseUrl}${image}` : `${baseUrl}/default.png`
 
   return {
@@ -59,7 +59,7 @@ export default function Blog({ params }) {
   }
 
   return (
-    <section className='p-4'>
+    <article className="max-w-none py-4">
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -81,18 +81,22 @@ export default function Blog({ params }) {
             },
           }),
         }}
-      />
-      <h1 className="title font-semibold text-2xl tracking-tighter">
-        {post.metadata.title}
-      </h1>
-      <div className="flex justify-between items-center mt-2 mb-8 text-sm">
-        <p className="text-sm muted">
-          {formatDate(post.metadata.publishedAt)}
-        </p>
-      </div>
-      <article className="prose">
+      />      
+      {/* Featured Image */}
+      {post.metadata.image && (
+        <ComicPanel
+          className="mb-8"
+          imageSrc={post.metadata.image}
+          imagePosition={post.metadata.imagePosition || 'center center'}
+          description={`${formatDate(post.metadata.publishedAt)} · ${post.metadata.readingTime} min read`}
+        />
+      )}
+
+      {/* Article Content */}
+      <div className="prose prose-lg dark:prose-invert max-w-none">
+        <h1 className="text-4xl md:text-5xl font-bold tracking-tight">{post.metadata.title}</h1>
         <CustomMDX source={post.content} />
-      </article>
-    </section>
+      </div>
+    </article>
   )
 }

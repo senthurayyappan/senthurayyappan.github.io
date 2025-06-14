@@ -1,34 +1,24 @@
 import Link from 'next/link'
-import { formatDate, getBlogPosts } from 'app/blog/utils'
+import { getBlogPosts } from 'app/blog/utils'
+import Image from 'next/image'
 import ComicPanel from './ComicPanel'
+
 export function BlogPosts() {
   let allBlogs = getBlogPosts()
 
-  return (
-    <>
-      {allBlogs
-        .sort((a, b) => {
-          if (
-            new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt)
-          ) {
-            return -1
-          }
-          return 1
-        })
-        .map((post) => (
-          <ComicPanel
-            key={post.slug}
-            description={post.metadata.title}
-            title={formatDate(post.metadata.publishedAt, false)}
-            imageSrc={post.metadata.image}
-            imagePosition={post.metadata.imagePosition}
-            className={post.metadata.className}
-            titlePosition='top-right'
-            href={`/blog/${post.slug}`}
-            newTab={false}
-          />
-
-        ))}
-    </>
-  )
+  return allBlogs.map((post) => (
+    <ComicPanel
+      key={post.slug}
+      className={post.metadata.className}
+      imageSrc={post.metadata.image}
+      imagePosition={post.metadata.imagePosition || 'center center'}
+      title={post.metadata.title}
+      titlePosition="top-right"
+      description={post.metadata.summary}
+      descriptionPosition="bottom"
+      href={`/blog/${post.slug}`}
+      newTab={false}
+    >
+    </ComicPanel>
+  ))
 }

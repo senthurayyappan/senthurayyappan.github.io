@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import matter from 'gray-matter'
 
 type Metadata = {
   title: string
@@ -7,7 +8,9 @@ type Metadata = {
   summary: string
   className?: string
   image?: string
-  imagePosition?: string  
+  imagePosition?: string
+  readingTime?: number
+  tags?: string[]
 }
 
 function parseFrontmatter(fileContent: string) {
@@ -25,11 +28,16 @@ function parseFrontmatter(fileContent: string) {
     metadata[key.trim() as keyof Metadata] = value
   })
 
+  // Calculate reading time
+  metadata.readingTime = calculateReadingTime(content)
+
   return { metadata: metadata as Metadata, content }
 }
 
 function getMDXFiles(dir) {
-  return fs.readdirSync(dir).filter((file) => path.extname(file) === '.mdx')
+  return fs.readdirSync(dir)
+    .filter((file) => path.extname(file) === '.mdx')
+    .filter((file) => file !== 'template.mdx') // Ignore template file
 }
 
 function readMDXFile(filePath) {
@@ -89,4 +97,11 @@ export function formatDate(date: string, includeRelative = false) {
   }
 
   return `${fullDate} (${formattedDate})`
+}
+
+export function calculateReadingTime(content: string): number {
+  const wordsPerMinute = 200
+  const words = content.trim().split(/\s+/).length
+  const minutes = Math.ceil(words / wordsPerMinute)
+  return minutes
 }

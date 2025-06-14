@@ -1,4 +1,5 @@
 import { BlogPosts } from '@/components/posts'
+import ComicPanel from '@/components/ComicPanel'
 
 export const metadata = {
   title: 'Articles',
@@ -7,7 +8,7 @@ export const metadata = {
 
 export default function Page() {
   return (
-    <section className='comic grid grid-cols-2 md:grid-cols-3 gap-2 grid-rows-[minmax(200px,1fr)_minmax(200px,1fr)_auto_auto]'>
+    <section className="py-4 comic grid grid-cols-2 md:grid-cols-3 gap-2 grid-rows-[minmax(200px,1fr)_minmax(200px,1fr)_auto_auto]">
       <BlogPosts />
     </section>
   )
