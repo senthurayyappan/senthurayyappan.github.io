@@ -33,8 +33,11 @@ const getDevicePerformanceLevel = (): 'low' | 'medium' | 'high' => {
   
   if (!gl) return 'low';
   
-  const renderer = gl.getParameter(gl.RENDERER);
-  const vendor = gl.getParameter(gl.VENDOR);
+  // Properly cast to WebGL context
+  const webglContext = gl as WebGLRenderingContext;
+  
+  const renderer = webglContext.getParameter(webglContext.RENDERER);
+  const vendor = webglContext.getParameter(webglContext.VENDOR);
   
   // Simple heuristic based on common mobile GPUs
   if (renderer && (
