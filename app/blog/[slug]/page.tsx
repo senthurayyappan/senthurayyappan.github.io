@@ -4,7 +4,6 @@ import { formatDate, getBlogPosts } from 'app/blog/utils'
 import { baseUrl } from 'app/sitemap'
 import Image from 'next/image'
 import ComicPanel from '@/components/ComicPanel'
-import LikeButton from '@/components/LikeButton'
 
 export async function generateStaticParams() {
   let posts = getBlogPosts()
@@ -99,9 +98,6 @@ export default function Blog({ params }) {
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight leading-tight m-0">
             {post.metadata.title}
           </h1>
-          <div className="flex-shrink-0">
-            <LikeButton slug={post.slug} />
-          </div>
         </div>
         <CustomMDX source={post.content} />
       </div>
