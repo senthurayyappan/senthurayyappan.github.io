@@ -1,7 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: process.env.NODE_ENV === 'production' ? 'export' : undefined,
-  // Your existing config might be here
   images: {
     unoptimized: true,
   },

@@ -25,7 +25,17 @@ function parseFrontmatter(fileContent: string) {
     let [key, ...valueArr] = line.split(': ')
     let value = valueArr.join(': ').trim()
     value = value.replace(/^['"](.*)['"]$/, '$1') // Remove quotes
-    metadata[key.trim() as keyof Metadata] = value
+    
+    const trimmedKey = key.trim() as keyof Metadata
+    
+    // Handle different types of metadata
+    if (trimmedKey === 'tags') {
+      metadata[trimmedKey] = value.split(',').map(tag => tag.trim())
+    } else if (trimmedKey === 'readingTime') {
+      metadata[trimmedKey] = parseInt(value, 10)
+    } else {
+      metadata[trimmedKey] = value
+    }
   })
 
   // Calculate reading time
