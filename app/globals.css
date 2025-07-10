@@ -37,6 +37,7 @@
 html {
   min-width: 320px;
   background-color: var(--background);
+  overflow-x: visible;
 }
 
 /* --- Dark Mode Overrides --- */
@@ -65,6 +66,7 @@ html {
 body {
   background-color: transparent;
   color: var(--text);
+  overflow-x: visible;
 }
 
 .sa-link {
@@ -259,6 +261,10 @@ html::before {
   display: grid; /* Or flex, depending on your outer layout */
   gap: 12px; /* Adjust gap as needed */
   box-sizing: border-box; /* Keep this - it's generally good practice */
+  /* Add margin to provide space for hover effects */
+  margin: 20px;
+  /* Ensure content doesn't get clipped on hover */
+  overflow: visible;
   /* The height will now be determined by the grid content */
 }
 
@@ -269,7 +275,7 @@ html::before {
 /* --- NEW Comic Panel Styles --- */
 .panel {
   background-color: var(--background-color); /* Fallback color */
-  border:solid 2px var(--sa-black); /* Use theme color */
+  border:solid 1px var(--sa-black); /* Use theme color */
   box-shadow:0 6px 6px -6px rgba(0, 0, 0, 0.5); /* Adjusted shadow */
   /* display:inline-block; Remove, let grid/flex control display */
   /* flex:1 1; Remove, let grid/flex control sizing */
@@ -426,17 +432,67 @@ html::before {
 /* --- End NEW Description Styles --- */
 
 /* --- NEW Hover effect for linked panels --- */
-.panel-link-hover:hover {
-  /* Use Tailwind's @apply directive if you prefer, or define styles directly */
-  border-width: 6px;
-  border-color: var(--accent); /* Use the CSS variable for accent color */
-  /* Only transition properties that actually change */
-  transition: filter 100ms ease-in-out, border-width 100ms ease-in-out, border-color 100ms ease-in-out;
+.panel-link-hover {
+  position: relative;
+  overflow: hidden;
 }
 
-/* Add this to the CSS file */
+.panel-link-hover:hover {
+  z-index: 10;
+  border: solid 2px var(--text);
+  transform: translate3d(12px, -12px, 0);
+  /* Create 3D effect with solid box-shadows */
+  box-shadow: 
+    -1px 1px 0px var(--text),
+    -2px 2px 0px var(--text),
+    -3px 3px 0px var(--text),
+    -4px 4px 0px var(--text),
+    -5px 5px 0px var(--text),
+    -6px 6px 0px var(--text),
+    -7px 7px 0px var(--text),
+    -8px 8px 0px var(--text),
+    -9px 9px 0px var(--text),
+    -10px 10px 0px var(--text),
+    -11px 11px 0px var(--text),
+    -12px 12px 0px var(--text);
+  /* Smooth transition for the transform and shadow */
+  transition: transform 150ms ease-out, box-shadow 150ms ease-out;
+}
+
+/* Shine effect */
+.panel-link-hover:hover::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, color-mix(in srgb, var(--sa-white) 40%, transparent), transparent);
+  animation: shine 1.0s ease-in-out;
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) translateY(100%);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%) translateY(-100%);
+    opacity: 0;
+  }
+}
+
 .hover\:shadow-glow:hover {
-  box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 8px 2px var(--accent, 0.1);
 }
 
 .panel-button {
