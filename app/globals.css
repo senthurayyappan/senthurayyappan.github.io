@@ -435,31 +435,19 @@ html::before {
 .panel-link-hover {
   position: relative;
   overflow: hidden;
+  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .panel-link-hover:hover {
   z-index: 10;
-  border: solid 2px var(--text);
-  transform: translate3d(12px, -12px, 0);
-  /* Create 3D effect with solid box-shadows */
-  box-shadow: 
-    -1px 1px 0px var(--text),
-    -2px 2px 0px var(--text),
-    -3px 3px 0px var(--text),
-    -4px 4px 0px var(--text),
-    -5px 5px 0px var(--text),
-    -6px 6px 0px var(--text),
-    -7px 7px 0px var(--text),
-    -8px 8px 0px var(--text),
-    -9px 9px 0px var(--text),
-    -10px 10px 0px var(--text),
-    -11px 11px 0px var(--text),
-    -12px 12px 0px var(--text);
-  /* Smooth transition for the transform and shadow */
-  transition: transform 150ms ease-out, box-shadow 150ms ease-out;
+  border-bottom: solid 2px var(--text) !important;
+  transform: translateY(-8px);
+  /* Subtle bottom shadow for depth */
+  box-shadow: 0 8px 0px var(--text) !important;
 }
 
-/* Shine effect */
+/* Subtle shine effect */
 .panel-link-hover:hover::before {
   content: '';
   position: absolute;
@@ -467,8 +455,8 @@ html::before {
   left: -50%;
   width: 200%;
   height: 200%;
-  background: linear-gradient(45deg, transparent, color-mix(in srgb, var(--sa-white) 40%, transparent), transparent);
-  animation: shine 1.0s ease-in-out;
+  background: linear-gradient(45deg, transparent, color-mix(in srgb, var(--sa-white) 15%, transparent), transparent);
+  animation: shine 1.5s ease-in-out;
   z-index: 1;
   opacity: 0;
   pointer-events: none;
@@ -479,11 +467,11 @@ html::before {
     transform: translateX(-100%) translateY(100%);
     opacity: 0;
   }
-  20% {
-    opacity: 1;
+  30% {
+    opacity: 0.6;
   }
-  80% {
-    opacity: 1;
+  70% {
+    opacity: 0.6;
   }
   100% {
     transform: translateX(100%) translateY(-100%);
