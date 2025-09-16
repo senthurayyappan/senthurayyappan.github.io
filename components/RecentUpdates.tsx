@@ -91,7 +91,7 @@ const RecentUpdates: React.FC = () => {
 
       {/* Data Timestamp */}
       <div className="flex justify-end">
-        <span className="text-xs muted">{new Date().toLocaleDateString()}</span>
+        <span className="text-xs opacity-50 font-medium">{new Date().toLocaleDateString()}</span>
       </div>
     </div>
   );
