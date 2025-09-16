@@ -51,9 +51,9 @@ const RecentUpdates: React.FC = () => {
       </div>
 
       {/* Typography Style Words */}
-      <div className="flex items-center">
+      <div className="flex items-center mb-4">
         <div className="flex flex-col items-start justify-center text-xl sm:text-3xl">
-          <span className="text-xs font-bold uppercase tracking-wider mb-2 sm:mb-4">Recommendations</span>
+          <span className="text-xs font-bold uppercase tracking-wider mb-2 sm:mb-4 opacity-50">Recommendations</span>
           <Link
             href={languageUrl}
             className="sa-link block"
@@ -83,7 +83,7 @@ const RecentUpdates: React.FC = () => {
             rel="noopener noreferrer"
           >
             <div className="text-left">
-              <span className="text-[var(--accent)] uppercase tracking-wider leading-none font-extrabold">{currentSong}</span>
+              <span className="text-[var(--sa-red)] uppercase tracking-wider leading-none font-extrabold">{currentSong}</span>
             </div>
           </Link>
         </div>

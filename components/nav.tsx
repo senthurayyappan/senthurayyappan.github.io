@@ -58,7 +58,7 @@ export function Navbar() {
                 <Link
                   key={path}
                   href={path}
-                  className="transition-all hover:text-neutral-800 dark:hover:text-neutral-200 flex items-center py-1 px-2 m-1 sa-link"
+                  className="transition-all flex items-center py-1 px-2 m-1 sa-link"
                 >
                   <span className="hidden sm:inline">{name}</span>
                 </Link>
