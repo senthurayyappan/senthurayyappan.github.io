@@ -13,16 +13,13 @@ const navItems = {
     name: 'about',
   },
   '/blog': {
-    name: 'articles',
+    name: 'blog',
   },
   '/projects': {
     name: 'projects',
   },
   '/publications': {
     name: 'publications',
-  },
-  '/gallery': {
-    name: 'gallery',
   },
 }
 
