@@ -2,8 +2,8 @@ import { BlogPosts } from '@/components/posts'
 import ComicPanel from '@/components/ComicPanel'
 
 export const metadata = {
-  title: 'Articles',
-  description: 'Read my articles.',
+  title: 'Blog',
+  description: 'Read my blog posts.',
 }
 
 export default function Page() {

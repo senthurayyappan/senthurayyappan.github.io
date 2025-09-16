@@ -59,7 +59,7 @@ html {
   /* --- Other Dark Mode Vars --- */
   --background: var(--sa-black);
   --muted: var(--sa-blue);
-  --accent: var(--sa-green);
+  --accent: var(--sa-yellow);
   --text: var(--sa-white);
 }
 
@@ -76,7 +76,6 @@ body {
   text-decoration-color: transparent; /* Start transparent */
   text-underline-offset: 4px; /* Adjust vertical spacing */
   text-decoration-thickness: 2px; /* Match previous thickness */
-  color: inherit;
   /* Removed line-height: 1; - let parent control line height */
 }
 
@@ -260,9 +259,9 @@ html::before {
   /* Removed original grid styles */
   display: grid; /* Or flex, depending on your outer layout */
   gap: 12px; /* Adjust gap as needed */
+  margin-top: 12px;
   box-sizing: border-box; /* Keep this - it's generally good practice */
   /* Add margin to provide space for hover effects */
-  margin: 20px;
   /* Ensure content doesn't get clipped on hover */
   overflow: visible;
   /* The height will now be determined by the grid content */
@@ -441,10 +440,10 @@ html::before {
 
 .panel-link-hover:hover {
   z-index: 10;
-  border-bottom: solid 2px var(--text) !important;
+  border-bottom: solid 2px var(--accent) !important;
   transform: translateY(-8px);
   /* Subtle bottom shadow for depth */
-  box-shadow: 0 8px 0px var(--text) !important;
+  box-shadow: 0 8px 0px var(--accent) !important;
 }
 
 /* Subtle shine effect */

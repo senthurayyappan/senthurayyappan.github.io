@@ -1,20 +1,15 @@
 'use client'
 
-import { BlogPosts } from '@/components/posts'
 import Image from 'next/image'
-import ScrollAnimation from '@/components/ScrollAnimation'
-import { ShaderCanvas } from '@/components/ShaderCanvas'
+import RecentUpdates from '@/components/RecentUpdates'
 import Link from 'next/link'
 import ComicPanel from '@/components/ComicPanel'
-
-import vertexShaderSource from '/shaders/metaball.vert'
-import fragmentShaderSource from '/shaders/metaball.frag'
 
 export default function Page() {
   const affiliations = [
     { name: 'NIT Trichy', logo: '/nitt.png', url: 'https://www.nitt.edu/' },
     { name: 'IIT Madras', logo: '/iitm.png', url: 'https://www.iitm.ac.in/' },
-    { name: 'DRDO', logo: '/drdo.png', url: 'https://www.drdo.gov.in/' },      
+    { name: 'DRDO', logo: '/drdo.png', url: 'https://www.drdo.gov.in/' },
     { name: 'Michigan Robotics', logo: '/mrobotics.png', url: 'https://robotics.umich.edu/' },
     { name: 'NSF', logo: '/nsf.png', url: 'https://www.nsf.gov/' },
     { name: 'RAI', logo: '/rai.jpg', url: 'https://rai-inst.com/' },
@@ -24,16 +19,10 @@ export default function Page() {
     <>
       <div className="comic grid grid-cols-2 md:grid-cols-3 gap-2 grid-rows-[minmax(200px,1fr)_minmax(200px,1fr)_auto_auto]">
         <ComicPanel
-          className="col-span-2 row-span-2 items-center justify-center"
-          title="Some garden variety implicit surfaces..."
-          titlePosition="bottom-left"
+          className="col-span-2 row-span-2"
           priority={true}
         >
-          <ShaderCanvas
-            fragmentShaderSource={fragmentShaderSource}
-            vertexShaderSource={vertexShaderSource}
-            className="-z-10"
-          />
+          <RecentUpdates />
         </ComicPanel>
 
         <ComicPanel 
@@ -79,7 +68,7 @@ export default function Page() {
           </p>
         </ComicPanel>
 
-        <ComicPanel imageSrc="/sa-articles.jpg" title='Articles' titlePosition='bottom-right' href="/blog" newTab={false}/>
+        <ComicPanel imageSrc="/sa-articles.jpg" title='Blog' titlePosition='bottom-right' href="/blog" newTab={false}/>
         <ComicPanel
              className="col-span-2 md:col-span-3 row-span-1"
              imageSrc="/sa-socials.jpg"
