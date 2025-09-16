@@ -51,7 +51,7 @@ const RecentUpdates: React.FC = () => {
       </div>
 
       {/* Typography Style Words */}
-      <div className="flex items-center mb-4">
+      <div className="flex items-center">
         <div className="flex flex-col items-start justify-center text-xl sm:text-3xl">
           <span className="text-xs font-bold uppercase tracking-wider mb-2 sm:mb-4 opacity-50">Recommendations</span>
           <Link
@@ -87,6 +87,11 @@ const RecentUpdates: React.FC = () => {
             </div>
           </Link>
         </div>
+      </div>
+
+      {/* Data Timestamp */}
+      <div className="flex justify-end">
+        <span className="text-xs muted">{new Date().toLocaleDateString()}</span>
       </div>
     </div>
   );

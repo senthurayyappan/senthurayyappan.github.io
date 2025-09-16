@@ -70,18 +70,18 @@ body {
 }
 
 .sa-link {
-  /* Removed background properties */
-  transition: text-decoration-color 250ms ease-in-out; /* Transition color */
+  transition: all 150ms ease-out;
   text-decoration: underline;
-  text-decoration-color: transparent; /* Start transparent */
-  text-underline-offset: 4px; /* Adjust vertical spacing */
-  text-decoration-thickness: 2px; /* Match previous thickness */
-  /* Removed line-height: 1; - let parent control line height */
+  text-decoration-color: transparent;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 2px;
+  position: relative;
 }
 
-.sa-link:where(:hover, :focus-visible) {
-  /* Change color on hover */
-  text-decoration-color: var(--accent);
+.sa-link:hover,
+.sa-link:focus-visible {
+  text-decoration-color: var(--accent) !important;
+  transform: translateY(-1px);
 }
 
 .muted {
