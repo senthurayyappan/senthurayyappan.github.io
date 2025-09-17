@@ -21,7 +21,7 @@ const RecentUpdates: React.FC = () => {
       {/* Latest Blog Post Section */}
       <Link
         href={`/blog/${latestPostSlug}`}
-        className='block hover:scale-[1.01] transition-transform p-3 sm:p-4 border border-current md:mb-2 lg:mb-4'
+        className='block p-3 sm:p-4 border border-current md:mb-2 lg:mb-4 panel-link-hover'
       >
 
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-4 gap-1 sm:gap-0">
