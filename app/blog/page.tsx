@@ -1,14 +1,22 @@
 import { BlogPosts } from '@/components/posts'
-import ComicPanel from '@/components/ComicPanel'
 
 export const metadata = {
   title: 'Blog',
-  description: 'Read my blog posts.',
+  description: 'Dev blogs, robotics notes, and assorted thoughts.',
 }
 
 export default function Page() {
   return (
-    <section className="py-4 comic grid grid-cols-2 md:grid-cols-3 gap-2 grid-rows-[minmax(200px,1fr)_minmax(200px,1fr)_auto_auto]">
+    <section className="mx-auto max-w-4xl px-4 sm:px-6 py-6 md:py-10">
+      <header className="mb-6">
+        <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-[var(--accent)]">
+          Blog
+        </h1>
+        <p className="mt-2 text-base opacity-75 max-w-2xl">
+          Dev blogs, robotics notes, and assorted thoughts I needed to write
+          down.
+        </p>
+      </header>
       <BlogPosts />
     </section>
   )

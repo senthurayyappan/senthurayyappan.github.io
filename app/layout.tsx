@@ -2,6 +2,15 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
+import { Source_Serif_4 } from 'next/font/google'
+
+const sourceSerif = Source_Serif_4({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  style: ['normal', 'italic'],
+  variable: '--font-serif',
+  display: 'swap',
+})
 import { Navbar } from '@/components/nav'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
@@ -54,6 +63,7 @@ export default function RootLayout({
       className={cx(
         GeistSans.variable,
         GeistMono.variable,
+        sourceSerif.variable,
         "h-full"
       )}
       suppressHydrationWarning

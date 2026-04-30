@@ -1,19 +1,22 @@
-'use client'
-
 import Image from 'next/image'
 import RecentUpdates from '@/components/RecentUpdates'
 import Link from 'next/link'
 import ComicPanel from '@/components/ComicPanel'
+import { getBlogPosts } from 'app/blog/utils'
 
 export default function Page() {
-  const affiliations = [
-    { name: 'NIT Trichy', logo: '/nitt.png', url: 'https://www.nitt.edu/' },
-    { name: 'IIT Madras', logo: '/iitm.png', url: 'https://www.iitm.ac.in/' },
-    { name: 'DRDO', logo: '/drdo.png', url: 'https://www.drdo.gov.in/' },
-    { name: 'Michigan Robotics', logo: '/mrobotics.png', url: 'https://robotics.umich.edu/' },
-    { name: 'NSF', logo: '/nsf.png', url: 'https://www.nsf.gov/' },
-    { name: 'RAI', logo: '/rai.jpg', url: 'https://rai-inst.com/' },
-  ];
+  const latestPost = getBlogPosts()
+    .sort(
+      (a, b) =>
+        new Date(b.metadata.publishedAt).getTime() -
+        new Date(a.metadata.publishedAt).getTime()
+    )
+    .map((p) => ({
+      title: p.metadata.title,
+      summary: p.metadata.summary,
+      slug: p.slug,
+      publishedAt: p.metadata.publishedAt,
+    }))[0]
 
   return (
     <>
@@ -22,7 +25,7 @@ export default function Page() {
           className="col-span-2 row-span-2"
           priority={true}
         >
-          <RecentUpdates />
+          <RecentUpdates latestPost={latestPost} />
         </ComicPanel>
 
         <ComicPanel 

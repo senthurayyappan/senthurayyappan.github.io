@@ -1,15 +1,23 @@
 import { notFound } from 'next/navigation'
 import { CustomMDX } from '@/components/mdx'
-import { formatDate, getBlogPosts } from 'app/blog/utils'
+import { getBlogPosts } from 'app/blog/utils'
 import { baseUrl } from 'app/sitemap'
-import Image from 'next/image'
-import ComicPanel from '@/components/ComicPanel'
+import PostHeader from '@/components/PostHeader'
+import PostFigure from '@/components/PostFigure'
+import PostFooter from '@/components/PostFooter'
+
+const REPO_URL = 'https://github.com/senthurayyappan/senthurayyappan.github.io'
+
+function getOrderedPosts() {
+  return getBlogPosts().sort(
+    (a, b) =>
+      new Date(b.metadata.publishedAt).getTime() -
+      new Date(a.metadata.publishedAt).getTime()
+  )
+}
 
 export async function generateStaticParams() {
-  let posts = getBlogPosts()
-  return posts.map((post) => ({
-    slug: post.slug,
-  }))
+  return getBlogPosts().map((post) => ({ slug: post.slug }))
 }
 
 export function generateMetadata({ params }) {
@@ -24,7 +32,7 @@ export function generateMetadata({ params }) {
     summary: description,
     image,
   } = post.metadata
-  
+
   let ogImage = image ? `${baseUrl}${image}` : `${baseUrl}/default.png`
 
   return {
@@ -36,11 +44,7 @@ export function generateMetadata({ params }) {
       type: 'article',
       publishedTime,
       url: `${baseUrl}/blog/${post.slug}`,
-      images: [
-        {
-          url: ogImage,
-        },
-      ],
+      images: [{ url: ogImage }],
     },
     twitter: {
       card: 'summary_large_image',
@@ -52,14 +56,19 @@ export function generateMetadata({ params }) {
 }
 
 export default function Blog({ params }) {
-  let post = getBlogPosts().find((post) => post.slug === params.slug)
-
-  if (!post) {
+  const posts = getOrderedPosts()
+  const idx = posts.findIndex((p) => p.slug === params.slug)
+  if (idx === -1) {
     notFound()
   }
 
+  const post = posts[idx]
+  // Posts are sorted newest-first: the older neighbor (prev in time) sits at idx+1.
+  const prev = posts[idx + 1]
+  const next = posts[idx - 1]
+
   return (
-    <article className="max-w-none py-4">
+    <article className="w-full py-8 md:py-12">
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -81,25 +90,29 @@ export default function Blog({ params }) {
             },
           }),
         }}
-      />      
-      {/* Featured Image */}
-      {post.metadata.image && (
-        <ComicPanel
-          className="mb-8"
-          imageSrc={post.metadata.image}
-          imagePosition={post.metadata.imagePosition || 'center center'}
-          description={`${formatDate(post.metadata.publishedAt)} · ${post.metadata.readingTime} min read`}
-        />
-      )}
+      />
 
-      {/* Article Content */}
-      <div className="prose prose-lg dark:prose-invert max-w-none">
-        <div className="flex items-center justify-between gap-4 mb-8">
-          <span className="text-2xl md:text-4xl font-bold tracking-tight leading-tight m-0">
-            {post.metadata.title}
-          </span>
+      <div className="mx-auto max-w-[640px] px-4 sm:px-6">
+        <PostHeader metadata={post.metadata} />
+
+        {post.metadata.image && (
+          <PostFigure
+            src={post.metadata.image}
+            alt={post.metadata.title}
+            position={post.metadata.imagePosition}
+          />
+        )}
+
+        <div className="prose dark:prose-invert">
+          <CustomMDX source={post.content} />
         </div>
-        <CustomMDX source={post.content} />
+
+        <PostFooter
+          slug={post.slug}
+          prev={prev}
+          next={next}
+          repoUrl={REPO_URL}
+        />
       </div>
     </article>
   )
