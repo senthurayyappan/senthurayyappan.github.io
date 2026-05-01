@@ -44,6 +44,44 @@ The site has a strong visual identity that runs through everything — treat it 
 - `lib/utils.ts` exposes `cn()` (clsx + tailwind-merge) and a `useVisitorCount` hook that hits Upstash Redis directly from the browser. **The Upstash REST URL and token are hardcoded** — they're public-by-design for an INCR-only counter, but be aware before adding any other operations against that store.
 - `'use client'` is required for any component using hooks, theme context, or framer-motion. The root layout (`app/layout.tsx`) is a Server Component; `Navbar`, `RecentUpdates`, `ShaderCanvas`, etc. are client components.
 
+## Visual conventions
+
+### Editorial list-row hover (use across the site)
+
+Any "row of clickable items" pattern — blog index entries, publications entries, future content lists — uses this hover treatment, **not** a background tint:
+
+- Parent: `<Link>` / `<a>` with `className="block group no-underline py-5 border-b border-current/15"`.
+- Inside: `flex items-start justify-between gap-6` with content in `flex-1` and an arrow span as the right-side sibling.
+- Title: `group-hover:text-[var(--accent)] transition-colors`.
+- Arrow span: `opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200`, color `text-[var(--accent)]`. Use `→` (`M5 12h14 / M13 6l6 6-6 6`) for internal links and `↗` (`M7 17 17 7 / M7 7h10v10`) for external. 18×18 SVG, currentColor stroke.
+- Mono meta line below summary uses `text-[11px] font-mono uppercase tracking-[0.1em] text-[color:color-mix(in_srgb,var(--text)_55%,transparent)]`.
+
+Reference implementations: `components/posts.tsx` (`PostEntry`) and `app/publications/page.tsx` (`PublicationEntry`).
+
+### Editorial page header (for content-listing pages)
+
+Big serif title with an accent-colored period at the end, fluid sized via `clamp()`, no eyebrow row, no subtitle by default:
+
+```tsx
+<h1
+  className="font-medium tracking-tight text-[var(--text)] leading-[0.95]"
+  style={{
+    fontFamily: 'var(--font-serif), Georgia, serif',
+    fontSize: 'clamp(3rem, 2rem + 4vw, 5rem)',
+  }}
+>
+  Title<span className="text-[var(--accent)]">.</span>
+</h1>
+```
+
+Reference: `app/blog/page.tsx`, `app/publications/page.tsx`.
+
+### Where the comic identity lives vs. doesn't
+
+- **Comic-panel grids and accent-colored chrome stay** on showcase pages: home (`app/page.tsx`), about (`app/about/page.tsx`), projects (`app/projects/page.tsx`).
+- **Editorial restraint** (Source Serif 4 body, weight-500 dark headings, no accent in prose, ~640px reading column) is for reading/data pages: blog post body, publications, eventually 404 / gallery.
+- The blog *index* sits between these — typography-first list, no panels, but uses comic-style year-section headings (`text-3xl md:text-4xl font-bold tracking-tight text-[var(--accent)]`).
+
 ## Conventions worth knowing
 
 - TypeScript is configured loosely: `strict: false`, `target: es5`, but `strictNullChecks: true`. Don't expect strict-mode diagnostics; do expect null-check errors.

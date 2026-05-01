@@ -759,25 +759,42 @@ html::before {
 /* Remove unused panel definitions */
 /* .panel-5 to .panel-11 definitions removed */
 
-/* --- NEW Description Styles --- */
+/* --- Description: vintage-comic narrator caption --- */
 .panel .description {
   position: absolute;
   left: 0;
   right: 0;
-  background-color: rgba(255, 255, 255, 1.0);
+  background-color: var(--white);
   color: var(--sa-black);
-  padding: clamp(4px, 1vw, 6px) clamp(8px, 1.5vw, 12px) clamp(8px, 1.5vw, 12px);
+  padding: 0.55rem 0.95rem 0.6rem;
   margin: 0;
   border-top: solid 2px var(--sa-black);
   border-bottom: solid 2px var(--sa-black);
-  font-family: inherit;
-  font-size: clamp(0.75rem, 2vw, 1rem);
-  text-align: justify;
+  font-family: var(--font-serif), Georgia, 'Times New Roman', serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(0.85rem, 1.7vw, 1rem);
+  letter-spacing: 0;
+  text-align: left;
+  line-height: 1.4;
   z-index: 1;
   box-sizing: border-box;
-  /* font-style: italic; */
-  /* font-weight: 600; */
-  line-height: normal;
+}
+
+/* Hover-only descriptions on devices that have hover capability;
+   touch devices keep them always visible. */
+@media (hover: hover) {
+  .panel .description {
+    opacity: 0;
+    transform: translateY(4px);
+    pointer-events: none;
+    transition: opacity 180ms ease-out, transform 180ms ease-out;
+  }
+  .panel:hover .description,
+  .panel:focus-within .description {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .panel .description-top {
@@ -794,6 +811,88 @@ html::before {
 
 /* --- End NEW Description Styles --- */
 
+/* --- Affiliations narrator ribbon (vintage comic) --- */
+.affiliations-strip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.45rem 0.85rem;
+  background: var(--white);
+  border-top: 2px solid var(--sa-black);
+  font-family: var(--font-geist-sans), Helvetica, sans-serif;
+  color: var(--sa-black);
+}
+
+.affiliations-label {
+  font-weight: 800;
+  font-style: italic;
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.affiliations-logos {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.affiliations-logos::-webkit-scrollbar {
+  display: none;
+}
+
+.affiliations-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--sa-white);
+  border: 2px solid var(--sa-black);
+  border-radius: 999px;
+  flex-shrink: 0;
+  transition: transform 150ms ease-out, border-color 150ms ease-out;
+}
+
+.affiliations-logo:hover,
+.affiliations-logo:focus-visible {
+  transform: translateY(-2px);
+  border-color: var(--sa-red);
+  outline: none;
+}
+
+.affiliations-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 3px;
+  border-radius: 999px;
+}
+
+.affiliations-logo[data-affiliation="NSF"] img {
+  padding: 0;
+  transform: scale(1.05);
+}
+
+@media (min-width: 768px) {
+  .affiliations-label {
+    font-size: 1.1rem;
+  }
+  .affiliations-logo {
+    width: 40px;
+    height: 40px;
+  }
+}
+
 /* --- NEW Hover effect for linked panels --- */
 .panel-link-hover {
   position: relative;
@@ -804,10 +903,13 @@ html::before {
 
 .panel-link-hover:hover {
   z-index: 10;
-  border-bottom: solid 2px var(--accent) !important;
-  transform: translateY(-8px);
-  /* Subtle bottom shadow for depth */
-  box-shadow: 0 8px 0px var(--accent) !important;
+  transform: translate(-3px, -3px);
+  /* Hard-edge comic offset shadow (vintage sticker-on-page feel) */
+  box-shadow: 6px 6px 0 var(--sa-black) !important;
+}
+
+.dark .panel-link-hover:hover {
+  box-shadow: 6px 6px 0 var(--sa-white) !important;
 }
 
 /* Subtle shine effect */

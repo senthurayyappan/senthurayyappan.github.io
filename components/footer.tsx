@@ -54,7 +54,7 @@ export default function Footer() {
       <ul className="font-sm flex flex-row space-x-4">
         <li>
           <a
-            className="flex items-center hover:var(--sa-white) dark:hover:var(--sa-black)"
+            className="flex items-center"
             rel="noopener noreferrer"
             target="_blank"
             href="/rss"
@@ -65,7 +65,7 @@ export default function Footer() {
         </li>
         <li>
           <a
-            className="flex items-center hover:var(--sa-white) dark:hover:var(--sa-black)"
+            className="flex items-center"
             rel="noopener noreferrer"
             target="_blank"
             href="https://github.com/senthurayyappan/senthurayyappan.github.io"
@@ -86,13 +86,4 @@ export default function Footer() {
       </p>
     </footer>
   )
-}
-
-// Add a helper function for ordinal suffix
-function getOrdinalSuffix(n: number): string {
-  const j = n % 10, k = n % 100;
-  if (j === 1 && k !== 11) return 'st';
-  if (j === 2 && k !== 12) return 'nd';
-  if (j === 3 && k !== 13) return 'rd';
-  return 'th';
 }

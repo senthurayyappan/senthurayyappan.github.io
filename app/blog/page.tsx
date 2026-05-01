@@ -7,15 +7,17 @@ export const metadata = {
 
 export default function Page() {
   return (
-    <section className="mx-auto max-w-4xl px-4 sm:px-6 py-6 md:py-10">
-      <header className="mb-6">
-        <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-[var(--accent)]">
-          Blog
+    <section className="mx-auto max-w-5xl px-4 sm:px-6 py-6 md:py-10">
+      <header className="mb-12">
+        <h1
+          className="font-medium tracking-tight text-[var(--text)] leading-[0.95]"
+          style={{
+            fontFamily: 'var(--font-serif), Georgia, serif',
+            fontSize: 'clamp(3rem, 2rem + 4vw, 5rem)',
+          }}
+        >
+          Blog<span className="text-[var(--accent)]">.</span>
         </h1>
-        <p className="mt-2 text-base opacity-75 max-w-2xl">
-          Dev blogs, robotics notes, and assorted thoughts I needed to write
-          down.
-        </p>
       </header>
       <BlogPosts />
     </section>

@@ -1,7 +1,5 @@
 import Link from 'next/link'
-import { getBlogPosts } from 'app/blog/utils'
-import { formatDate } from 'app/blog/utils'
-import ComicPanel from './ComicPanel'
+import { getBlogPosts, formatDate } from 'app/blog/utils'
 
 interface Post {
   slug: string
@@ -26,54 +24,74 @@ function groupByYear(posts: Post[]) {
   return Object.entries(groups).sort(([a], [b]) => Number(b) - Number(a))
 }
 
-function PostRow({ post }: { post: Post }) {
+function PostEntry({ post }: { post: Post }) {
   const { metadata, slug } = post
   return (
     <Link
       href={`/blog/${slug}`}
-      className="group block py-6 border-b border-current/15 no-underline transition-colors hover:bg-[color:color-mix(in_srgb,var(--accent)_5%,transparent)]"
+      className="block group no-underline py-5 border-b border-current/15"
     >
-      <div className="flex flex-col md:grid md:grid-cols-[110px_minmax(0,1fr)] md:gap-8 md:items-baseline">
-        <time
-          dateTime={metadata.publishedAt}
-          className="text-xs font-mono uppercase tracking-[0.15em] opacity-50 mb-2 md:mb-0 md:pt-1"
-        >
-          {new Date(
-            metadata.publishedAt.includes('T')
-              ? metadata.publishedAt
-              : `${metadata.publishedAt}T00:00:00`
-          ).toLocaleString('en-us', { month: 'short', day: 'numeric' })}
-        </time>
-        <div className="min-w-0">
-          <h3 className="text-xl md:text-2xl font-bold tracking-tight leading-snug text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
+      <div className="flex items-start justify-between gap-6">
+        <div className="min-w-0 flex-1">
+          <h3
+            className="text-base md:text-lg font-medium leading-snug text-[var(--text)] group-hover:text-[var(--accent)] transition-colors"
+            style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}
+          >
             {metadata.title}
           </h3>
           {metadata.summary && (
-            <p className="mt-2 text-sm md:text-base opacity-75 leading-relaxed">
+            <p
+              className="mt-1.5 text-sm leading-relaxed text-[color:color-mix(in_srgb,var(--text)_70%,transparent)]"
+              style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}
+            >
               {metadata.summary}
             </p>
           )}
-          <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] font-mono uppercase tracking-[0.15em] opacity-60">
+          <p className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] font-mono uppercase tracking-[0.1em] text-[color:color-mix(in_srgb,var(--text)_55%,transparent)]">
+            <time dateTime={metadata.publishedAt}>
+              {formatDate(metadata.publishedAt)}
+            </time>
             {metadata.readingTime !== undefined && (
-              <span>{metadata.readingTime} min read</span>
+              <>
+                <span aria-hidden>·</span>
+                <span>{metadata.readingTime} min read</span>
+              </>
             )}
             {metadata.tags && metadata.tags.length > 0 && (
               <>
                 <span aria-hidden>·</span>
-                <span className="flex flex-wrap gap-1.5">
-                  {metadata.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-1.5 py-0.5 border border-current/40"
-                    >
+                <span className="flex flex-wrap gap-x-2">
+                  {metadata.tags.map((tag, i) => (
+                    <span key={tag}>
                       {tag}
+                      {i < metadata.tags!.length - 1 && (
+                        <span aria-hidden> ·</span>
+                      )}
                     </span>
                   ))}
                 </span>
               </>
             )}
-          </div>
+          </p>
         </div>
+        <span
+          aria-hidden
+          className="flex-none mt-1 text-[var(--accent)] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"
+        >
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M5 12h14" />
+            <path d="M13 6l6 6-6 6" />
+          </svg>
+        </span>
       </div>
     </Link>
   )
@@ -94,55 +112,25 @@ export function BlogPosts() {
     )
   }
 
-  const [featured, ...rest] = allBlogs
-  const grouped = groupByYear(rest)
+  const grouped = groupByYear(allBlogs)
 
   return (
-    <div className="space-y-8">
-      <ComicPanel
-        className="w-full"
-        imageSrc={featured.metadata.image}
-        imagePosition={featured.metadata.imagePosition || 'center center'}
-        title={featured.metadata.title}
-        titlePosition="bottom-right"
-        description={featured.metadata.summary}
-        descriptionPosition="bottom"
-        href={`/blog/${featured.slug}`}
-        newTab={false}
-      >
-        <div className="absolute top-4 left-4 z-10">
-          <span className="speech text-[10px] font-mono uppercase tracking-[0.15em]">
-            Latest · {formatDate(featured.metadata.publishedAt)}
-            {featured.metadata.readingTime !== undefined && (
-              <> · {featured.metadata.readingTime} min</>
-            )}
-          </span>
-        </div>
-        <div className="h-40 md:h-48" />
-      </ComicPanel>
-
-      {rest.length > 0 && (
-        <div className="space-y-10">
-          {grouped.map(([year, posts]) => (
-            <section key={year}>
-              <div className="flex items-baseline gap-4 mb-2">
-                <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-[var(--accent)]">
-                  {year}
-                </h2>
-                <span className="flex-1 border-t border-current/20" />
-                <span className="text-xs font-mono uppercase tracking-[0.15em] opacity-50">
-                  {posts.length} post{posts.length === 1 ? '' : 's'}
-                </span>
-              </div>
-              <div>
-                {posts.map((post) => (
-                  <PostRow key={post.slug} post={post} />
-                ))}
-              </div>
-            </section>
-          ))}
-        </div>
-      )}
+    <div className="space-y-10">
+      {grouped.map(([year, posts]) => (
+        <section key={year}>
+          <div className="flex items-baseline gap-4 mb-2">
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-[var(--accent)]">
+              {year}
+            </h2>
+            <span className="flex-1 border-t border-current/20" />
+          </div>
+          <div>
+            {posts.map((post) => (
+              <PostEntry key={post.slug} post={post} />
+            ))}
+          </div>
+        </section>
+      ))}
     </div>
   )
 }

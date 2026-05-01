@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useRef, useMemo, useEffect } from 'react'
+import React, { useMemo, useEffect } from 'react'
 import { Canvas, useFrame, extend, useThree } from '@react-three/fiber'
 import { shaderMaterial } from '@react-three/drei'
 import * as THREE from 'three'
@@ -54,7 +54,6 @@ const getDevicePerformanceLevel = (): 'low' | 'medium' | 'high' => {
 
 // Renamed inner component and pass uniforms
 function ShaderDisplay({ material, performanceLevel }) {
-  const meshRef = useRef<THREE.Mesh>();
   const { size, viewport } = useThree();
 
   useFrame((state) => {
@@ -69,10 +68,9 @@ function ShaderDisplay({ material, performanceLevel }) {
   });
 
   return (
-    <mesh ref={meshRef}>
+    <mesh>
       <planeGeometry args={[viewport.width, viewport.height]} />
-      {/* Use the passed material instance */} 
-      <primitive object={material} attach="material" /> 
+      <primitive object={material} attach="material" />
     </mesh>
   );
 }
