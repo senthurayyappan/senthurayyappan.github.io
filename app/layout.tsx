@@ -2,7 +2,12 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
-import { Source_Serif_4 } from 'next/font/google'
+import {
+  Source_Serif_4,
+  DM_Serif_Display,
+  Crimson_Pro,
+  Anek_Tamil,
+} from 'next/font/google'
 
 const sourceSerif = Source_Serif_4({
   subsets: ['latin'],
@@ -11,6 +16,30 @@ const sourceSerif = Source_Serif_4({
   variable: '--font-serif',
   display: 'swap',
 })
+
+const dmSerifDisplay = DM_Serif_Display({
+  subsets: ['latin'],
+  weight: ['400'],
+  style: ['normal', 'italic'],
+  variable: '--font-serif-display',
+  display: 'swap',
+})
+
+const crimsonPro = Crimson_Pro({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  style: ['normal', 'italic'],
+  variable: '--font-serif-body',
+  display: 'swap',
+})
+
+const anekTamil = Anek_Tamil({
+  subsets: ['tamil', 'latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-tamil',
+  display: 'swap',
+})
+
 import { Navbar } from '@/components/nav'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
@@ -25,10 +54,12 @@ export const metadata: Metadata = {
     default: 'Senthur Ayyappan',
     template: '%s | Senthur Ayyappan',
   },
-  description: 'Robotics Engineer: developing open-source tools that (mostly) work',
+  description:
+    'PhD student at the Neurobionics Lab, U-M Robotics, advised by Prof. Elliott Rouse. Working on co-design — co-evolving a robot’s mechanical design and its control inside a simulator.',
   openGraph: {
-    title: 'Senthur Ayyappan | Robotics Engineer',
-    description: 'Robotics Engineer: developing open-source tools that (mostly) work',
+    title: 'Senthur Ayyappan | PhD Student, Michigan Robotics',
+    description:
+      'PhD student at the Neurobionics Lab, U-M Robotics, advised by Prof. Elliott Rouse. Working on co-design — co-evolving a robot’s mechanical design and its control inside a simulator.',
     url: baseUrl,
     siteName: 'Senthur Ayyappan',
     locale: 'en_US',
@@ -50,7 +81,8 @@ export const metadata: Metadata = {
   },
 }
 
-const cx = (...classes) => classes.filter(Boolean).join(' ')
+const cx = (...classes: (string | undefined | false)[]) =>
+  classes.filter(Boolean).join(' ')
 
 export default function RootLayout({
   children,
@@ -64,26 +96,20 @@ export default function RootLayout({
         GeistSans.variable,
         GeistMono.variable,
         sourceSerif.variable,
-        "h-full"
+        dmSerifDisplay.variable,
+        crimsonPro.variable,
+        anekTamil.variable,
+        'h-full'
       )}
       suppressHydrationWarning
     >
-      <body 
-        className="antialiased mx-auto flex flex-col min-h-full"
-        style={{ maxWidth: "min(90vw, 120rem)" }}
-      >
+      <body className="antialiased min-h-full">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <main className="w-full flex flex-col flex-grow md:px-4 lg:px-10 xl:px-20 2xl:px-32 min-h-[calc(100vh-2rem)]">
-            <div className="sticky top-0 z-50 bg-[var(--background)] pt-2 pb-2 border-b">
-              <Navbar />
-            </div>
-            <div className="flex-1 overflow-y-auto scrollbar-hide">
-                {children}
-            </div>
-            <div className="pb-4 pt-4 md:pb-6 md:pt-6">
-              <Footer />
-            </div>
+          <main className="page-grid wrap">
+            <Navbar />
+            <div className="page-content min-w-0">{children}</div>
           </main>
+          <Footer />
           <Analytics />
           <SpeedInsights />
           <PerformanceMonitor />
