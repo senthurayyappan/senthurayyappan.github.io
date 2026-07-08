@@ -28,17 +28,15 @@ Personal portfolio + blog deployed as a **fully static export** to GitHub Pages.
 
 The site has a strong visual identity that runs through everything — treat it as load-bearing, not decorative:
 
-- **Personal almanac.** The home page (`app/page.tsx`) is laid out as an editorial almanac with a sticky left sidebar nav (`components/nav.tsx`) and numbered sections (`§ 01 Latest Dispatch`, `§ 02 From the Blog`, `§ 03 Triptych`, `§ 04 Now`). The two-column shell (`.page-grid` + `.wrap` in `globals.css`) is applied site-wide via `app/layout.tsx`.
-- **Vintage Tamil cinema × Japanese editorial.** Paper/ink palette (`--paper` / `--ink`) plus poster accents (`--red-oxide`, `--mustard`, `--indigo`, `--olive`, `--teal`, `--cream`) used sparingly. Yellow appears as a highlighter wash under emphasized words in the hero (`.hero-tag em`).
-- **Type system.** Three serif voices, all loaded via `next/font` in `app/layout.tsx`:
-  - `--font-serif-display` (DM Serif Display) — h2/h3/feature titles, sidebar nav labels.
-  - `--font-serif-body` (Crimson Pro) — body, italic metadata, post titles in lists.
-  - `--font-tamil` (Anek Tamil) — Tamil-only flourishes (currently the footer "முற்றும்").
-  - `--font-serif` (Source Serif 4) is kept for the blog post `.prose` body.
-- **Kolam ornament.** `components/Kolam.tsx` renders a sikku-kolam SVG (continuous line woven around a 3×3 dot grid). Use it via `<Kolam size={...} strokeWidth={...} />` — currently appears as a divider in the footer (over a 1px rule) and as an ornament inside the home `.recs` recommendations card.
-- **Theme + palette.** `next-themes` with `attribute="class"` toggles `.dark` on `<html>`. In dark mode `--accent` flips from red-oxide to mustard. The legacy `--sa-*` aliases (`--sa-black`, `--sa-white`, `--sa-red`, etc.) still resolve so existing components compile, but new code should use the paper/ink/poster vars directly.
+- **Personal almanac.** The home page (`app/page.tsx`) is laid out as an editorial almanac with a sticky left sidebar nav (`components/nav.tsx`) and plain-titled sections (Latest post, From the blog, Around the site, Recommendations) via a local `SectionHead`. No section numbering, eyebrows, stamps, or "Fig." captions — those were removed deliberately as generic-AI-design tells; don't reintroduce them. The two-column shell (`.page-grid` + `.wrap` in `globals.css`) is applied site-wide via `app/layout.tsx`.
+- **Vintage Tamil cinema × Japanese editorial.** Paper/ink palette (`--paper` / `--ink`) plus poster accents (`--red-oxide`, `--mustard`, `--indigo`, `--olive`, `--teal`, `--cream`) used sparingly. `--accent` is red-oxide in light mode, mustard in dark — the owner explicitly wants this palette kept. Mustard also appears as the `::selection` highlight.
+- **Type system.** Two Latin faces, loaded via `next/font` in `app/layout.tsx`:
+  - `--font-serif-display` (Young Serif) — h2/h3/feature titles, sidebar nav labels.
+  - `--font-serif-body` (Newsreader, variable with `opsz` axis + italic) — body, metadata, post titles in lists, and the blog `.prose`. `--font-serif` is a CSS alias to it (set in `:root`) so older inline styles keep resolving.
+- **Kolam ornament.** `components/Kolam.tsx` is a deterministic sikku-kolam generator (after Bárbara Almeida's Processing sketch): a checkerboard of tiles drawn as rounded rects whose corners are either fully rounded (smooth S-curve with the diagonal neighbour) or square (X crossing), driven by a seeded 0/1 corner matrix; pulli dots fill every enclosed cell. The unit is a **radially (D4) symmetric medallion** — each corner value is stamped onto its full dihedral orbit, and the medallion side `n` must stay ODD so the drawn checkerboard survives 90° rotation — because the owner explicitly wants each motif to be radially symmetric like a real kolam, arranged as a repeating border rather than a random field. A kolam authenticity rule is enforced: **no drawn loop may have zero rounded corners** (a plain orthogonal square never appears in real kolams — lines curve around every dot); invalid matrices deterministically re-roll the seed. Closed loops are **filled from the poster palette indexed by shape** (rounded-corner count 0–4 → paper/teal/mustard/red-oxide/cream), so colouring follows the symmetry and flips with the theme. `<KolamStrip count n seed p altN? altSeed? />` **chains** medallions with zero gap, the traditional way borders are joined from small dot motifs: the pulli columns stay evenly spaced across the joins and neighbouring border arcs meet in tangent kisses, so the border reads as one continuous chain (never re-add spacing between medallions — the owner wants the seamless lattice). `altN`/`altSeed` alternate a second smaller vertically-centred motif (big-motif/small-connector rhythm); `n=1` degenerates to the classic single-row circle chain, good for lightweight separators. Used as the footer divider (`.foot-ornament` — the footer is padded to align with the main content column, not the full wrap); the default `Kolam` export is a single medallion for smaller marks. Lower `p` → more crossings/longer weave. It is the site's signature mark. **Where kolams go: the footer border ONLY** (`components/footer.tsx`: alternating 5/3 chained medallions). The owner tried and rejected kolams in the sidebar nav, beside year headings, atop `PostFooter`, and on the 404 page — don't reintroduce them anywhere without being asked; plain 1px rules are correct everywhere else.
+- **Theme + palette.** `next-themes` with `attribute="class"` toggles `.dark` on `<html>`. Hover/active colors use `var(--accent)` (never hardcode red-oxide/mustard pairs with `.dark` overrides). The legacy `--sa-*` aliases (`--sa-black`, `--sa-white`, `--sa-red`, etc.) still resolve so existing components compile, but new code should use the paper/ink/poster vars directly.
 - **Tailwind v4 alpha.** Imported via `@import 'tailwindcss'` in `globals.css` (no `tailwind.config.js`). The `@/*` path alias maps to the repo root (`tsconfig.json`).
-- **Body texture.** `body` paints a subtle SVG fractal-noise + radial-gradient layer (replaces the prior halftone-dot overlay on `html::before`). It's purely decorative; don't rely on it for contrast.
+- **No texture overlays.** The body is flat paper — the old fractal-noise/radial-gradient wash was removed as an AI-design tell. Don't add grain, noise, or vignette layers back.
 
 #### Comic-panel legacy
 
@@ -64,14 +62,15 @@ Any "row of clickable items" pattern — blog index entries, publications entrie
 - Parent: `<Link>` / `<a>` with `className="block group no-underline py-5 border-b border-current/15"`.
 - Inside: `flex items-start justify-between gap-6` with content in `flex-1` and an arrow span as the right-side sibling.
 - Title: `group-hover:text-[var(--accent)] transition-colors`.
-- Arrow span: `opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200`, color `text-[var(--accent)]`. Use `→` (`M5 12h14 / M13 6l6 6-6 6`) for internal links and `↗` (`M7 17 17 7 / M7 7h10v10`) for external. 18×18 SVG, currentColor stroke.
-- Mono meta line below summary uses `text-[11px] font-mono uppercase tracking-[0.1em] text-[color:color-mix(in_srgb,var(--text)_55%,transparent)]`.
+- Arrow span (owner-preferred — keep this): `opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200`, color `text-[var(--accent)]`. Use `→` (`M5 12h14 / M13 6l6 6-6 6`) for internal links and `↗` (`M7 17 17 7 / M7 7h10v10`) for external. 18×18 SVG, currentColor stroke. The same slide-in arrow appears in the sidebar nav (`.sn-arrow`) and the home page `.read-on` / `.more` links.
+- Meta line below summary uses the `.meta-line` class (Newsreader roman, 14px, normal case, muted). Never use tiny mono/uppercase letterspaced kickers for metadata, and don't set metadata in italics — both treatments were removed site-wide (the owner dislikes italic metadata; italics are reserved for semantic emphasis in prose).
+- Never join metadata with `·` separator glyphs. When a meta row has two logical clusters (role + timeline, stats + updated date, date/read-time + tags), lay them out as two elements with `justify-between`; within a cluster, separate items with flex gaps (`gap-x-4`/`gap-x-5`), not punctuation. Reference: `.exp-meta` on `/about`, repo meta rows on `/projects`.
 
 Reference implementations: `components/posts.tsx` (`PostEntry`) and `app/publications/page.tsx` (`PublicationEntry`).
 
 ### Editorial page header (for content-listing pages)
 
-Big serif title with an accent-colored period at the end, fluid sized via `clamp()`, no eyebrow row, no subtitle by default:
+Big serif title with an accent-colored period at the end (an owner-preferred signature — keep it), fluid sized via `clamp()`, no eyebrow row, no subtitle by default:
 
 ```tsx
 <h1
@@ -91,11 +90,11 @@ Reference: `app/blog/page.tsx`, `app/publications/page.tsx`.
 
 - **Editorial almanac (default)** — home (`app/page.tsx`), global sidebar nav, global footer. New pages should adopt this system: numbered `SectionHead`, kolam dividers, paper/ink palette, DM Serif Display + Crimson Pro.
 - **Comic-panel legacy** — `/about` and `/projects` still use `ComicPanel`. They render fine inside the new sidebar shell but should eventually be rewritten into the editorial system.
-- **Editorial restraint** (Source Serif 4 body, ~640px reading column) — blog post body, publications.
+- **Blog posts use the full content column** — no `max-w`/`mx-auto` reading column; the owner wants post pages to occupy the same scrollable width as every other page. `PostHeader` uses the editorial page-header treatment (big Newsreader title with accent period, summary, then a `.meta-line`), `.prose` body is 18px Newsreader at 88% ink, and `.prose` h1–h4 use the Young Serif display face like headings everywhere else. No mono-uppercase headings inside prose (h5/h6 are small bold serif).
 - The blog *index* uses the same editorial list-row pattern with year-section headings (`text-3xl md:text-4xl font-bold tracking-tight text-[var(--accent)]`).
 
 ## Conventions worth knowing
 
 - TypeScript is configured loosely: `strict: false`, `target: es5`, but `strictNullChecks: true`. Don't expect strict-mode diagnostics; do expect null-check errors.
 - Components mix `.tsx` styles: PascalCase filenames for newer additions (`ComicPanel.tsx`, `RecentUpdates.tsx`), lowercase for older ones (`nav.tsx`, `mdx.tsx`, `posts.tsx`). Match the surrounding file when editing.
-- The home page (`app/page.tsx`) sources the latest blog post automatically from `getBlogPosts()`, but the recommendations list (`RECS`) and the "Now" prose (`Now()` component) are hardcoded — update them when something new is worth surfacing. `components/RecentUpdates.tsx` is no longer rendered but is kept temporarily as a content reference.
+- The home page (`app/page.tsx`) sources the latest blog post automatically from `getBlogPosts()`, but the recommendations list (`RECS`) is hardcoded — update it when something new is worth surfacing. `components/RecentUpdates.tsx` is no longer rendered but is kept temporarily as a content reference.

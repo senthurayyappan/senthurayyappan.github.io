@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function Page() {
   return (
-    <section className="mx-auto max-w-5xl px-4 sm:px-6 py-6 md:py-10">
+    <section className="max-w-5xl py-6 md:py-10">
       <header className="mb-12">
         <h1
           className="font-medium tracking-tight text-[var(--text)] leading-[0.95]"

@@ -6,12 +6,12 @@ import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { ThemeSwitch } from './theme-switch'
 
-const navItems: { num: string; href: string; label: string }[] = [
-  { num: '01', href: '/', label: 'Home' },
-  { num: '02', href: '/about', label: 'About' },
-  { num: '03', href: '/projects', label: 'Projects' },
-  { num: '04', href: '/blog', label: 'Blog' },
-  { num: '05', href: '/publications', label: 'Publications' },
+const navItems: { href: string; label: string }[] = [
+  { href: '/', label: 'Home' },
+  { href: '/about', label: 'About' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/publications', label: 'Publications' },
 ]
 
 function GitHubIcon() {
@@ -49,19 +49,18 @@ function RssIcon() {
 
 function NavList({ pathname, onClick }: { pathname: string; onClick?: () => void }) {
   return (
-    <ol className="sidenav-list">
+    <ul className="sidenav-list">
       {navItems.map((it) => {
         const isActive =
           it.href === '/' ? pathname === '/' : pathname.startsWith(it.href)
         return (
-          <li key={it.num}>
+          <li key={it.href}>
             <Link
               href={it.href}
               onClick={onClick}
               aria-current={isActive ? 'page' : undefined}
             >
-              <span className="sn-num">{it.num}</span>
-              <span className="sn-label">{it.label}</span>
+              {it.label}
               <span className="sn-arrow" aria-hidden="true">
                 <svg
                   width="18"
@@ -81,7 +80,7 @@ function NavList({ pathname, onClick }: { pathname: string; onClick?: () => void
           </li>
         )
       })}
-    </ol>
+    </ul>
   )
 }
 

@@ -39,54 +39,45 @@ const chronology: {
   org: string
 }[] = [
     {
-      date: '2026 - Present',
+      date: '2026–present',
       title: 'PhD Student',
       org: 'Robotics, University of Michigan',
     },
     {
-      date: '2021 - 2025',
+      date: '2021–2025',
       title: 'Project Lead, Research Engineer',
       org: 'Neurobionics Lab, U-M',
     },
     {
-      date: 'Nov 2024 - Jan 2025',
+      date: 'Nov 2024 – Jan 2025',
       title: 'Private Consultant',
       org: 'Robotics and AI Institute',
     },
     {
-      date: 'May 2020 - July 2020',
+      date: 'May 2020 – July 2020',
       title: 'Research Intern',
       org: 'DRDO/DEBEL Exoskeleton Project',
     },
     {
-      date: 'Dec 2018 - July 2019',
+      date: 'Dec 2018 – July 2019',
       title: 'Research Intern',
       org: 'Robotics Lab, IIT Madras',
     },
     {
-      date: 'July 2016 - June 2020',
+      date: 'July 2016 – June 2020',
       title: 'National Institute of Technology Tiruchirappalli',
       org: 'Bachelor of Technology, Production Engineering',
     },
     {
-      date: '2013 - 2015',
+      date: '2013–2015',
       title: 'Maharishi International Residential School',
       org: 'Central Board of Secondary Education',
     },
   ]
 
-function SectionHead({
-  num,
-  title,
-  right,
-}: {
-  num: string
-  title: string
-  right?: string
-}) {
+function SectionHead({ title, right }: { title: string; right?: string }) {
   return (
     <div className="section-head">
-      <span className="num">§ {num}</span>
       <h2>{title}</h2>
       {right && <span className="right">{right}</span>}
     </div>
@@ -174,7 +165,7 @@ function Experience() {
 
   return (
     <section className="section" id="experience">
-      <SectionHead num="01" title="Experience" />
+      <SectionHead title="Experience" />
       <div className="exp-grid">
         {/* Row 1 — RAI big lead + Open-Source Leg highlight tile */}
         <div className="exp-row exp-row-7-5">
@@ -193,7 +184,10 @@ function Experience() {
                 style={{ objectFit: 'cover' }}
               />
             </div>
-            <span className="exp-meta">Private Consultant · 2024-2025</span>
+            <span className="exp-meta">
+              <span>Private Consultant</span>
+              <span>2024–2025</span>
+            </span>
             <h3>Robotics &amp; AI Institute</h3>
             <p>
               Worked on the co-design of the next-generation Ultra Mobility
@@ -209,7 +203,10 @@ function Experience() {
             data-bg="osl"
           >
             <span className="exp-stamp">Current</span>
-            <span className="exp-meta">Project Lead · 2021 - 2025</span>
+            <span className="exp-meta">
+              <span>Project Lead</span>
+              <span>2021–2025</span>
+            </span>
             <h3>The Open-Source Leg</h3>
             <p>
               Led the hardware and software stack for OSL 2.0, a lower-limb
@@ -235,7 +232,10 @@ function Experience() {
                 style={{ objectFit: 'cover' }}
               />
             </div>
-            <span className="exp-meta">Research Engineer · 2022-2023</span>
+            <span className="exp-meta">
+              <span>Research Engineer</span>
+              <span>2022–2023</span>
+            </span>
             <h3>ROB311 Ballbot</h3>
             <p>
               Co-developed the balancing robot platform used as the hands-on
@@ -259,8 +259,9 @@ function Experience() {
                 />
               </div>
               <span className="exp-meta">
-                BTech, Production Engineering · 2016 — 2020
-              </span>
+              <span>BTech, Production Engineering</span>
+              <span>2016–2020</span>
+            </span>
               <h3>NIT Trichy</h3>
               <p>
                 Earned my BTech in Production Engineering with a minor in
@@ -283,7 +284,10 @@ function Experience() {
                   style={{ objectFit: 'cover', objectPosition: '0% 30%' }}
                 />
               </div>
-              <span className="exp-meta">Team Lead · 2018 — 2020</span>
+              <span className="exp-meta">
+              <span>Team Lead</span>
+              <span>2018–2020</span>
+            </span>
               <h3>Spider Tronix, NITT</h3>
               <p>
                 Led NIT Trichy&rsquo;s robotics and machine learning club, coordinating a
@@ -312,7 +316,8 @@ function Experience() {
               />
             </div>
             <span className="exp-meta">
-              Research Intern · 2019
+              <span>Research Intern</span>
+              <span>2019</span>
             </span>
             <h3>IIT Madras</h3>
             <p>
@@ -337,7 +342,8 @@ function Experience() {
               />
             </div>
             <span className="exp-meta">
-              Research Intern · 2020
+              <span>Research Intern</span>
+              <span>2020</span>
             </span>
             <h3>DRDO | DEBEL</h3>
             <p>
@@ -355,7 +361,7 @@ function Experience() {
 function Chronology() {
   return (
     <section className="section" id="chronology">
-      <SectionHead num="02" title="Chronology" right="Selected timeline" />
+      <SectionHead title="Chronology" right="Selected timeline" />
       <table className="chronology-table">
         <tbody>
           {chronology.map(({ date, title, org }) => (
@@ -376,11 +382,7 @@ function Chronology() {
 function Tools() {
   return (
     <section className="section" id="tools">
-      <SectionHead
-        num="03"
-        title="Tools of the Trade"
-        right="Three columns"
-      />
+      <SectionHead title="Tools of the trade" />
       <div className="profile-tools">
         {skills.map(({ label, items }) => (
           <div key={label} className="profile-tool">

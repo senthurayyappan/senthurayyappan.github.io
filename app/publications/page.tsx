@@ -129,7 +129,7 @@ function PublicationEntry({ pub }: { pub: Publication }) {
               </Fragment>
             ))}
           </p>
-          <p className="mt-2 text-[11px] font-mono uppercase tracking-[0.1em] text-[color:color-mix(in_srgb,var(--text)_55%,transparent)]">
+          <p className="mt-2 meta-line">
             {pub.venue}
           </p>
         </div>
@@ -137,16 +137,7 @@ function PublicationEntry({ pub }: { pub: Publication }) {
           aria-hidden
           className="flex-none mt-1 text-[var(--accent)] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"
         >
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M7 17 17 7" />
             <path d="M7 7h10v10" />
           </svg>
@@ -160,7 +151,7 @@ export default function Page() {
   const grouped = groupByYear(publications)
 
   return (
-    <section className="mx-auto max-w-5xl px-4 sm:px-6 py-6 md:py-10">
+    <section className="max-w-5xl py-6 md:py-10">
       <header className="mb-12">
         <h1
           className="font-medium tracking-tight text-[var(--text)] leading-[0.95]"

@@ -28,7 +28,7 @@ export default function PostFooter({
               href={`/blog/${prev.slug}`}
               className="block group no-underline"
             >
-              <span className="block text-[11px] font-mono uppercase tracking-[0.1em] text-[color:color-mix(in_srgb,var(--text)_50%,transparent)]">
+              <span className="block meta-line">
                 ← Previous
               </span>
               <span
@@ -46,7 +46,7 @@ export default function PostFooter({
               href={`/blog/${next.slug}`}
               className="block group no-underline md:text-right md:col-start-2"
             >
-              <span className="block text-[11px] font-mono uppercase tracking-[0.1em] text-[color:color-mix(in_srgb,var(--text)_50%,transparent)]">
+              <span className="block meta-line">
                 Next →
               </span>
               <span
@@ -61,7 +61,7 @@ export default function PostFooter({
           )}
         </div>
       )}
-      <div className="flex flex-wrap gap-x-5 gap-y-2 justify-center text-[11px] font-mono uppercase tracking-[0.1em] text-[color:color-mix(in_srgb,var(--text)_55%,transparent)]">
+      <div className="flex flex-wrap gap-x-5 gap-y-2 justify-center meta-line">
         <Link href="/blog" className="hover:text-[var(--text)] transition-colors">
           All posts
         </Link>

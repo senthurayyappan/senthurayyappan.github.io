@@ -26,7 +26,7 @@ export default function PostFigure({
       />
       {caption && (
         <figcaption
-          className="mt-2 text-sm italic text-center text-[color:color-mix(in_srgb,var(--text)_60%,transparent)]"
+          className="mt-2 text-sm text-center text-[color:color-mix(in_srgb,var(--text)_60%,transparent)]"
           style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}
         >
           {caption}

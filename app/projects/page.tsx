@@ -259,13 +259,34 @@ function formatDate(date: string) {
   }).format(new Date(date))
 }
 
-function RepoEntry({
-  repo,
-  index,
-}: {
-  repo: Repository
-  index: number
-}) {
+function StarIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M12 2.5l2.9 5.9 6.6 1-4.75 4.6 1.1 6.5L12 17.4l-5.85 3.1 1.1-6.5L2.5 9.4l6.6-1z" />
+    </svg>
+  )
+}
+
+function ForkIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="6" cy="5" r="2.5" />
+      <circle cx="18" cy="5" r="2.5" />
+      <circle cx="12" cy="19" r="2.5" />
+      <path d="M6 7.5v1a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3v-1" />
+      <path d="M12 11.5v5" />
+    </svg>
+  )
+}
+
+function RepoEntry({ repo }: { repo: Repository }) {
+  const tags = [
+    ...(repo.language ? [repo.language] : []),
+    ...(repo.topics || []).filter(
+      (t) => t.toLowerCase() !== repo.language?.toLowerCase()
+    ),
+  ].slice(0, 5)
+
   return (
     <a
       href={repo.href}
@@ -273,61 +294,56 @@ function RepoEntry({
       rel="noopener noreferrer"
       className="block group no-underline py-5 border-b border-current/15"
     >
-      <div className="flex items-start justify-between gap-6">
-        <div className="min-w-0 flex-1">
-          <div className="flex items-baseline gap-3">
-            <span className="text-[11px] font-mono uppercase tracking-[0.14em] text-[color:color-mix(in_srgb,var(--text)_55%,transparent)]">
-              {String(index + 1).padStart(2, '0')}
-            </span>
-            <h3
-              className="text-base md:text-lg font-medium leading-snug text-[var(--text)] group-hover:text-[var(--accent)] transition-colors"
-              style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}
-            >
-              {repo.name}
-            </h3>
-          </div>
-          {repo.description && (
-            <p
-              className="mt-1.5 text-sm leading-relaxed text-[color:color-mix(in_srgb,var(--text)_70%,transparent)]"
-              style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}
-            >
-              {repo.description}
-            </p>
-          )}
-          <p className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] font-mono uppercase tracking-[0.1em] text-[color:color-mix(in_srgb,var(--text)_55%,transparent)]">
-            {repo.language && <span>{repo.language}</span>}
-            {repo.language && <span aria-hidden>·</span>}
-            <span>{repo.stars} stars</span>
-            <span aria-hidden>·</span>
-            <span>{repo.forks} forks</span>
-            <span aria-hidden>·</span>
-            <time dateTime={repo.updatedAt}>Updated {formatDate(repo.updatedAt)}</time>
-          </p>
-          {repo.topics && repo.topics.length > 0 && (
-            <p className="mt-2 flex flex-wrap gap-2 text-[11px] font-mono uppercase tracking-[0.08em] text-[color:color-mix(in_srgb,var(--text)_50%,transparent)]">
-              {repo.topics.slice(0, 4).map((topic) => (
-                <span key={topic}>{topic}</span>
-              ))}
-            </p>
-          )}
-        </div>
-        <span
-          aria-hidden
-          className="flex-none mt-1 text-[var(--accent)] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"
+      <div className="flex items-baseline justify-between gap-6">
+        <h3
+          className="min-w-0 text-base md:text-lg font-medium leading-snug text-[var(--text)] group-hover:text-[var(--accent)] transition-colors"
+          style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}
         >
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+          {repo.name}
+        </h3>
+        <span className="flex-none flex items-center gap-3">
+          <time className="meta-line" dateTime={repo.updatedAt}>
+            {formatDate(repo.updatedAt)}
+          </time>
+          <span
+            aria-hidden
+            className="text-[var(--accent)] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"
           >
-            <path d="M7 17 17 7" />
-            <path d="M7 7h10v10" />
-          </svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M7 17 17 7" />
+              <path d="M7 7h10v10" />
+            </svg>
+          </span>
+        </span>
+      </div>
+      {repo.description && (
+        <p
+          className="mt-1.5 text-sm leading-relaxed text-[color:color-mix(in_srgb,var(--text)_70%,transparent)]"
+          style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}
+        >
+          {repo.description}
+        </p>
+      )}
+      <div className="mt-3 flex items-center justify-between gap-6">
+        <span className="flex flex-wrap gap-2">
+          {tags.map((tag) => (
+            <span
+              key={tag}
+              className="meta-line px-2 py-[2px] border border-current/25"
+            >
+              {tag}
+            </span>
+          ))}
+        </span>
+        <span className="flex-none flex items-center gap-4 meta-line">
+          <span className="inline-flex items-center gap-1.5">
+            <StarIcon />
+            {repo.stars}
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <ForkIcon />
+            {repo.forks}
+          </span>
         </span>
       </div>
     </a>
@@ -350,8 +366,8 @@ export default function Page() {
       </header>
 
       <div>
-        {repositories.map((repo, index) => (
-          <RepoEntry key={repo.name} repo={repo} index={index} />
+        {repositories.map((repo) => (
+          <RepoEntry key={repo.name} repo={repo} />
         ))}
       </div>
     </section>

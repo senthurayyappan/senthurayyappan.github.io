@@ -2,41 +2,20 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
-import {
-  Source_Serif_4,
-  DM_Serif_Display,
-  Crimson_Pro,
-  Anek_Tamil,
-} from 'next/font/google'
+import { Young_Serif, Newsreader } from 'next/font/google'
 
-const sourceSerif = Source_Serif_4({
-  subsets: ['latin'],
-  weight: ['400', '500', '600'],
-  style: ['normal', 'italic'],
-  variable: '--font-serif',
-  display: 'swap',
-})
-
-const dmSerifDisplay = DM_Serif_Display({
+const youngSerif = Young_Serif({
   subsets: ['latin'],
   weight: ['400'],
-  style: ['normal', 'italic'],
   variable: '--font-serif-display',
   display: 'swap',
 })
 
-const crimsonPro = Crimson_Pro({
+const newsreader = Newsreader({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
   style: ['normal', 'italic'],
+  axes: ['opsz'],
   variable: '--font-serif-body',
-  display: 'swap',
-})
-
-const anekTamil = Anek_Tamil({
-  subsets: ['tamil', 'latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-tamil',
   display: 'swap',
 })
 
@@ -95,10 +74,8 @@ export default function RootLayout({
       className={cx(
         GeistSans.variable,
         GeistMono.variable,
-        sourceSerif.variable,
-        dmSerifDisplay.variable,
-        crimsonPro.variable,
-        anekTamil.variable,
+        youngSerif.variable,
+        newsreader.variable,
         'h-full'
       )}
       suppressHydrationWarning

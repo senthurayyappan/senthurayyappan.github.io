@@ -65,43 +65,30 @@ const TrackGlyph = () => (
 )
 
 const RECS: {
-  idx: string
   name: string
   kind: string
   href: string
   glyph: React.ReactNode
 }[] = [
     {
-      idx: 'i.',
       name: 'The Studio',
       kind: 'Show',
       href: 'https://www.imdb.com/title/tt23649128/',
       glyph: <FilmGlyph />,
     },
     {
-      idx: 'ii.',
       name: 'Dindigul Biriyani',
       kind: 'Recipe',
       href: 'https://www.kannammacooks.com/tamilnadu-thalappakatti-biriyani/',
       glyph: <RecipeGlyph />,
     },
     {
-      idx: 'iii.',
       name: 'Osai Kekkudho',
       kind: 'Track',
       href: 'https://youtu.be/E69KvVkemeM',
       glyph: <TrackGlyph />,
     },
   ]
-
-function tagClass(tag?: string) {
-  const t = (tag || '').toLowerCase()
-  if (t.includes('research')) return 't-research'
-  if (t.includes('tutorial')) return 't-tutorial'
-  if (t.includes('life') || t.includes('personal')) return 't-life'
-  if (t.includes('note')) return 't-notes'
-  return 't-default'
-}
 
 function shortDate(d: string) {
   const dt = new Date(d.includes('T') ? d : `${d}T00:00:00`)
@@ -120,33 +107,17 @@ function Hero() {
         robot&rsquo;s mechanical design and its control policy can co-evolve
         inside a simulation environment.
       </p>
-      <div className="hero-columns">
-        <div className="hero-column">
-          <span className="hero-column-value">PhD W26</span>
-        </div>
-        <div className="hero-column">
-          <span className="hero-column-value">Neurobionics Lab, U-M Robotics</span>
-        </div>
-        <div className="hero-column">
-          <span className="hero-column-value">Ann Arbor, 2026</span>
-        </div>
+      <div className="hero-folio">
+        <span>PhD W26</span>
+        <span>Neurobionics Lab, U-M Robotics</span>
       </div>
     </section>
   )
 }
 
-function SectionHead({
-  num,
-  title,
-  right,
-}: {
-  num: string
-  title: string
-  right?: string
-}) {
+function SectionHead({ title, right }: { title: string; right?: string }) {
   return (
     <div className="section-head">
-      <span className="num">§ {num}</span>
       <h2>{title}</h2>
       {right && <span className="right">{right}</span>}
     </div>
@@ -168,9 +139,8 @@ function Featured({
   return (
     <section className="section" id="featured">
       <SectionHead
-        num="01"
-        title="Latest Dispatch"
-        right={`Updated ${formatDate(post.publishedAt)}`}
+        title="Latest post"
+        right={formatDate(post.publishedAt)}
       />
       <div className="featured">
         <Link
@@ -178,7 +148,6 @@ function Featured({
           className="img-frame"
           aria-label={post.title}
         >
-          <span className="stamp">Featured</span>
           {post.image ? (
             <Image
               src={post.image}
@@ -189,21 +158,18 @@ function Featured({
               priority
             />
           ) : null}
-          <span className="corner">Fig. 01</span>
         </Link>
-        <div className="copy">
-          <h3>
-            <Link href={`/blog/${post.slug}`}>{post.title}</Link>
-          </h3>
+        <Link href={`/blog/${post.slug}`} className="copy">
+          <h3>{post.title}</h3>
           {post.summary && <p className="dek">{post.summary}</p>}
           <div className="meta">
             <span>{formatDate(post.publishedAt)}</span>
             {post.readingTime !== undefined && (
-              <span>· {post.readingTime} min read</span>
+              <span>{post.readingTime} min read</span>
             )}
           </div>
-          <Link href={`/blog/${post.slug}`} className="read-on">
-            Read the dispatch
+          <span className="read-on">
+            Read the post
             <svg
               width="18"
               height="18"
@@ -218,8 +184,8 @@ function Featured({
               <path d="M5 12h14" />
               <path d="M13 6l6 6-6 6" />
             </svg>
-          </Link>
-        </div>
+          </span>
+        </Link>
       </div>
     </section>
   )
@@ -233,36 +199,22 @@ function PostsList({
     title: string
     publishedAt: string
     readingTime?: number
-    tags?: string[]
   }[]
 }) {
   if (posts.length === 0) return null
   return (
     <section className="section" id="blog">
-      <SectionHead
-        num="02"
-        title="From the Blog"
-        right={`Archive · ${posts.length} ${posts.length === 1 ? 'entry' : 'entries'}`}
-      />
+      <SectionHead title="From the blog" />
       <div className="posts">
-        {posts.map((p) => {
-          const primary = p.tags && p.tags.length > 0 ? p.tags[0] : undefined
-          return (
-            <Link key={p.slug} href={`/blog/${p.slug}`} className="post-row">
-              <span className="date">{shortDate(p.publishedAt)}</span>
-              <span className="title">
-                <span
-                  className={`tag-dot ${tagClass(primary)}`}
-                  aria-hidden="true"
-                />
-                {p.title}
-              </span>
-              <span className="read">
-                {p.readingTime !== undefined ? `${p.readingTime} min` : ''}
-              </span>
-            </Link>
-          )
-        })}
+        {posts.map((p) => (
+          <Link key={p.slug} href={`/blog/${p.slug}`} className="post-row">
+            <span className="date">{shortDate(p.publishedAt)}</span>
+            <span className="title">{p.title}</span>
+            <span className="read">
+              {p.readingTime !== undefined ? `${p.readingTime} min` : ''}
+            </span>
+          </Link>
+        ))}
       </div>
     </section>
   )
@@ -271,7 +223,7 @@ function PostsList({
 function FrontPackage() {
   return (
     <section className="section" id="inside-the-paper">
-      <SectionHead num="03" title="Quick Tour" right="Three pages" />
+      <SectionHead title="Around the site" />
       <div className="front-package">
         <Link href="/projects" className="fp-lead">
           <div className="fp-lead-photo">
@@ -287,28 +239,23 @@ function FrontPackage() {
           <p className="dek">
             Hardware and software toolchains for robotics research. Most of &rsquo;em are open-source and mostly work. When they don&rsquo;t, someone awesome in the community (often someone like you) fixes them.
           </p>
-          <ol className="teaser-list" aria-label="Selected projects">
+          <ul className="teaser-list" aria-label="Selected projects">
             <li>
-              <span className="idx">i.</span>
               <span className="name">Open-Source Leg</span>
             </li>
             <li>
-              <span className="idx">ii.</span>
               <span className="name">Onshape Robotics Toolkit</span>
             </li>
             <li>
-              <span className="idx">iii.</span>
               <span className="name">ROB311 Ballbot</span>
             </li>
             <li>
-              <span className="idx">iv.</span>
               <span className="name">Robot CI</span>
             </li>
             <li>
-              <span className="idx">v.</span>
               <span className="name">Anton</span>
             </li>
-          </ol>
+          </ul>
           <span className="more">
             All projects
             <svg
@@ -335,22 +282,22 @@ function FrontPackage() {
               I lead the Open-Source Leg as a research engineer for the past five years. In that time I also consulted briefly for the Robotics &amp; AI Institute and co-developed the ROB311 Ballbot. Before coming to the US in 2021, what was I doing? I&rsquo;m glad you asked.
             </p>
             <span className="more">
-              Full bio
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M5 12h14" />
-                <path d="M13 6l6 6-6 6" />
-              </svg>
-            </span>
+            Full bio
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M5 12h14" />
+              <path d="M13 6l6 6-6 6" />
+            </svg>
+          </span>
           </Link>
           <Link href="/publications" className="fp-story">
             <h3>Publications</h3>
@@ -358,22 +305,22 @@ function FrontPackage() {
               Most recent: &ldquo;A Compensated Open-Loop Impedance Controller Evaluated on the Second-Generation Open-Source Leg Prosthesis.&rdquo; IEEE/ASME T-Mech, 2025.
             </p>
             <span className="more">
-              All publications
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M5 12h14" />
-                <path d="M13 6l6 6-6 6" />
-              </svg>
-            </span>
+            All publications
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M5 12h14" />
+              <path d="M13 6l6 6-6 6" />
+            </svg>
+          </span>
           </Link>
         </div>
       </div>
@@ -384,11 +331,11 @@ function FrontPackage() {
 function Recommendations() {
   return (
     <section className="section" id="recommendations">
-      <SectionHead num="04" title="Recommendations" right="Three picks" />
+      <SectionHead title="Recommendations" />
       <div className="rec-grid">
         {RECS.map((r) => (
           <a
-            key={r.idx}
+            key={r.name}
             href={r.href}
             target="_blank"
             rel="noopener noreferrer"
@@ -437,7 +384,6 @@ export default function Page() {
           title: p.metadata.title,
           publishedAt: p.metadata.publishedAt,
           readingTime: p.metadata.readingTime,
-          tags: p.metadata.tags,
         }))}
       />
       <FrontPackage />

@@ -68,7 +68,7 @@ export default function Blog({ params }) {
   const next = posts[idx - 1]
 
   return (
-    <article className="w-full py-8 md:py-12">
+    <article className="w-full py-6 md:py-10">
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -92,28 +92,26 @@ export default function Blog({ params }) {
         }}
       />
 
-      <div className="mx-auto max-w-[640px] px-4 sm:px-6">
-        <PostHeader metadata={post.metadata} />
+      <PostHeader metadata={post.metadata} />
 
-        {post.metadata.image && (
-          <PostFigure
-            src={post.metadata.image}
-            alt={post.metadata.title}
-            position={post.metadata.imagePosition}
-          />
-        )}
-
-        <div className="prose dark:prose-invert">
-          <CustomMDX source={post.content} />
-        </div>
-
-        <PostFooter
-          slug={post.slug}
-          prev={prev}
-          next={next}
-          repoUrl={REPO_URL}
+      {post.metadata.image && (
+        <PostFigure
+          src={post.metadata.image}
+          alt={post.metadata.title}
+          position={post.metadata.imagePosition}
         />
+      )}
+
+      <div className="prose dark:prose-invert">
+        <CustomMDX source={post.content} />
       </div>
+
+      <PostFooter
+        slug={post.slug}
+        prev={prev}
+        next={next}
+        repoUrl={REPO_URL}
+      />
     </article>
   )
 }
