@@ -28,9 +28,9 @@ This is not decoration. Senthur's research is robot codesign: co-evolving a mach
 |---|---|---|
 | `--paper` | `#f6f4ee` | light ground; panel faces **in both themes** |
 | `--ink` | `#15130d` | text, keylines, **and the dark ground** |
-| `--yellow` | `#f9c90a` | accent in dark |
-| `--red` | `#ef2841` | accent in light; panel bottom face |
-| `--blue` | `#007d7e` | panel right face |
+| `--yellow` | `#f9c90a` | accent in dark; panel right face at night |
+| `--red` | `#ef2841` | accent in light; panel right face by day |
+| `--blue` | `#007d7e` | panel bottom face, **both themes** |
 
 `--ink` is the warm tonal mirror of `--paper` -- same warm bias (red high, blue low),
 inverted lightness. Pure `#000000` was tried and rejected: the paper is warm, and a
@@ -60,43 +60,78 @@ The alternatives (white keylines, or no keylines) were both tried and rejected.
 Long-form prose lives **outside** panels, directly on the ground, so night reading stays
 comfortable.
 
-## The panel: true oblique extrusion
+## The grid: a butted sheet with extruded cells
 
-Not a CSS drop shadow. A real solid:
+Grids and tables are **zero-gap**: cells butt together into one sheet, and adjacent
+keylines collapse into a single shared 2px scribe line (each cell after the first
+column/row pulls back 2px). A raised cell is extruded straight out of that sheet --
+the literal CAD operation: sketch a grid on a plane, select a face, extrude.
 
-- **Face**: `--paper`, `--ink` keyline at 2.4px.
-- **Right side face**: `--blue`. Cool, recessive -- correct for a vertical plane.
-- **Bottom side face**: `--red`. Warm, heavy -- correct for a ground-facing plane.
-- **Mitered corner edge** where the two side faces meet. This is what sells it as a
-  solid rather than two rectangles.
-- Keylines on the side faces too.
+### The geometry (load-bearing -- the first attempt got it wrong)
 
-`--yellow` is deliberately **not** spent on panel furniture. It is held in reserve as
-the dark-mode accent and for hover, so the accent always has somewhere louder to
-escalate to.
+The first mockups kept the content face glued to its grid slot and bolted side faces
+on *outside* it. That put the solid's implied footprint off-grid while its top face
+stayed coplanar with the flat neighbours -- two contradictory depth cues at once. It
+read as a rectangle with two coloured borders, and no amount of styling fixed it.
+The correct construction:
 
-### Depth tiers -- the extrusion must be rationed
+- **The footprint never moves.** The cell's slot in the grid is the solid's base;
+  its edges stay flush with the flat neighbours' scribe lines.
+- **The face lifts up-left** by the extrusion height `d`:
+  `transform: translate(-d, -d)`. The implied camera sits down-right.
+- **Side faces are skewed parallelograms** connecting the lifted face back to the
+  footprint, both *inside* the cell's own slot: right face is a `width: d` strip at
+  the right edge under `skewY(45deg)`; bottom face is a `height: d` strip at the
+  bottom edge under `skewX(45deg)`. They meet in a mitered corner edge.
+- **Right side face = accent** (`--red` by day, `--yellow` at night).
+  **Bottom side face = `--blue`**, both themes.
+- **Fixed painter's order.** Cells further down-right always paint in front
+  (z-index derived from grid position, row + col) and hover **never** changes it.
+  A lifted face only ever invades up-left, and the down-right cell legitimately
+  wins every overlap -- occlusion, not collision. Hover-promoting z-index was tried
+  and rejected: the block pops over everything and the illusion collapses.
+- **No drop shadows.** At zero gap there is no ground between cells to receive one,
+  and soft blur fights the flat ink language.
 
-| Tier | Depth |
+A true CSS-3D perspective version (real cuboids in a `perspective` camera) was
+prototyped and rejected: a real camera shows near cells almost no side face, and
+perspective transforms rasterize text off the pixel grid -- the type blurs.
+
+### Line weights: every edge has exactly one owner
+
+Stacked keylines read as a misprint. The face draws its own 2px border including
+both seams; the right side face draws the outer diagonals and the miter; the bottom
+face draws only its outer horizontal edge and outer diagonal. Shared edges are
+`border-width: 0` on the non-owner. Diagonal borders are **3px pre-skew** (2.12px
+perpendicular after the 45-degree shear) because Chromium rounds fractional border
+widths down to whole px -- the exact 2.83px computes to 2px and renders thin.
+
+### Heights: binary, not a scale
+
+| State | Height |
 |---|---|
-| Hero, featured panel | 12px |
-| List rows, secondary cards | 4-6px |
-| Blog reading column | 0 -- body text sits flat on the page |
+| Flat (default) | 0 |
+| Raised -- editorial mark: current work, featured | 12px |
+| Hovered (any cell) | 18px |
 
-If everything is extruded, depth stops meaning anything and the page reads as noise.
+Raise at most 1-2 cells per grid, ideally on a diagonal. If everything is raised,
+nothing is. Varied per-cell heights were tried and rejected as noise.
 
 ### Hover
 
-Depth collapses 12px -> 3px and the panel translates down-right by the difference: the
-panel **presses into the page**. One transform. A real affordance, not an opacity fade.
-A robotics site should behave like it has physics.
+Any cell rises to 18px and its face tints with the accent at low alpha. Flat cells
+become solids on hover, so every cell is interactive; resting height only says which
+ones matter. The lift is one animated `@property`-registered custom length driving
+pure 2D changes (face translate, side-face growth) -- text stays on the pixel grid
+and never blurs. Side-face borders use `min(calc(var(--d)*99), Npx)` so they vanish
+exactly when the cell is flat.
 
-### Section colour override
+### The padding rule
 
-Blue-right / red-bottom is the site default so all panels read as one material. A section
-may swap the pairing deliberately (e.g. Projects red-right / blue-bottom) so colour
-signals *where you are* rather than decorating at random. Yellow stays out of side faces
-entirely -- see the reserve rule above.
+A raised face overlaps its up-left neighbours by its height. Cell padding of
+12-15px keeps neighbour text clear of the resting 12px overlap; a hovered face may
+graze a neighbour's text zone by a few px, which reads as an object passing in
+front, not a bug.
 
 ## Display type: continuous extrusion, single accent
 
@@ -199,10 +234,10 @@ drop the halftone.**
 
 | File | Change |
 |---|---|
-| `app/globals.css` | Palette rewrite (5 tokens, no black); panel/extrusion system; heading extrusion; depth tiers; hover press |
+| `app/globals.css` | Palette rewrite (5 tokens, no black) -- **done, shipped 2026-07-14**; extruded-panel system (`.xp` face + skewed pseudo side faces, `@property --d`); heading extrusion; zero-gap grid + border collapse; painter's-order z rules |
 | `components/Kolam.tsx` | Replaced with the plait generator |
 | `app/layout.tsx` | Add Inter for utility text |
-| `public/logo/favicons/site.webmanifest` | `theme_color` / `background_color` -> `--paper` |
+| `public/logo/favicons/site.webmanifest` | `theme_color` / `background_color` -> `--paper` -- **done, shipped 2026-07-14** |
 | Image assets | Re-exported as `currentColor` SVG lineart |
 | `CLAUDE.md` | Document the system as load-bearing |
 
@@ -213,6 +248,9 @@ is superseded by the extruded panel and should be retired as pages migrate.
 
 - `npm run build` and inspect the **minified** CSS. Dev mode hides minifier bugs; a
   `color-mix(... 0%, ...)` collapse to a unitless `0` silently voided
-  `background-image` in production once already.
+  `background-image` in production once already. `min(calc(var(--d)*99), 3px)` and
+  `@property` registrations must survive minification -- verify in the built output.
 - Check both themes in a real browser, not just dev.
 - Confirm no hex outside the five tokens (plus ink/paper alpha derivations) ships.
+- Hover every grid: no cell may change stacking order, no seam may render heavier
+  than 2px, and no neighbour's text may be covered at rest.
