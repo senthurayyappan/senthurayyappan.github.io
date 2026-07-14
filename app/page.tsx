@@ -332,20 +332,22 @@ function Recommendations() {
   return (
     <section className="section" id="recommendations">
       <SectionHead title="Recommendations" />
-      <div className="rec-grid">
+      <div className="xsheet rec-sheet">
         {RECS.map((r) => (
           <a
             key={r.name}
             href={r.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="rec-cell"
+            className="xcell"
           >
-            <div className="rec-meta">
-              <span className="rec-kind">{r.kind}</span>
-              <span className="rec-glyph">{r.glyph}</span>
-            </div>
-            <span className="rec-name">{r.name}</span>
+            <span className="xcell-face">
+              <span className="rec-meta">
+                <span className="rec-kind">{r.kind}</span>
+                <span className="rec-glyph">{r.glyph}</span>
+              </span>
+              <span className="rec-name">{r.name}</span>
+            </span>
           </a>
         ))}
       </div>
