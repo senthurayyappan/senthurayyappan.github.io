@@ -132,7 +132,12 @@ a.xcell:focus-visible {
   color: inherit;
 }
 .xcell.raised { --d: 12px; }
-.xcell:focus-visible { --d: 18px; }
+.xcell:focus-visible {
+  --d: 18px;
+  /* the face carries the accent outline + tint + lift; the UA ring would
+     hug the static footprint 18px away from it */
+  outline: none;
+}
 
 .xcell-face {
   position: relative;
@@ -194,7 +199,7 @@ a.xcell:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .xcell, .xcell-face { transition: none; }
+  .xcell, .xcell-face, .rec-glyph { transition: none; }
 }
 
 /* Extruded display type -- 28px+ headings only (below that it reads as
@@ -661,7 +666,7 @@ img {
 /* The panel face already tints on hover; the glyph nudge is the only inner
    effect kept (motion the face tint doesn't provide). */
 @media (hover: hover) {
-  .xcell:hover .rec-glyph {
+  .rec-sheet .xcell:hover .rec-glyph {
     transform: translateX(2px);
   }
 }
