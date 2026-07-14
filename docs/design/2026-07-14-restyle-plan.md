@@ -168,6 +168,70 @@ git add app/globals.css
 git commit -m "feat(css): extruded panel primitives (.xsheet/.xcell) and display-type extrusion"
 ```
 
+### Task 1.5: Night-not-inversion palette (`--ink: #15130d`)
+
+Found during Task 1 spec review: the plan wrongly assumed the token-semantics
+rewrite had shipped. What shipped was the hue correction; `.dark` still inverts
+`--paper`/`--ink` and `--black` is still `#000000`. With that palette, `.xcell`
+faces would render black with white keylines at night -- the exact construction
+the spec rejects. This task must land before any page adopts the panel system.
+
+**Files:**
+- Modify: `app/globals.css` (the `:root` and `.dark` palette blocks, lines ~1-80, plus an audit of every `var(--paper)` / `var(--ink)` / `var(--black)` usage below)
+
+- [ ] **Step 1.5.1: Rewrite the tokens**
+
+New semantics (spec: "Dark mode is night, not inversion"):
+
+```css
+:root {
+  --yellow: #f9c90a;
+  --red: #ef2841;
+  --blue: #007d7e;
+  --ink: #15130d;   /* warm near-black: text on paper, keylines, the dark ground */
+  --paper: #f6f4ee; /* warm white: light ground, panel faces in BOTH themes */
+  /* ground-following tokens -- the ONLY things .dark changes */
+  --background: var(--paper);
+  --text: var(--ink);
+  --accent: var(--red);
+  /* neutrals derive from the GROUND pair and flip with it */
+  --ink-soft: rgba(21, 19, 13, 0.76);
+  --ink-mute: rgba(21, 19, 13, 0.54);
+  --rule: rgba(21, 19, 13, 0.18);
+  --rule-strong: rgba(21, 19, 13, 0.55);
+}
+.dark {
+  --background: var(--ink);
+  --text: var(--paper);
+  --accent: var(--yellow);
+  --ink-soft: rgba(246, 244, 238, 0.76);
+  --ink-mute: rgba(246, 244, 238, 0.56);
+  --rule: rgba(246, 244, 238, 0.18);
+  --rule-strong: rgba(246, 244, 238, 0.55);
+}
+```
+
+`--paper`/`--ink` must NOT appear in `.dark`. Delete `--black`; point the legacy
+`--sa-black` alias at `var(--ink)` and `--sh-background` at `var(--ink)`.
+Recompute `--paper-2`/`--paper-3` (and their `.dark` values) as mixes over the
+new hexes; they are ground-tint steps and stay in `.dark`.
+
+- [ ] **Step 1.5.2: Audit every direct usage**
+
+`grep -n 'var(--paper)\|var(--ink)\|var(--black)\|var(--white)' app/globals.css`
+and classify each: **panel/paper-fixed** (keep `--paper`/`--ink` -- panel faces,
+keylines on paper) vs **ground-following** (switch to `--background`/`--text` --
+body, nav, prose, anything that must stay readable on the dark ground).
+`::selection` becomes yellow on `var(--ink)`. Check components for inline
+`var(--black)`/`var(--white)` usages too.
+
+- [ ] **Step 1.5.3: Verify both themes, build, commit**
+
+`npm run dev`: light mode near-identical to before (#15130d vs #000 is a subtle
+warm shift); dark mode text must be paper-on-ink everywhere, no invisible text,
+no pure #000 anywhere. `npm run build` passes; built CSS has no `#000` outside
+comments. Commit: `feat(palette): night-not-inversion tokens, warm ink #15130d`.
+
 ### Task 2: Recommendations grid adopts the sheet
 
 **Files:**

@@ -128,8 +128,9 @@ exactly when the cell is flat.
 
 ### The padding rule
 
-A raised face overlaps its up-left neighbours by its height. Cell padding of
-12-15px keeps neighbour text clear of the resting 12px overlap; a hovered face may
+A raised face overlaps its up-left neighbours by its height. Cell padding of at
+least 12px (the site uses 16-18px) keeps neighbour text clear of the resting
+12px overlap; a hovered face may
 graze a neighbour's text zone by a few px, which reads as an object passing in
 front, not a bug.
 
@@ -234,7 +235,7 @@ drop the halftone.**
 
 | File | Change |
 |---|---|
-| `app/globals.css` | Palette rewrite (5 tokens, no black) -- **done, shipped 2026-07-14**; extruded-panel system (`.xp` face + skewed pseudo side faces, `@property --d`); heading extrusion; zero-gap grid + border collapse; painter's-order z rules |
+| `app/globals.css` | Hue correction (logo colours only) **shipped 2026-07-14 am**. Still to do: token-semantics rewrite (`--ink: #15130d`, night-not-inversion -- `.dark` flips only `--background`/`--text`, never `--paper`/`--ink`); extruded-panel system (`.xcell` face + skewed pseudo side faces, `@property --d`); heading extrusion; zero-gap grid + border collapse |
 | `components/Kolam.tsx` | Replaced with the plait generator |
 | `app/layout.tsx` | Add Inter for utility text |
 | `public/logo/favicons/site.webmanifest` | `theme_color` / `background_color` -> `--paper` -- **done, shipped 2026-07-14** |
