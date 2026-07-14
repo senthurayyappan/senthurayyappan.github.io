@@ -432,10 +432,10 @@ img {
 /* Editorial type helpers ------------------------------------------------- */
 
 .label {
-  font-family: var(--font-serif-body), Georgia, serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-weight: 400;
-  font-size: 15px;
-  letter-spacing: 0.02em;
+  font-size: 14px;
+  letter-spacing: 0.01em;
   color: var(--ink-mute);
 }
 
@@ -510,8 +510,8 @@ img {
   letter-spacing: -0.01em;
 }
 .section-head .right {
-  font-family: var(--font-serif-body), Georgia, serif;
-  font-size: 15px;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 14px;
   color: var(--ink-mute);
 }
 
@@ -580,8 +580,8 @@ img {
   display: flex;
   gap: 18px;
   align-items: baseline;
-  font-family: var(--font-serif-body), Georgia, serif;
-  font-size: 15px;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 14px;
   color: var(--ink-mute);
 }
 .featured .read-on {
@@ -677,9 +677,9 @@ img {
   border-bottom: 1px solid var(--rule);
 }
 .rec-kind {
-  font-family: var(--font-serif-body), Georgia, serif;
-  font-size: 15px;
-  letter-spacing: 0.02em;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.01em;
   color: var(--ink-mute);
 }
 .rec-glyph {
@@ -998,9 +998,9 @@ img {
   align-items: baseline;
   gap: 16px;
   flex-wrap: wrap;
-  font-family: var(--font-serif-body), Georgia, serif;
-  font-size: 15px;
-  letter-spacing: 0.02em;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.01em;
   color: var(--ink-mute);
 }
 .exp-grid h3 {
