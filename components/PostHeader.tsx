@@ -14,7 +14,7 @@ export default function PostHeader({ metadata }: PostHeaderProps) {
   return (
     <header className="mb-10">
       <h1
-        className="font-medium tracking-tight text-[var(--text)] leading-[1.05]"
+        className="type-x font-medium tracking-tight text-[var(--text)] leading-[1.05]"
         style={{
           fontFamily: 'var(--font-serif), Georgia, serif',
           fontSize: 'clamp(2.5rem, 1.75rem + 3vw, 4rem)',
