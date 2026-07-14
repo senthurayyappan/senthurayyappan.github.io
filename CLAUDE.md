@@ -56,10 +56,6 @@ The site's panel grammar is "flat lineart, extruded in Z" — every raised eleme
 - **Display type:** `.type-x` extrudes text with stacked 1px `text-shadow` steps (never a single offset — a detached echo reads as double vision). It is for **28px+ page-title h1s only** (blog, projects, publications, 404, `PostHeader`); below that it reads as a misprint.
 - **Current adopters** (home page): Recommendations (`.rec-sheet`), the Front package "Around the site" (`.fp-sheet`, with the Projects lead `.fp-lead` raised), and the Featured/Latest-post cell.
 
-#### Comic-panel legacy (dead code)
-
-`components/ComicPanel.tsx` and the `.comic` / `.panel` / `.affiliations-strip` / `.panel-link-hover` CSS are **orphaned** — nothing imports `ComicPanel`, and `/about` and `/projects` were rewritten into the editorial system (`/about` uses `.profile-*` / `.exp-*` / `.section-head`; `/projects` uses utility classes plus `.type-x`). The only remaining `.panel-link-hover` reference is in `components/RecentUpdates.tsx`, which is itself unrendered. The CSS still lives in `globals.css` and its tokens were rewritten so panels would render paper-fixed (lit at night), but it has no consumers: treat all of it as a deletion candidate, not a system to build on. New grids and cards use the extruded sheet (Recommendations replaced the old `.rec-grid` card CSS); new list-row hovers use the editorial pattern below.
-
 ### Shaders / 3D
 
 - `components/ShaderCanvas.tsx` is a generic React-Three-Fiber wrapper that takes raw vertex/fragment shader source as props. It exposes `time`, `resolution`, and `performanceLevel` uniforms and downgrades DPR/antialiasing on detected mobile GPUs.
@@ -107,12 +103,11 @@ Reference: `app/blog/page.tsx`, `app/publications/page.tsx`.
 ### Where each visual mode lives
 
 - **Editorial almanac (default)** — home (`app/page.tsx`), global sidebar nav, global footer. New pages should adopt this system: plain-titled `SectionHead`, extruded `.xsheet` panels for grids/cards, paper/ink palette, Young Serif + Newsreader + Inter utility text. (Kolams stay in the footer only.)
-- **Comic-panel legacy** — no live consumers. `/about` and `/projects` are already editorial; `ComicPanel.tsx` and the `.comic`/`.panel`/`.affiliations-strip` CSS survive only as unreferenced code awaiting deletion.
 - **Blog posts use the full content column** — no `max-w`/`mx-auto` reading column; the owner wants post pages to occupy the same scrollable width as every other page. `PostHeader` uses the editorial page-header treatment (big extruded `.type-x` Newsreader title with accent period, summary, then a `.meta-line`), `.prose` body is 18px Newsreader at 88% ink, and `.prose` h1–h4 use the Young Serif display face like headings everywhere else. No mono-uppercase headings inside prose (h5/h6 are small bold serif). `.prose` figures are panels: paper face, ink keyline, both themes.
 - The blog *index* uses the same editorial list-row pattern with year-section headings (`text-3xl md:text-4xl font-bold tracking-tight text-[var(--accent)]`).
 
 ## Conventions worth knowing
 
 - TypeScript is configured loosely: `strict: false`, `target: es5`, but `strictNullChecks: true`. Don't expect strict-mode diagnostics; do expect null-check errors.
-- Components mix `.tsx` styles: PascalCase filenames for newer additions (`ComicPanel.tsx`, `RecentUpdates.tsx`), lowercase for older ones (`nav.tsx`, `mdx.tsx`, `posts.tsx`). Match the surrounding file when editing.
-- The home page (`app/page.tsx`) sources the latest blog post automatically from `getBlogPosts()`, but the recommendations list (`RECS`) is hardcoded — update it when something new is worth surfacing. `components/RecentUpdates.tsx` is no longer rendered but is kept temporarily as a content reference.
+- Components mix `.tsx` styles: PascalCase filenames for newer additions (`PostHeader.tsx`, `ShaderCanvas.tsx`), lowercase for older ones (`nav.tsx`, `mdx.tsx`, `posts.tsx`). Match the surrounding file when editing.
+- The home page (`app/page.tsx`) sources the latest blog post automatically from `getBlogPosts()`, but the recommendations list (`RECS`) is hardcoded — update it when something new is worth surfacing.
