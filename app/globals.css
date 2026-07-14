@@ -93,6 +93,7 @@
 
 .xsheet {
   display: grid;
+  /* tracks must stay contiguous -- never set gap, justify-content, or align-content on a sheet; the -2px keyline collapse depends on butted tracks. */
   gap: 0;
   /* compensates the cells' -2px keyline-collapse shift */
   padding: 2px 0 0 2px;
@@ -112,8 +113,12 @@ a.xcell {
   text-decoration: none;
   color: inherit;
 }
+/* beat the global a:hover { color: var(--accent) } accent hijack */
+a.xcell:hover,
+a.xcell:focus-visible {
+  color: inherit;
+}
 .xcell.raised { --d: 12px; }
-.xcell:hover,
 .xcell:focus-visible { --d: 18px; }
 
 .xcell-face {
@@ -126,9 +131,18 @@ a.xcell {
   transform: translate(calc(var(--d) * -1), calc(var(--d) * -1));
   transition: background 0.16s ease;
 }
-.xcell:hover .xcell-face,
 .xcell:focus-visible .xcell-face {
   background: color-mix(in srgb, var(--accent) 12%, var(--paper));
+  /* the UA ring hugs the static footprint; move the indicator onto the lifted face */
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+/* hover lift only on hover-capable devices; touch would stick at 18px after tap */
+@media (hover: hover) {
+  .xcell:hover { --d: 18px; }
+  .xcell:hover .xcell-face {
+    background: color-mix(in srgb, var(--accent) 12%, var(--paper));
+  }
 }
 
 /* Right side face: accent. Single-owner edges; diagonals 3px pre-skew
