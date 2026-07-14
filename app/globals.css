@@ -13,10 +13,11 @@
      lightness). Every neutral below is --ink or --paper at reduced alpha —
      never a new tint. Do not add a colour that isn't one of these five.
 
-     Night, not inversion: --paper and --ink NEVER flip. Panel faces stay
-     paper and keylines stay ink in BOTH themes. .dark changes only the
-     ground-following tokens — --background, --text, --accent, the alpha
-     neutrals, and the --paper-2/3 ground tints.
+     --paper and --ink are the two fixed poles and never flip; what flips is
+     which pole is the ground. .dark swaps --background/--text and follows
+     with --accent, the alpha neutrals, and the --paper-2/3 ground tints.
+     Panel faces are cut from the ground, so they flip with it — see the
+     extruded panel system below.
 
      #15130d = rgb(21 19 13): the rgba(21, 19, 13, *) literals in this
      file derive from it — a future ink change must update them together. */
@@ -77,9 +78,9 @@
 }
 
 .dark {
-  /* Night, not inversion: --paper and --ink are deliberately NOT
-     redefined here. Panels stay lit paper with ink keylines after dark;
-     only the ground and the prose sitting on it flip. */
+  /* --paper and --ink are deliberately NOT redefined here; the ground
+     tokens below just point at the other pole. Everything that sits on the
+     ground -- prose, tints, and panel faces -- follows these. */
   --paper-2: #23211b; /* paper 6% over ink */
   --paper-3: #34322c; /* paper 14% over ink */
   --ink-soft: rgba(246, 244, 238, 0.76);
@@ -148,51 +149,42 @@ a.xcell:focus-visible {
   outline: none;
 }
 
+/* The face is a slab cut from the ground: it takes the ground's colour, so
+   panels go dark at night with everything else. Every token used inside a
+   face therefore just inherits the theme -- there is NO daylight re-anchor,
+   and there must not be one: the tokens downstream (--ink-soft, --rule,
+   --accent, --paper-2) are already written to flip, and re-anchoring them
+   is what pinned face interiors to daylight.
+
+   Consequence: the KEYLINE inverts too (--text = ink by day, paper at
+   night). It has to. An ink keyline on an ink face is ~1.2:1 and the
+   outline that defines the whole language would dissolve. */
 .xcell-face {
   position: relative;
   flex: 1;
   display: block;
-  background: var(--paper);
-  border: 2px solid var(--ink);
+  background: var(--background);
+  border: 2px solid var(--text);
   padding: 16px 18px;
   transform: translate(calc(var(--d) * -1), calc(var(--d) * -1));
-  transition: background 0.16s ease;
-  /* The face is a lit paper object where daylight rules hold: tokens used
-     ON it re-anchor to their light-theme values, including --accent (red;
-     yellow-on-paper is ~1.4:1). The side-face pseudos hang off .xcell,
-     not the face, so they correctly keep the flipping night accent.
-     --muted/--sa-off-white are :root-substituted chains this block cannot
-     reach -- on faces use --ink-mute/--paper-3 directly. The hex values
-     below mirror the :root light set and must be kept in sync with it. */
-  color: var(--ink);
-  --text: var(--ink);
-  --accent: var(--red);
-  --ink-soft: rgba(21, 19, 13, 0.76);
-  --ink-mute: rgba(21, 19, 13, 0.59);
-  --rule: rgba(21, 19, 13, 0.18);
-  --rule-strong: rgba(21, 19, 13, 0.55);
-  --paper-2: #edebe5;
-  --paper-3: #dbd9d3;
 }
-/* Tint via background-color, never the background shorthand: faces may
-   carry background-image layers (photo tiles) that a shorthand would reset. */
+/* No face tint on hover or focus -- the lift plus the title going accent is
+   the whole hover language. Focus keeps an outline anyway: a lift alone is
+   not a sufficient focus indicator. The UA ring would hug the static
+   footprint, 18px away from the face, so put the ring on the face. */
 .xcell:focus-visible .xcell-face,
 .xcell:has(:focus-visible) .xcell-face {
-  background-color: color-mix(in srgb, var(--accent) 12%, var(--paper));
-  /* the UA ring hugs the static footprint; move the indicator onto the lifted face */
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 /* hover lift only on hover-capable devices; touch would stick at 18px after tap */
 @media (hover: hover) {
   .xcell:hover { --d: 18px; }
-  .xcell:hover .xcell-face {
-    background-color: color-mix(in srgb, var(--accent) 12%, var(--paper));
-  }
 }
 
 /* Right side face: accent. Single-owner edges; diagonals 3px pre-skew
-   (2.12px perpendicular) because Chromium floors fractional borders. */
+   (2.12px perpendicular) because Chromium floors fractional borders.
+   Keylines are --text, matching the face: all linework inverts together. */
 .xcell::before {
   content: '';
   position: absolute;
@@ -202,7 +194,7 @@ a.xcell:focus-visible {
   height: 100%;
   box-sizing: border-box;
   background: var(--accent);
-  border: 0 solid var(--ink);
+  border: 0 solid var(--text);
   border-top-width: min(calc(var(--d) * 99), 3px);
   border-right-width: min(calc(var(--d) * 99), 2px);
   border-bottom-width: min(calc(var(--d) * 99), 3px);
@@ -219,7 +211,7 @@ a.xcell:focus-visible {
   height: var(--d);
   box-sizing: border-box;
   background: var(--blue);
-  border: 0 solid var(--ink);
+  border: 0 solid var(--text);
   border-bottom-width: min(calc(var(--d) * 99), 2px);
   border-left-width: min(calc(var(--d) * 99), 3px);
   transform: skewX(45deg);
@@ -227,7 +219,7 @@ a.xcell:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .xcell, .xcell-face, .rec-glyph { transition: none; }
+  .xcell, .rec-glyph { transition: none; }
 }
 
 /* Extruded display type -- 28px+ headings only (below that it reads as
@@ -695,13 +687,6 @@ img {
   width: 38px;
   height: auto;
 }
-/* The panel face already tints on hover; the glyph nudge is the only inner
-   effect kept (motion the face tint doesn't provide). */
-@media (hover: hover) {
-  .rec-sheet .xcell:hover .rec-glyph {
-    transform: translateX(2px);
-  }
-}
 .rec-name {
   font-family: var(--font-serif-display), Georgia, serif;
   font-weight: 400;
@@ -709,6 +694,19 @@ img {
   line-height: 1.1;
   letter-spacing: -0.01em;
   margin-top: auto;
+  transition: color 0.2s ease;
+}
+/* Hover: the lift plus the name going accent, the same language the fp-sheet
+   and Featured cells speak. The glyph nudge adds the motion the (removed)
+   face tint used to carry. 26px clears the 24px large-text threshold, so red
+   on paper at 3.78:1 still meets AA. */
+@media (hover: hover) {
+  .rec-sheet .xcell:hover .rec-glyph {
+    transform: translateX(2px);
+  }
+  .rec-sheet .xcell:hover .rec-name {
+    color: var(--accent);
+  }
 }
 
 /* Front-page package — extruded sheet ("Around the site") ----------------- */
@@ -782,11 +780,8 @@ img {
   /* absorb the column height the plain publications cell doesn't need */
   flex: 1;
 }
-/* The wash fades to --paper, not --background: the panel face stays lit
-   in both themes, so the text always sits on paper.
-   Doubled class = (0,3,0) specificity, tying the primitive's
-   .xcell:hover .xcell-face background-color tint (which still applies)
-   while this later rule keeps owning background-image on hover/focus. */
+/* The wash fades to --background, so it tracks the face: paper by day, ink
+   at night, and the text sitting on it always has its own ground under it. */
 .fp-story-photo.fp-story .xcell-face {
   justify-content: flex-end;
   background-image:
@@ -794,8 +789,8 @@ img {
       180deg,
       transparent 0%,
       transparent 5%,
-      var(--paper) 70%,
-      var(--paper) 100%
+      var(--background) 70%,
+      var(--background) 100%
     ),
     var(--fp-story-photo-src);
   background-size: 100% 100%, cover;

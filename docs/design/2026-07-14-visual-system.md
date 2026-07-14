@@ -1,6 +1,7 @@
 # Visual system: extruded comic lineart
 
-Status: approved, not yet implemented
+Status: implemented (panels, palette, type, kolam, Inter). Imagery-to-lineart and the
+`/about` sheet migration are still open.
 Date: 2026-07-14
 
 ## The idea in one line
@@ -26,8 +27,8 @@ This is not decoration. Senthur's research is robot codesign: co-evolving a mach
 
 | Token | Value | Role |
 |---|---|---|
-| `--paper` | `#f6f4ee` | light ground; panel faces **in both themes** |
-| `--ink` | `#15130d` | text, keylines, **and the dark ground** |
+| `--paper` | `#f6f4ee` | light ground and its panel faces; the keyline at night |
+| `--ink` | `#15130d` | dark ground and its panel faces; the keyline by day |
 | `--yellow` | `#f9c90a` | accent in dark; panel right face at night |
 | `--red` | `#ef2841` | accent in light; panel right face by day |
 | `--blue` | `#007d7e` | panel bottom face, **both themes** |
@@ -36,29 +37,43 @@ This is not decoration. Senthur's research is robot codesign: co-evolving a mach
 inverted lightness. Pure `#000000` was tried and rejected: the paper is warm, and a
 neutral black fights it.
 
-**One ink serves as text, keyline, and dark ground.** Ink-on-paper is 16.7:1, and that
-holds whether paper is the figure or the field. This is what makes a single token
-possible, and it is why the keyline can stay dark in *both* themes.
+**Paper and ink are two poles, not a figure and a field.** Ink-on-paper is 16.7:1, and
+that holds whichever one is the ground. So the pair swaps roles wholesale between
+themes: whichever is the ground fills the panel faces, and the *other* one draws every
+line on top of it.
 
 Every neutral is `--ink` or `--paper` at reduced alpha. Never introduce a sixth hue.
 `public/palette.png` is a stale orphaned swatch file -- do not source colours from it.
 
-## Dark mode is night, not inversion
+## Dark mode: the whole sheet flips, linework included
 
-The panels do **not** flip. They stay paper -- lit physical objects -- with ink keylines
-and their coloured side faces intact. Only the ground goes dark and the prose sitting
-on that ground goes light.
+Panels are **cut from the ground**. Whatever colour the ground is, the faces are that
+colour too -- paper by day, ink at night -- and the coloured side faces stay saturated
+in both. The face declares no tokens of its own; everything inside it (`--ink-soft`,
+`--rule`, `--paper-2`, `--accent`) already flips, so face interiors come out right for
+free.
 
-The rationale is how comics actually handle night: **the ink is always black, even in a
-night scene.** What changes after dark is the fills, not the linework. Batman has the
-same outline at midnight as at noon.
+**The keyline flips with it.** Lines are `--text`: ink on the paper ground, paper on the
+ink ground. This is forced, not chosen -- an ink keyline on an ink face is ~1.2:1 and
+the outline that defines the entire language would dissolve.
 
-The practical consequence is that a dark panel face is impossible -- an ink keyline on a
-dark face is ~1.2:1 contrast and the outline that defines the whole language dissolves.
-The alternatives (white keylines, or no keylines) were both tried and rejected.
+### The rejected version, and why it was wrong
 
-Long-form prose lives **outside** panels, directly on the ground, so night reading stays
-comfortable.
+This section originally read *"dark mode is night, not inversion"* and argued the
+opposite: panels stay lit paper with ink keylines in both themes, on the comics
+principle that **the ink is always black, even in a night scene** -- Batman has the same
+outline at midnight as at noon. It shipped that way.
+
+The owner rejected it immediately on seeing it: **a dark page full of glowing white
+panels defeats the purpose of dark mode.** The comics analogy was seductive and wrong,
+because it reasons about a *drawing of a night scene* -- a lit page you hold in daylight
+-- when a dark-mode UI is the opposite thing: an emissive screen in a dark room, where
+every white rectangle is a lamp pointed at the reader. On a page whose panels are most
+of the content, "the panels don't flip" and "dark mode" cannot both be true.
+
+Do not reintroduce fixed-paper faces.
+
+Long-form prose still lives **outside** panels, directly on the ground.
 
 ## The grid: a butted sheet with extruded cells
 
@@ -119,12 +134,21 @@ nothing is. Varied per-cell heights were tried and rejected as noise.
 
 ### Hover
 
-Any cell rises to 18px and its face tints with the accent at low alpha. Flat cells
-become solids on hover, so every cell is interactive; resting height only says which
-ones matter. The lift is one animated `@property`-registered custom length driving
-pure 2D changes (face translate, side-face growth) -- text stays on the pixel grid
-and never blurs. Side-face borders use `min(calc(var(--d)*99), Npx)` so they vanish
-exactly when the cell is flat.
+Any cell rises to 18px and **its title goes accent**. Flat cells become solids on hover,
+so every cell is interactive; resting height only says which ones matter. The lift is
+one animated `@property`-registered custom length driving pure 2D changes (face
+translate, side-face growth) -- text stays on the pixel grid and never blurs. Side-face
+borders use `min(calc(var(--d)*99), Npx)` so they vanish exactly when the cell is flat.
+
+**The face itself does not tint.** A low-alpha accent wash on the face shipped first and
+was rejected: the extrusion is already a large, unmistakable state change, and washing
+the face on top of it is a second answer to a question the lift has answered. Every
+sheet must therefore give its title an accent hover, or its cells will have no feedback
+beyond the lift -- the Recommendations cells originally had none, because the tint was
+carrying them.
+
+Keyboard focus keeps `outline: 2px solid var(--accent)` on the face. A lift is not a
+focus indicator, and the UA ring would hug the static footprint, 18px from the face.
 
 ### The padding rule
 
@@ -235,7 +259,7 @@ drop the halftone.**
 
 | File | Change |
 |---|---|
-| `app/globals.css` | Hue correction (logo colours only) **shipped 2026-07-14 am**. Still to do: token-semantics rewrite (`--ink: #15130d`, night-not-inversion -- `.dark` flips only `--background`/`--text`, never `--paper`/`--ink`); extruded-panel system (`.xcell` face + skewed pseudo side faces, `@property --d`); heading extrusion; zero-gap grid + border collapse |
+| `app/globals.css` | **Shipped.** Hue correction (logo colours only); token-semantics rewrite (`--ink: #15130d`; `.dark` swaps which pole is the ground, and faces + keylines follow it); extruded-panel system (`.xcell` face + skewed pseudo side faces, `@property --d`); heading extrusion; zero-gap grid + border collapse |
 | `components/Kolam.tsx` | Replaced with the plait generator |
 | `app/layout.tsx` | Add Inter for utility text |
 | `public/logo/favicons/site.webmanifest` | `theme_color` / `background_color` -> `--paper` -- **done, shipped 2026-07-14** |
