@@ -623,7 +623,16 @@ img {
    Uses a layered background-image (gradient over image) so children render
    naturally on top of both layers — no z-index gymnastics.
    Text is pinned to the BOTTOM of the block so the face/upper composition
-   of the photo stays visible at the top. */
+   of the photo stays visible at the top.
+
+   The fade-out stop must be plain `transparent`, NOT
+   color-mix(in srgb, var(--background) 0%, transparent). The two are the
+   same color, but the release minifier collapses the `0%` to a unitless `0`,
+   which is invalid inside color-mix() (it takes a <percentage>, and unitless
+   zero is only valid for <length>). That makes the whole background-image
+   invalid at computed-value time, so it falls back to `none` and the photo
+   silently disappears in the production build only. Same applies to
+   .exp-tile below. */
 .fp-story-photo {
   --fp-story-photo-src: url('/sa-publications.jpg');
   --fp-story-photo-pos: 35% center;
@@ -633,8 +642,8 @@ img {
   background-image:
     linear-gradient(
       180deg,
-      color-mix(in srgb, var(--background) 0%, transparent) 0%,
-      color-mix(in srgb, var(--background) 0%, transparent) 5%,
+      transparent 0%,
+      transparent 5%,
       var(--background) 70%,
       var(--background) 100%
     ),
@@ -980,8 +989,8 @@ img {
   background-image:
     linear-gradient(
       180deg,
-      color-mix(in srgb, var(--background) 0%, transparent) 0%,
-      color-mix(in srgb, var(--background) 0%, transparent) 12%,
+      transparent 0%,
+      transparent 12%,
       var(--background) 78%,
       var(--background) 100%
     ),
