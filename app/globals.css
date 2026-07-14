@@ -439,13 +439,13 @@ img {
   color: var(--ink-mute);
 }
 
-/* Metadata voice: small quiet serif, normal case and roman. Never mono/uppercase
+/* Metadata voice: small quiet sans, normal case and roman. Never mono/uppercase
    kickers or italics — both read as generic AI design. */
 .meta-line {
-  font-family: var(--font-serif-body), Georgia, serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-weight: 400;
   font-size: 14px;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
   text-transform: none;
   color: color-mix(in srgb, var(--text) 62%, transparent);
 }
@@ -476,7 +476,7 @@ img {
   padding: 13px 0;
   border-top: 1px solid var(--rule-strong);
   border-bottom: 1px solid var(--rule-strong);
-  font-family: var(--font-serif-display), Georgia, serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-weight: 400;
   font-size: 18px;
   letter-spacing: -0.005em;
@@ -636,8 +636,8 @@ img {
   background: rgba(246, 244, 238, 0.05);
 }
 .post-row .date {
-  font-family: var(--font-serif-body), Georgia, serif;
-  font-size: 15px;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 14px;
   color: var(--ink-mute);
   white-space: nowrap;
 }
@@ -649,7 +649,7 @@ img {
   letter-spacing: -0.01em;
 }
 .post-row .read {
-  font-family: var(--font-serif-body), Georgia, serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-size: 14px;
   color: var(--ink-mute);
   white-space: nowrap;
@@ -1086,7 +1086,8 @@ img {
   background: var(--red);
   color: var(--paper);
   padding: 5px 11px;
-  font-family: var(--font-serif-display), Georgia, serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-weight: 500;
   font-size: 12px;
   letter-spacing: 0.04em;
   z-index: 2;
@@ -1322,7 +1323,11 @@ img {
   white-space: nowrap;
   margin-right: auto;
 }
-.foot-copy,
+.foot-copy {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 14px;
+  color: var(--ink-mute);
+}
 .foot-source {
   font-family: var(--font-serif-body), Georgia, serif;
   font-size: 15px;

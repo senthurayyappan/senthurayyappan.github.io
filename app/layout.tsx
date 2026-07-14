@@ -2,7 +2,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
-import { Young_Serif, Newsreader } from 'next/font/google'
+import { Young_Serif, Newsreader, Inter } from 'next/font/google'
 
 const youngSerif = Young_Serif({
   subsets: ['latin'],
@@ -16,6 +16,13 @@ const newsreader = Newsreader({
   style: ['normal', 'italic'],
   axes: ['opsz'],
   variable: '--font-serif-body',
+  display: 'swap',
+})
+
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-sans',
   display: 'swap',
 })
 
@@ -76,6 +83,7 @@ export default function RootLayout({
         GeistMono.variable,
         youngSerif.variable,
         newsreader.variable,
+        inter.variable,
         'h-full'
       )}
       suppressHydrationWarning
