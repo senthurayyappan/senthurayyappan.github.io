@@ -118,7 +118,7 @@ function Hero() {
 function SectionHead({ title, right }: { title: string; right?: string }) {
   return (
     <div className="section-head">
-      <h2>{title}</h2>
+      <h2 className="type-x">{title}</h2>
       {right && <span className="right">{right}</span>}
     </div>
   )

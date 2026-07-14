@@ -1324,10 +1324,13 @@ img {
   margin-top: 64px;
   padding: 36px 0 44px 276px;
 }
-/* Sikku plait (components/Kolam.tsx KolamPlait) — render at the plait's
-   natural 1:1 size (23 segments => viewBox 460 x 39) instead of stretching to
-   the column. The height must track the viewBox: squash it and the open weave
-   collapses back into the flat bead-chain the plait exists to avoid. */
+/* Sikku plait (components/Kolam.tsx KolamPlait, rendered with `fill`) as a
+   full-width footer divider. Height is pinned to the viewBox height (39px) and
+   width is 100%; the component's `slice` fit keeps the weave at true 1:1 and
+   clips the overflow on the right, so the height -- and thus the A/P weave
+   proportion -- never changes with the column width. Do NOT set a width that
+   forces the SVG to scale to fit (that squashes the height and flattens the
+   open weave back into the bead-chain we fixed). */
 .foot-ornament {
   margin: 0 0 28px;
   color: var(--ink-soft);
@@ -1335,8 +1338,7 @@ img {
 .foot-ornament svg {
   display: block;
   height: 39px;
-  width: auto;
-  max-width: 100%;
+  width: 100%;
 }
 .foot-row {
   display: flex;

@@ -41,7 +41,19 @@ function strandPath(n: number, y: number, sign: 1 | -1) {
   return d
 }
 
-export function KolamPlait({ segments = 19 }: { segments?: number }) {
+export function KolamPlait({
+  segments = 19,
+  fill = false,
+}: {
+  segments?: number
+  // fill: render as a full-width divider. The SVG fills its container at the
+  // weave's true 1:1 scale and clips the overflow on the right (slice), left-
+  // aligned -- so the height, and therefore the A/P proportion, never changes
+  // with the container width. Pass enough `segments` to overflow the widest
+  // container it will sit in (the footer uses 60 => 1200px, past the ~904px
+  // content column). Without fill the plait is centred at its natural size.
+  fill?: boolean
+}) {
   // useId keeps the clipPath id unique per instance (it works in server
   // components), so two plaits on one page can't collide.
   const clipId = useId()
@@ -64,7 +76,7 @@ export function KolamPlait({ segments = 19 }: { segments?: number }) {
     <svg
       viewBox={`0 0 ${w} ${h}`}
       width="100%"
-      preserveAspectRatio="xMidYMid meet"
+      preserveAspectRatio={fill ? 'xMinYMid slice' : 'xMidYMid meet'}
       fill="none"
       aria-hidden="true"
     >
