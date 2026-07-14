@@ -245,7 +245,23 @@ was tried and rejected. A sikku kolam is a weave; that is the entire form.
 weave inverts for free with no second asset. The night version is therefore literally
 rice flour on dark earth, which is what a kolam physically is.
 
-Footer border only. This has not changed.
+Footer border only — **superseded 2026-07-14.** The full-width kolam divider never
+quite landed as a footer treatment, so the footer was rebuilt as an extruded "space
+bar": a single wide, low-profile `.xcell` (see "Footer: the space bar" below) that
+reuses the panel primitives so it flips dark and carries the same side faces as every
+other panel. The plait generator (`components/Kolam.tsx`) is retained but no longer
+rendered anywhere; the kolam can return as a divider via `fill` if wanted.
+
+## Footer: the space bar
+
+The footer is now a single wide, low-profile extruded key —
+`.xsheet.foot-bar > .xcell.raised.foot-key > .xcell-face.foot-key-face` — so a
+keyboard's widest key IS the site's own extrusion language, no parallel geometry.
+"The End" (serif display) sits left, the `.foot-copy` line right, on a face that
+flips dark with a paper keyline like every panel. It rests at `.raised` (12px); the
+hover lift is suppressed (`.foot-bar .xcell:hover { --d: 12px }`) because a footer is
+not interactive and a bar that jumps on hover reads as a broken button. At ≤1240px the
+face centres its contents.
 
 ## Imagery: continuous lineart
 

@@ -1268,28 +1268,31 @@ img {
   margin-top: 64px;
   padding: 36px 0 44px 276px;
 }
-/* Sikku plait (components/Kolam.tsx KolamPlait, rendered with `fill`) as a
-   full-width footer divider. Height is pinned to the viewBox height (39px) and
-   width is 100%; the component's `slice` fit keeps the weave at true 1:1 and
-   clips the overflow on the right, so the height -- and thus the A/P weave
-   proportion -- never changes with the column width. Do NOT set a width that
-   forces the SVG to scale to fit (that squashes the height and flattens the
-   open weave back into the bead-chain we fixed). */
-.foot-ornament {
+/* The "space bar": a single wide, low-profile extruded key built from the
+   panel primitives (.xsheet/.xcell/.xcell-face). It flips dark, carries the
+   accent-right / blue-bottom side faces, and rests raised (.raised = 12px)
+   like a key sitting proud of the board. It is NOT interactive, so the hover
+   lift is suppressed just below -- a moving footer bar reads as a broken
+   button. A single-cell sheet needs no extra grid setup: the cell fills the
+   one implicit track full-width. */
+.foot-bar {
   margin: 0 0 28px;
-  color: var(--ink-soft);
 }
-.foot-ornament svg {
-  display: block;
-  height: 39px;
-  width: 100%;
-}
-.foot-row {
+.foot-key-face {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 24px;
   flex-wrap: wrap;
+  min-height: 44px;
+  padding: 18px 24px;
+}
+/* Pin the footer key at its rest depth on hover (overrides .xcell:hover by
+   specificity, so source order does not matter). */
+@media (hover: hover) {
+  .foot-bar .xcell:hover {
+    --d: 12px;
+  }
 }
 .foot-end {
   font-family: var(--font-serif-display), Georgia, serif;
@@ -1380,10 +1383,7 @@ img {
   .foot {
     padding-left: 0;
   }
-  .foot-ornament svg {
-    margin-inline: auto;
-  }
-  .foot-row {
+  .foot-key-face {
     justify-content: center;
     text-align: center;
     gap: 12px;
