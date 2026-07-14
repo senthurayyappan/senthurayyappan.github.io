@@ -142,50 +142,55 @@ function Featured({
         title="Latest post"
         right={formatDate(post.publishedAt)}
       />
-      <div className="featured">
-        <Link
-          href={`/blog/${post.slug}`}
-          className="img-frame"
-          aria-label={post.title}
-        >
-          {post.image ? (
-            <Image
-              src={post.image}
-              alt={post.title}
-              fill
-              sizes="(min-width: 1240px) 50vw, 100vw"
-              style={{ objectFit: 'cover' }}
-              priority
-            />
-          ) : null}
-        </Link>
-        <Link href={`/blog/${post.slug}`} className="copy">
-          <h3>{post.title}</h3>
-          {post.summary && <p className="dek">{post.summary}</p>}
-          <div className="meta">
-            <span>{formatDate(post.publishedAt)}</span>
-            {post.readingTime !== undefined && (
-              <span>{post.readingTime} min read</span>
-            )}
-          </div>
-          <span className="read-on">
-            Read the post
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
+      <div className="xsheet">
+        <div className="xcell raised">
+          {/* face is a div: contains flow content (links, headings) */}
+          <div className="xcell-face featured">
+            <Link
+              href={`/blog/${post.slug}`}
+              className="img-frame"
+              aria-label={post.title}
             >
-              <path d="M5 12h14" />
-              <path d="M13 6l6 6-6 6" />
-            </svg>
-          </span>
-        </Link>
+              {post.image ? (
+                <Image
+                  src={post.image}
+                  alt={post.title}
+                  fill
+                  sizes="(min-width: 1240px) 50vw, 100vw"
+                  style={{ objectFit: 'cover' }}
+                  priority
+                />
+              ) : null}
+            </Link>
+            <Link href={`/blog/${post.slug}`} className="copy">
+              <h3>{post.title}</h3>
+              {post.summary && <p className="dek">{post.summary}</p>}
+              <div className="meta">
+                <span>{formatDate(post.publishedAt)}</span>
+                {post.readingTime !== undefined && (
+                  <span>{post.readingTime} min read</span>
+                )}
+              </div>
+              <span className="read-on">
+                Read the post
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M5 12h14" />
+                  <path d="M13 6l6 6-6 6" />
+                </svg>
+              </span>
+            </Link>
+          </div>
+        </div>
       </div>
     </section>
   )
@@ -224,103 +229,111 @@ function FrontPackage() {
   return (
     <section className="section" id="inside-the-paper">
       <SectionHead title="Around the site" />
-      <div className="front-package">
-        <Link href="/projects" className="fp-lead">
-          <div className="fp-lead-photo">
-            <Image
-              src="/projects/osl-v2.jpg"
-              alt="Open-Source Leg v2"
-              fill
-              sizes="(min-width: 960px) 60vw, 100vw"
-              style={{ objectFit: 'cover' }}
-            />
+      <div className="xsheet fp-sheet">
+        <Link href="/projects" className="xcell raised fp-lead">
+          {/* face is a div: contains flow content (h3, p, ul) */}
+          <div className="xcell-face">
+            <div className="fp-lead-photo">
+              <Image
+                src="/projects/osl-v2.jpg"
+                alt="Open-Source Leg v2"
+                fill
+                sizes="(min-width: 960px) 60vw, 100vw"
+                style={{ objectFit: 'cover' }}
+              />
+            </div>
+            <h3>Projects</h3>
+            <p className="dek">
+              Hardware and software toolchains for robotics research. Most of &rsquo;em are open-source and mostly work. When they don&rsquo;t, someone awesome in the community (often someone like you) fixes them.
+            </p>
+            <ul className="teaser-list" aria-label="Selected projects">
+              <li>
+                <span className="name">Open-Source Leg</span>
+              </li>
+              <li>
+                <span className="name">Onshape Robotics Toolkit</span>
+              </li>
+              <li>
+                <span className="name">ROB311 Ballbot</span>
+              </li>
+              <li>
+                <span className="name">Robot CI</span>
+              </li>
+              <li>
+                <span className="name">Anton</span>
+              </li>
+            </ul>
+            <span className="more">
+              All projects
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14" />
+                <path d="M13 6l6 6-6 6" />
+              </svg>
+            </span>
           </div>
-          <h3>Projects</h3>
-          <p className="dek">
-            Hardware and software toolchains for robotics research. Most of &rsquo;em are open-source and mostly work. When they don&rsquo;t, someone awesome in the community (often someone like you) fixes them.
-          </p>
-          <ul className="teaser-list" aria-label="Selected projects">
-            <li>
-              <span className="name">Open-Source Leg</span>
-            </li>
-            <li>
-              <span className="name">Onshape Robotics Toolkit</span>
-            </li>
-            <li>
-              <span className="name">ROB311 Ballbot</span>
-            </li>
-            <li>
-              <span className="name">Robot CI</span>
-            </li>
-            <li>
-              <span className="name">Anton</span>
-            </li>
-          </ul>
-          <span className="more">
-            All projects
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M5 12h14" />
-              <path d="M13 6l6 6-6 6" />
-            </svg>
-          </span>
         </Link>
 
+        {/* not a cell: a plain grid area holding two stacked cells */}
         <div className="fp-side">
-          <Link href="/about" className="fp-story fp-story-photo">
-            <h3>About</h3>
-            <p className="dek">
-              I lead the Open-Source Leg as a research engineer for the past five years. In that time I also consulted briefly for the Robotics &amp; AI Institute and co-developed the ROB311 Ballbot. Before coming to the US in 2021, what was I doing? I&rsquo;m glad you asked.
-            </p>
-            <span className="more">
-            Full bio
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M5 12h14" />
-              <path d="M13 6l6 6-6 6" />
-            </svg>
-          </span>
+          <Link href="/about" className="xcell fp-story fp-story-photo">
+            <div className="xcell-face">
+              <h3>About</h3>
+              <p className="dek">
+                I lead the Open-Source Leg as a research engineer for the past five years. In that time I also consulted briefly for the Robotics &amp; AI Institute and co-developed the ROB311 Ballbot. Before coming to the US in 2021, what was I doing? I&rsquo;m glad you asked.
+              </p>
+              <span className="more">
+                Full bio
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M5 12h14" />
+                  <path d="M13 6l6 6-6 6" />
+                </svg>
+              </span>
+            </div>
           </Link>
-          <Link href="/publications" className="fp-story">
-            <h3>Publications</h3>
-            <p className="dek">
-              Most recent: &ldquo;A Compensated Open-Loop Impedance Controller Evaluated on the Second-Generation Open-Source Leg Prosthesis.&rdquo; IEEE/ASME T-Mech, 2025.
-            </p>
-            <span className="more">
-            All publications
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M5 12h14" />
-              <path d="M13 6l6 6-6 6" />
-            </svg>
-          </span>
+          <Link href="/publications" className="xcell fp-story">
+            <div className="xcell-face">
+              <h3>Publications</h3>
+              <p className="dek">
+                Most recent: &ldquo;A Compensated Open-Loop Impedance Controller Evaluated on the Second-Generation Open-Source Leg Prosthesis.&rdquo; IEEE/ASME T-Mech, 2025.
+              </p>
+              <span className="more">
+                All publications
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M5 12h14" />
+                  <path d="M13 6l6 6-6 6" />
+                </svg>
+              </span>
+            </div>
           </Link>
         </div>
       </div>

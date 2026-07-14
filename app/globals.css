@@ -148,9 +148,23 @@ a.xcell:focus-visible {
   padding: 16px 18px;
   transform: translate(calc(var(--d) * -1), calc(var(--d) * -1));
   transition: background 0.16s ease;
+  /* The face stays lit paper in both themes, so everything ON it must
+     stay ink in both themes. Re-anchor the ground-following neutrals
+     (which .dark flips) to their ink-over-paper values. --accent is NOT
+     re-anchored: hover tints and accent text keep the night accent. */
+  color: var(--ink);
+  --text: var(--ink);
+  --ink-soft: rgba(21, 19, 13, 0.76);
+  --ink-mute: rgba(21, 19, 13, 0.54);
+  --rule: rgba(21, 19, 13, 0.18);
+  --rule-strong: rgba(21, 19, 13, 0.55);
+  --paper-2: #edebe5;
+  --paper-3: #dbd9d3;
 }
+/* Tint via background-color, never the background shorthand: faces may
+   carry background-image layers (photo tiles) that a shorthand would reset. */
 .xcell:focus-visible .xcell-face {
-  background: color-mix(in srgb, var(--accent) 12%, var(--paper));
+  background-color: color-mix(in srgb, var(--accent) 12%, var(--paper));
   /* the UA ring hugs the static footprint; move the indicator onto the lifted face */
   outline: 2px solid var(--accent);
   outline-offset: 2px;
@@ -159,7 +173,7 @@ a.xcell:focus-visible {
 @media (hover: hover) {
   .xcell:hover { --d: 18px; }
   .xcell:hover .xcell-face {
-    background: color-mix(in srgb, var(--accent) 12%, var(--paper));
+    background-color: color-mix(in srgb, var(--accent) 12%, var(--paper));
   }
 }
 
@@ -489,7 +503,9 @@ img {
   color: var(--ink-mute);
 }
 
-/* Featured post ---------------------------------------------------------- */
+/* Featured post — one raised cell; .featured doubles as the .xcell-face
+   (panel chrome comes from the primitive; this block owns the inner
+   two-column layout only) --------------------------------------------- */
 
 .featured {
   display: grid;
@@ -497,6 +513,8 @@ img {
   gap: 36px;
   align-items: center;
 }
+/* inner picture frame, distinct from the panel keyline (inset by the
+   face padding, so the two never double up) */
 .featured .img-frame {
   position: relative;
   background: var(--paper-2);
@@ -679,44 +697,41 @@ img {
   margin-top: auto;
 }
 
-/* Front-page package — "Inside the Paper" -------------------------------- */
+/* Front-page package — extruded sheet ("Around the site") ----------------- */
+/* Chrome comes from the panel system (.xsheet/.xcell/.xcell-face); this
+   block owns only the column split and the inner column layouts. */
 
-.front-package {
-  display: grid;
-  grid-template-columns: 1.7fr 1fr;
-  gap: 0;
-  border-top: 1px solid var(--rule-strong);
-  border-bottom: 1px solid var(--rule-strong);
-  border-left: 1px solid var(--rule-strong);
-  border-right: 1px solid var(--rule-strong);
+.fp-sheet {
+  grid-template-columns: 3fr 2fr;
 }
-.fp-lead {
+/* fp-lead — photo at top inside 14px face padding, text inset another
+   14px (28px effective). */
+.fp-lead .xcell-face {
   display: flex;
   flex-direction: column;
   gap: 14px;
-  position: relative;
-  color: var(--text);
-  padding: 14px 14px 32px 14px;
-  border-right: 1px solid var(--rule-strong);
+  padding: 14px 14px 32px;
 }
-.fp-lead > *:not(.fp-lead-photo) {
+.fp-lead .xcell-face > *:not(.fp-lead-photo) {
   padding-inline: 14px;
 }
+/* Not a cell: a plain grid area stacking two cells. The .xsheet > .xcell
+   margin rule cannot reach these nested cells, so the wrapper itself
+   mirrors the -2px keyline collapse a direct cell would get, and the
+   second inner cell collapses the keyline it shares with the first. */
 .fp-side {
   display: flex;
   flex-direction: column;
+  margin: -2px 0 0 -2px;
 }
-.fp-story {
+.fp-side .xcell + .xcell {
+  margin-top: -2px;
+}
+.fp-story .xcell-face {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  position: relative;
-  color: var(--text);
-  padding: 28px 28px 28px 28px;
-  border-bottom: 1px solid var(--rule-strong);
-}
-.fp-story:last-child {
-  border-bottom: none;
+  padding: 28px;
 }
 
 /* Lead photo (top of lead column) */
@@ -750,16 +765,23 @@ img {
 .fp-story-photo {
   --fp-story-photo-src: url('/sa-publications.jpg');
   --fp-story-photo-pos: 35% center;
+  /* absorb the column height the plain publications cell doesn't need */
   flex: 1;
-  padding-right: 28px;
+}
+/* The wash fades to --paper, not --background: the panel face stays lit
+   in both themes, so the text always sits on paper.
+   Doubled class = (0,3,0) specificity, tying the primitive's
+   .xcell:hover .xcell-face background-color tint (which still applies)
+   while this later rule keeps owning background-image on hover/focus. */
+.fp-story-photo.fp-story .xcell-face {
   justify-content: flex-end;
   background-image:
     linear-gradient(
       180deg,
       transparent 0%,
       transparent 5%,
-      var(--background) 70%,
-      var(--background) 100%
+      var(--paper) 70%,
+      var(--paper) 100%
     ),
     var(--fp-story-photo-src);
   background-size: 100% 100%, cover;
@@ -770,7 +792,7 @@ img {
   --fp-story-photo-src: url('/about/rai.jpg');
   --fp-story-photo-pos: center center;
 }
-.front-package .fp-story-photo .more {
+.fp-sheet .fp-story-photo .more {
   margin-top: 0;
 }
 
@@ -823,7 +845,7 @@ img {
   letter-spacing: -0.01em;
 }
 
-.front-package .more {
+.fp-sheet .more {
   margin-top: auto;
   padding-top: 6px;
   font-family: var(--font-serif-display), Georgia, serif;
@@ -833,7 +855,7 @@ img {
   gap: 8px;
   align-self: flex-start;
 }
-.front-package .more svg {
+.fp-sheet .more svg {
   color: var(--accent);
   opacity: 0;
   transform: translateX(-8px);
@@ -1317,15 +1339,13 @@ img {
   }
 }
 
-@media (max-width: 960px) {  .front-package {
+@media (max-width: 960px) {  .fp-sheet {
     grid-template-columns: 1fr;
   }
-  .fp-lead {
+  .fp-lead .xcell-face {
     padding: 28px 20px;
-    border-right: none;
-    border-bottom: 1px solid var(--rule-strong);
   }
-  .fp-story {
+  .fp-story .xcell-face {
     padding: 24px 20px;
   }
   .fp-lead h3 {
