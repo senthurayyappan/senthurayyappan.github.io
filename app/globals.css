@@ -16,7 +16,10 @@
      Night, not inversion: --paper and --ink NEVER flip. Panel faces stay
      paper and keylines stay ink in BOTH themes. .dark changes only the
      ground-following tokens — --background, --text, --accent, the alpha
-     neutrals, and the --paper-2/3 ground tints. */
+     neutrals, and the --paper-2/3 ground tints.
+
+     #15130d = rgb(21 19 13): the rgba(21, 19, 13, *) literals in this
+     file derive from it — a future ink change must update them together. */
   --yellow: #f9c90a;
   --red: #ef2841;
   --blue: #007d7e;
@@ -34,7 +37,8 @@
   --rule-strong: rgba(21, 19, 13, 0.55);
 
   /* Backwards-compatible aliases (used by the comic-panel legacy CSS).
-     Paper-fixed — they never flip. */
+     --sa-black/--sa-white alias the fixed ink/paper and never flip;
+     --sa-off-white follows the ground (flips via --paper-3). */
   --sa-black: var(--ink);
   --sa-white: var(--paper);
   --sa-off-white: var(--paper-3);
