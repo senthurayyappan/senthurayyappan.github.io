@@ -148,12 +148,13 @@ a.xcell:focus-visible {
   padding: 16px 18px;
   transform: translate(calc(var(--d) * -1), calc(var(--d) * -1));
   transition: background 0.16s ease;
-  /* The face stays lit paper in both themes, so everything ON it must
-     stay ink in both themes. Re-anchor the ground-following neutrals
-     (which .dark flips) to their ink-over-paper values. --accent is NOT
-     re-anchored: hover tints and accent text keep the night accent. */
+  /* The face is a lit paper object where daylight rules hold: everything
+     ON it re-anchors to its light-theme value, including --accent (red;
+     yellow-on-paper is ~1.4:1). The side-face pseudos hang off .xcell,
+     not the face, so they correctly keep the flipping night accent. */
   color: var(--ink);
   --text: var(--ink);
+  --accent: var(--red);
   --ink-soft: rgba(21, 19, 13, 0.76);
   --ink-mute: rgba(21, 19, 13, 0.54);
   --rule: rgba(21, 19, 13, 0.18);
