@@ -7,34 +7,42 @@
    ========================================================================== */
 
 :root {
-  /* The logo palette. These five are the ONLY hues on the site.
-     Every neutral below is --black or --white at reduced alpha — never a
-     new tint. Do not add a colour that isn't one of these five. */
+  /* The logo palette. These five are the ONLY hues on the site:
+     yellow, red, blue, ink, paper. There is no pure black — --ink #15130d
+     is the warm tonal mirror of --paper #f6f4ee (same warm bias, inverted
+     lightness). Every neutral below is --ink or --paper at reduced alpha —
+     never a new tint. Do not add a colour that isn't one of these five.
+
+     Night, not inversion: --paper and --ink NEVER flip. Panel faces stay
+     paper and keylines stay ink in BOTH themes. .dark changes only the
+     ground-following tokens — --background, --text, --accent, the alpha
+     neutrals, and the --paper-2/3 ground tints. */
   --yellow: #f9c90a;
   --red: #ef2841;
   --blue: #007d7e;
-  --black: #000000;
-  --white: #f6f4ee;
+  --ink: #15130d;
+  --paper: #f6f4ee;
 
-  /* Surfaces + text, derived from --black over --white */
-  --paper: var(--white);
-  --paper-2: #eceae4; /* black 4% over paper */
-  --paper-3: #d8d7d1; /* black 12% over paper */
-  --ink: var(--black);
-  --ink-soft: rgba(0, 0, 0, 0.76);
-  --ink-mute: rgba(0, 0, 0, 0.54);
+  /* Ground tints + prose neutrals. These style things sitting ON the
+     ground, so they DO flip in .dark. Light values: ink over paper. */
+  --paper-2: #edebe5; /* ink 4% over paper */
+  --paper-3: #dbd9d3; /* ink 12% over paper */
+  --ink-soft: rgba(21, 19, 13, 0.76);
+  --ink-mute: rgba(21, 19, 13, 0.54);
 
-  --rule: rgba(0, 0, 0, 0.18);
-  --rule-strong: rgba(0, 0, 0, 0.55);
+  --rule: rgba(21, 19, 13, 0.18);
+  --rule-strong: rgba(21, 19, 13, 0.55);
 
-  /* Backwards-compatible aliases (used by the comic-panel legacy CSS) */
-  --sa-black: var(--black);
-  --sa-white: var(--white);
+  /* Backwards-compatible aliases (used by the comic-panel legacy CSS).
+     Paper-fixed — they never flip. */
+  --sa-black: var(--ink);
+  --sa-white: var(--paper);
   --sa-off-white: var(--paper-3);
   --sa-yellow: var(--yellow);
   --sa-red: var(--red);
   --sa-blue: var(--blue);
 
+  /* The page ground and the prose on it — the tokens that flip. */
   --background: var(--paper);
   --text: var(--ink);
   --muted: var(--ink-mute);
@@ -48,9 +56,9 @@
   --max: 1180px;
   --gutter: 28px;
 
-  /* Syntax highlighting — brand hues on a black block, neutrals as white
+  /* Syntax highlighting — brand hues on an ink block, neutrals as paper
      at alpha. Code blocks stay dark in both themes. */
-  --sh-background: var(--black);
+  --sh-background: var(--ink);
   --sh-identifier: rgba(246, 244, 238, 0.87);
   --sh-sign: rgba(246, 244, 238, 0.55);
   --sh-comment: rgba(246, 244, 238, 0.45);
@@ -63,18 +71,19 @@
 }
 
 .dark {
-  --paper: var(--black);
-  --paper-2: #0f0f0e; /* white 6% over black */
-  --paper-3: #222221; /* white 14% over black */
-  --ink: var(--white);
+  /* Night, not inversion: --paper and --ink are deliberately NOT
+     redefined here. Panels stay lit paper with ink keylines after dark;
+     only the ground and the prose sitting on it flip. */
+  --paper-2: #23211b; /* paper 6% over ink */
+  --paper-3: #34322c; /* paper 14% over ink */
   --ink-soft: rgba(246, 244, 238, 0.76);
   --ink-mute: rgba(246, 244, 238, 0.56);
 
   --rule: rgba(246, 244, 238, 0.18);
   --rule-strong: rgba(246, 244, 238, 0.55);
 
-  --background: var(--paper);
-  --text: var(--ink);
+  --background: var(--ink);
+  --text: var(--paper);
   --muted: var(--ink-mute);
   --accent: var(--yellow);
 }
@@ -205,8 +214,8 @@ html {
 body {
   margin: 0;
   padding: 0;
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--background);
+  color: var(--text);
   font-family: var(--font-serif-body), 'Iowan Old Style', Georgia, serif;
   font-size: 19px;
   line-height: 1.6;
@@ -230,7 +239,7 @@ img {
 
 ::selection {
   background: var(--yellow);
-  color: var(--black);
+  color: var(--ink);
 }
 
 /* Layout primitives ------------------------------------------------------- */
@@ -305,7 +314,7 @@ img {
   align-items: center;
   gap: 10px;
   padding: 10px 0 10px 4px;
-  color: var(--ink);
+  color: var(--text);
   font-size: 18px;
   line-height: 1.2;
   letter-spacing: -0.005em;
@@ -420,7 +429,7 @@ img {
   font-size: 28px;
   line-height: 1.5;
   letter-spacing: -0.005em;
-  color: var(--ink);
+  color: var(--text);
 }
 /* Folio line — newspaper-style dateline between two rules:
    edition left, title right. */
@@ -437,7 +446,7 @@ img {
   font-size: 18px;
   letter-spacing: -0.005em;
   line-height: 1.25;
-  color: var(--ink);
+  color: var(--text);
 }
 .hero-folio span:last-child {
   text-align: right;
@@ -544,7 +553,7 @@ img {
   font-family: var(--font-serif-display), Georgia, serif;
   font-size: 18px;
   align-self: flex-start;
-  border-bottom: 1px solid var(--ink);
+  border-bottom: 1px solid var(--text);
   padding-bottom: 4px;
   transition: color 0.2s ease, border-color 0.2s ease;
 }
@@ -582,7 +591,7 @@ img {
   border-bottom: none;
 }
 .post-row:hover {
-  background: rgba(0, 0, 0, 0.04);
+  background: rgba(21, 19, 13, 0.04);
 }
 .dark .post-row:hover {
   background: rgba(246, 244, 238, 0.05);
@@ -625,7 +634,7 @@ img {
   padding: 22px 24px 26px;
   border-right: 1px solid var(--rule-strong);
   position: relative;
-  color: var(--ink);
+  color: var(--text);
   min-height: 180px;
 }
 .rec-cell:last-child {
@@ -689,7 +698,7 @@ img {
   flex-direction: column;
   gap: 14px;
   position: relative;
-  color: var(--ink);
+  color: var(--text);
   padding: 14px 14px 32px 14px;
   border-right: 1px solid var(--rule-strong);
 }
@@ -705,7 +714,7 @@ img {
   flex-direction: column;
   gap: 10px;
   position: relative;
-  color: var(--ink);
+  color: var(--text);
   padding: 28px 28px 28px 28px;
   border-bottom: 1px solid var(--rule-strong);
 }
@@ -852,7 +861,7 @@ img {
   font-family: var(--font-serif-body), Georgia, serif;
   font-size: 17px;
   line-height: 1.65;
-  color: var(--ink);
+  color: var(--text);
   text-align: justify;
   text-wrap: pretty;
 }
@@ -884,7 +893,7 @@ img {
   margin-bottom: 0;
 }
 .profile-lede a {
-  color: var(--ink);
+  color: var(--text);
   text-decoration: underline;
   text-decoration-color: var(--accent);
   text-decoration-thickness: 2px;
@@ -903,8 +912,8 @@ img {
   flex-wrap: wrap;
   gap: 40px;
   padding: 28px 0;
-  border-top: 2px solid var(--ink);
-  border-bottom: 2px solid var(--ink);
+  border-top: 2px solid var(--text);
+  border-bottom: 2px solid var(--text);
 }
 .profile-affiliations-logo {
   display: inline-flex;
@@ -972,7 +981,7 @@ img {
   font-family: var(--font-serif-display), Georgia, serif;
   font-weight: 400;
   letter-spacing: -0.01em;
-  color: var(--ink);
+  color: var(--text);
   transition: color 0.18s ease;
 }
 .exp-grid p {
@@ -1048,7 +1057,7 @@ img {
   top: 14px;
   left: 14px;
   background: var(--red);
-  color: var(--white);
+  color: var(--paper);
   padding: 5px 11px;
   font-family: var(--font-serif-display), Georgia, serif;
   font-size: 12px;
@@ -1057,7 +1066,7 @@ img {
 }
 .dark .exp-stamp {
   background: var(--yellow);
-  color: var(--black);
+  color: var(--ink);
 }
 
 /* "Visit project" link with animated arrow */
@@ -1069,7 +1078,7 @@ img {
   align-items: center;
   gap: 8px;
   align-self: flex-start;
-  color: var(--ink);
+  color: var(--text);
 }
 .exp-more svg {
   color: var(--accent);
@@ -1093,7 +1102,7 @@ img {
   gap: 10px;
   padding: 28px;
   text-decoration: none;
-  color: var(--ink);
+  color: var(--text);
   background-image:
     linear-gradient(
       180deg,
@@ -1169,7 +1178,7 @@ img {
   border-bottom: 1px solid var(--rule-strong);
   border-left: 1px solid var(--rule-strong);
   border-right: 1px solid var(--rule-strong);
-  color: var(--ink);
+  color: var(--text);
 }
 .chronology-table tr {
   border-bottom: 1px solid var(--rule-strong);
@@ -1203,7 +1212,7 @@ img {
   font-size: 28px;
   line-height: 1.08;
   letter-spacing: -0.01em;
-  color: var(--ink);
+  color: var(--text);
 }
 .chronology-org {
   margin: 6px 0 0;
@@ -1237,7 +1246,7 @@ img {
   font-family: var(--font-serif-display), Georgia, serif;
   font-size: 22px;
   line-height: 1.1;
-  color: var(--ink);
+  color: var(--text);
   margin-bottom: 6px;
 }
 .profile-tool-list {
@@ -1252,7 +1261,7 @@ img {
   font-weight: 400;
   font-size: 17px;
   line-height: 1.35;
-  color: var(--ink);
+  color: var(--text);
   padding: 8px 0;
   border-bottom: 1px solid var(--rule);
 }
@@ -1832,15 +1841,13 @@ img {
 .prose li > ol {
   margin: 0.4em 0;
 }
+/* Figures are panels: paper face, ink keyline, in BOTH themes. */
 .prose figure {
   margin: 2.25rem 0;
-  border: 1px solid var(--sa-black);
+  border: 1px solid var(--ink);
   background-color: var(--paper);
-  box-shadow: 0 6px 6px -6px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 6px 6px -6px rgba(21, 19, 13, 0.5);
   overflow: hidden;
-}
-.dark .prose figure {
-  border-color: var(--sa-white);
 }
 .prose figure img {
   display: block;
@@ -1849,17 +1856,13 @@ img {
   margin: 0;
 }
 .prose figure figcaption {
-  border-top: 1px solid var(--sa-black);
+  border-top: 1px solid var(--ink);
   background-color: var(--paper);
-  color: var(--sa-black);
+  color: var(--ink);
   padding: 0.5rem 1rem;
   text-align: center;
   font-size: 0.85em;
   line-height: 1.4;
-}
-.dark .prose figure figcaption {
-  border-color: var(--sa-white);
-  color: var(--sa-white);
 }
 .prose hr {
   margin: 2rem 0;
@@ -1916,19 +1919,17 @@ table {
   box-sizing: border-box;
   overflow: visible;
 }
+/* Panels stay paper-faced with ink keylines in BOTH themes —
+   lit objects at night, per the visual-system spec. */
 .panel {
-  background-color: var(--background);
-  border: solid 1px var(--sa-black);
-  box-shadow: 0 6px 6px -6px rgba(0, 0, 0, 0.5);
+  background-color: var(--paper);
+  border: solid 1px var(--ink);
+  box-shadow: 0 6px 6px -6px rgba(21, 19, 13, 0.5);
   min-height: 200px;
   overflow: hidden;
   position: relative;
   background-size: cover;
   background-position: center;
-}
-.dark .panel {
-  border-color: var(--sa-white);
-  box-shadow: 0 6px 6px -6px rgba(0, 0, 0, 0.3);
 }
 .panel .text {
   background-color: var(--paper);
@@ -2120,9 +2121,6 @@ table {
   z-index: 10;
   transform: translate(-3px, -3px);
   box-shadow: 6px 6px 0 var(--ink) !important;
-}
-.dark .panel-link-hover:hover {
-  box-shadow: 6px 6px 0 var(--sa-white) !important;
 }
 .panel-button {
   border: 4px solid transparent;

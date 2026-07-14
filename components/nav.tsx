@@ -169,10 +169,10 @@ export function Navbar() {
       {mobileOpen && (
         <>
           <div
-            className="fixed inset-0 z-30 md:hidden bg-black/30"
+            className="fixed inset-0 z-30 md:hidden bg-[rgba(21,19,13,0.3)]"
             onClick={() => setMobileOpen(false)}
           />
-          <div className="fixed top-0 left-0 h-full w-72 z-40 md:hidden p-6 flex flex-col gap-6 bg-[var(--paper)] shadow-xl">
+          <div className="fixed top-0 left-0 h-full w-72 z-40 md:hidden p-6 flex flex-col gap-6 bg-[var(--background)] shadow-xl">
             <Link
               href="/"
               onClick={() => setMobileOpen(false)}
