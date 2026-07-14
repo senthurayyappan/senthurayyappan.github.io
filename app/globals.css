@@ -785,7 +785,7 @@ img {
    but the minifier collapses that `0%` to a unitless `0` — invalid in
    color-mix(), which takes a <percentage> — voiding the whole
    background-image and blanking the photo in production builds only.
-   Applies to .exp-tile too. */
+   Applies to .exp-tile-cell too. */
 .fp-story-photo {
   --fp-story-photo-src: url('/sa-publications.jpg');
   --fp-story-photo-pos: 35% center;
@@ -981,36 +981,48 @@ img {
   object-fit: contain;
 }
 
-/* Experience: a framed newspaper page. Big panels mirror Quick Tour's
-   fp-lead — photo at top inside 14px outer padding, text inset another
-   14px (28px effective). Highlighted tiles use the fp-story-photo
-   treatment — image fills the panel as background with a paper-tinted
-   gradient washing the bottom so the meta + title + dek stay readable. */
-.exp-grid {
-  border-top: 1px solid var(--rule-strong);
-  border-bottom: 1px solid var(--rule-strong);
-  border-left: 1px solid var(--rule-strong);
-  border-right: 1px solid var(--rule-strong);
+/* Experience — extruded sheet (docs/design/2026-07-14-visual-system.md).
+   A 12-col grid; cells span 7/5 then 6/6 then 6/6 so the panels butt into one
+   sheet. Chrome (keylines, skewed side faces, hover lift) is the .xcell /
+   .xcell-face primitive; this block owns only the grid spans and each panel's
+   inner layout. */
+.exp-sheet {
+  grid-template-columns: repeat(12, 1fr);
 }
-.exp-row {
-  display: grid;
-  border-bottom: 1px solid var(--rule-strong);
-  align-items: stretch;
+.exp-cell-7 { grid-column: span 7; }
+.exp-cell-6 { grid-column: span 6; }
+.exp-cell-5 { grid-column: span 5; }
+
+/* Nested stack column (NIT + Spider) — same collapse trick as .fp-side: the
+   wrapper mirrors the -2px pull and the second cell collapses the shared
+   keyline (the .xsheet > .xcell child combinator can't reach nested cells). */
+.exp-side {
+  margin: -2px 0 0 -2px;
+  display: flex;
+  flex-direction: column;
 }
-.exp-row:last-child {
-  border-bottom: none;
+.exp-side > .xcell { flex: 1; }
+.exp-side > .xcell + .xcell { margin-top: -2px; }
+
+/* Shared face type. Titles go accent on hover (the sheet hover language). */
+.exp-sheet h3 {
+  margin: 0;
+  font-family: var(--font-serif-display), Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  transition: color 0.18s ease;
 }
-.exp-row-7-5 {
-  grid-template-columns: 7fr 5fr;
+.exp-sheet p {
+  margin: 0;
+  font-family: var(--font-serif-body), Georgia, serif;
+  line-height: 1.6;
+  color: var(--ink-soft);
 }
-.exp-row-1-1 {
-  grid-template-columns: 1fr 1fr;
-}
-.exp-row-1-1-1 {
-  grid-template-columns: 1fr 1fr 1fr;
+.exp-sheet .xcell:hover h3 {
+  color: var(--accent);
 }
 
-/* Shared text styles */
 /* Role on the left, timeline on the right — one justified row, no "·" strings. */
 .exp-meta {
   display: flex;
@@ -1023,39 +1035,16 @@ img {
   letter-spacing: 0.01em;
   color: var(--ink-mute);
 }
-.exp-grid h3 {
-  margin: 0;
-  font-family: var(--font-serif-display), Georgia, serif;
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  color: var(--text);
-  transition: color 0.18s ease;
-}
-.exp-grid p {
-  margin: 0;
-  font-family: var(--font-serif-body), Georgia, serif;
-  line-height: 1.6;
-  color: var(--ink-soft);
-}
-.exp-grid a:hover h3 {
-  color: var(--accent);
-}
 
-/* BIG panel — modeled on .fp-lead: 14px outer padding, photo at top with
-   the parent's padding only, text inset another 14px via padding-inline. */
-.exp-big {
+/* Photo-top face: image frame at top, text below inset a further 14px.
+   Modeled on the home page's .fp-lead. */
+.exp-photo-face {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 14px 14px 32px;
-  border-right: 1px solid var(--rule-strong);
-  text-decoration: none;
-  color: inherit;
+  gap: 12px;
+  padding: 14px 14px 28px;
 }
-.exp-row > .exp-big:last-child {
-  border-right: none;
-}
-.exp-big > *:not(.exp-big-photo) {
+.exp-photo-face > *:not(.exp-big-photo) {
   padding-inline: 14px;
 }
 .exp-big-photo {
@@ -1064,7 +1053,6 @@ img {
   background: var(--paper-2);
   border: 1px solid var(--rule-strong);
   overflow: hidden;
-  margin-bottom: 6px;
 }
 .exp-big-photo img {
   width: 100%;
@@ -1072,33 +1060,46 @@ img {
   object-fit: cover;
   display: block;
 }
-.exp-big h3 {
+.exp-photo-face h3 {
   font-size: 30px;
   line-height: 1.05;
 }
-.exp-big p {
+.exp-photo-face p {
   font-size: 16px;
   line-height: 1.55;
   max-width: 52ch;
 }
-.exp-big.is-lead h3 {
-  font-size: 42px;
+
+/* RAI lead (span 7): bigger title, taller 4/3 photo. */
+.exp-lead h3 {
+  font-size: 40px;
   line-height: 1;
 }
-.exp-big.is-lead p {
-  font-size: 17px;
-}
-.exp-big.is-portrait .exp-big-photo {
-  flex: 1 1 auto;
-  min-height: 440px;
-  aspect-ratio: auto;
-}
-/* First row stretches taller to give the OSL tile bg-image more room */
-.exp-grid > .exp-row:first-child .exp-big-photo {
+.exp-lead .exp-big-photo {
   aspect-ratio: 4 / 3;
 }
 
-/* "Current" stamp on lead photo */
+/* Compact photo-top (NIT / Spider stack): smaller title + dek. */
+.exp-compact .exp-photo-face {
+  padding: 14px 14px 22px;
+}
+.exp-compact h3 {
+  font-size: 23px;
+}
+.exp-compact p {
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* Ballbot (span 6): the photo fills the face height instead of a fixed ratio. */
+.exp-portrait-photo {
+  flex: 1 1 auto;
+  min-height: 360px;
+  aspect-ratio: auto;
+}
+
+/* "Current" stamp on the tile. Absolute vs the positioned .xcell-face; colours
+   are absolute (red/paper by day, yellow/ink at night), not theme tokens. */
 .exp-stamp {
   position: absolute;
   top: 14px;
@@ -1117,40 +1118,16 @@ img {
   color: var(--ink);
 }
 
-/* "Visit project" link with animated arrow */
-.exp-more {
-  margin-top: 4px;
-  font-family: var(--font-serif-display), Georgia, serif;
-  font-size: 17px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  align-self: flex-start;
-  color: var(--text);
-}
-.exp-more svg {
-  color: var(--accent);
-  opacity: 0;
-  transform: translateX(-8px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  flex: 0 0 auto;
-}
-.exp-big:hover .exp-more svg {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* TILE — fp-story-photo style: image fills the panel, gradient washes
-   the bottom 70% to paper so the text reads cleanly.                     */
-.exp-tile {
-  position: relative;
+/* Open-Source Leg "Current" tile: image fills the face with a gradient washing
+   to the ground so meta + title + dek stay readable. Same pattern (and the
+   same `transparent`-stop minifier caveat) as the home page's .fp-story-photo:
+   fade to --background so the wash tracks the theme. */
+.exp-tile-cell .xcell-face {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   gap: 10px;
   padding: 28px;
-  text-decoration: none;
-  color: var(--text);
   background-image:
     linear-gradient(
       180deg,
@@ -1164,57 +1141,24 @@ img {
   background-position: center center, var(--exp-tile-pos, center);
   background-repeat: no-repeat, no-repeat;
 }
-.exp-tile h3 {
-  font-size: 24px;
+.exp-tile-cell h3 {
+  font-size: 26px;
   line-height: 1.1;
 }
-.exp-tile p {
-  font-size: 14px;
+.exp-tile-cell p {
+  font-size: 15px;
   line-height: 1.5;
-  max-width: 38ch;
+  max-width: 40ch;
 }
-.exp-tile[data-bg="osl"] {
+.exp-tile-cell[data-bg='osl'] {
   --exp-tile-src: url('/about/sa-main.jpg');
   --exp-tile-pos: center center;
 }
-.exp-tile[data-bg="rai"] {
-  --exp-tile-src: url('/about/rai.jpg');
-  --exp-tile-pos: center center;
-}
-.exp-tile[data-bg="ballbot"] {
-  --exp-tile-src: url('/projects/ballbot-main.jpg');
-  --exp-tile-pos: center top;
-}
-.exp-tile[data-bg="iitm"] {
-  --exp-tile-src: url('/about/iitm.jpg');
-  --exp-tile-pos: 10% center;
-}
-
-/* Tiles sharing a row with a big panel: vertical rule on the right
-   (handled by the .exp-big's border-right). When tiles are stacked,
-   horizontal rules between them. */
-.exp-tile-stack {
-  display: flex;
-  flex-direction: column;
-}
-.exp-tile-stack > .exp-tile {
-  flex: 1;
-  border-bottom: 1px solid var(--rule-strong);
-}
-.exp-tile-stack > .exp-tile:last-child {
-  border-bottom: none;
-}
-.exp-big-stack {
-  display: flex;
-  flex-direction: column;
-}
-.exp-big-stack > .exp-big {
-  flex: 1;
-  border-right: none;
-  border-bottom: 1px solid var(--rule-strong);
-}
-.exp-big-stack > .exp-big:last-child {
-  border-bottom: none;
+/* Rest the "Current" tile at 18px, matching the home page's About tile: an
+   image-fill tile over a busy photo reads shallow at the 12px editorial raise
+   (0,3,0 beats .xcell.raised / .xcell:hover, so it holds 18 in every state). */
+.exp-sheet .exp-tile-cell.raised {
+  --d: 18px;
 }
 
 /* Chronology: two-column CV table with dates as the running gutter.        */
@@ -1462,33 +1406,27 @@ img {
     gap: 28px;
     padding: 22px 0;
   }
-  .exp-row-7-5,
-  .exp-row-1-1,
-  .exp-row-1-1-1 {
-    grid-template-columns: 1fr;
+  /* Single column: every cell (and the nested stack) spans the full grid, so
+     the sheet stacks vertically. The -2px keyline collapse still applies. */
+  .exp-cell-7,
+  .exp-cell-6,
+  .exp-cell-5,
+  .exp-side {
+    grid-column: 1 / -1;
   }
-  .exp-row > .exp-big {
-    border-right: none;
-    border-bottom: 1px solid var(--rule-strong);
+  .exp-lead h3 {
+    font-size: 32px;
   }
-  .exp-row > .exp-big:last-child {
-    border-bottom: none;
-  }
-  .exp-big.is-lead h3 {
-    font-size: 34px;
-  }
-  .exp-big h3 {
+  .exp-photo-face h3 {
     font-size: 26px;
   }
-  .exp-tile {
+  .exp-portrait-photo {
+    min-height: 300px;
+  }
+  .exp-tile-cell .xcell-face {
     min-height: 280px;
   }
-  .exp-row > .exp-tile {
-    border-bottom: 1px solid var(--rule-strong);
-  }
-  .exp-row > .exp-tile:last-child {
-    border-bottom: none;
-  }  .chronology-table,
+  .chronology-table,
   .chronology-table tbody,
   .chronology-table tr,
   .chronology-table th,
@@ -1544,7 +1482,8 @@ img {
   }
   .section {
     padding: 44px 0;
-  }  .exp-tile {
+  }
+  .exp-tile-cell .xcell-face {
     min-height: 240px;
   }
 }

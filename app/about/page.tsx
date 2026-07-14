@@ -146,35 +146,21 @@ function Affiliations() {
 }
 
 function Experience() {
-  const moreArrow = (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M7 17 17 7" />
-      <path d="M7 7h10v10" />
-    </svg>
-  )
-
   return (
     <section className="section" id="experience">
       <SectionHead title="Experience" />
-      <div className="exp-grid">
-        {/* Row 1 — RAI big lead + Open-Source Leg highlight tile */}
-        <div className="exp-row exp-row-7-5">
-          <a
-            href="https://rai-inst.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="exp-big"
-          >
+      {/* Extruded sheet: a 12-col grid whose cells span 7/5 then 6/6 then 6/6.
+          Chrome (keylines, side faces, hover lift) is the .xcell primitive; the
+          NIT+Spider stack is a nested column like the home page's .fp-side. */}
+      <div className="xsheet exp-sheet">
+        {/* Row 1 — RAI photo-lead + Open-Source Leg "Current" tile (raised) */}
+        <a
+          href="https://rai-inst.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="xcell exp-cell-7"
+        >
+          <div className="xcell-face exp-photo-face exp-lead">
             <div className="exp-big-photo">
               <Image
                 src="/about/rai.jpg"
@@ -194,14 +180,16 @@ function Experience() {
               Vehicle and built open-source tooling to connect parametric CAD
               assemblies with simulation workflows in Isaac Sim and MuJoCo.
             </p>
-          </a>
-          <a
-            href="https://www.opensourceleg.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="exp-tile"
-            data-bg="osl"
-          >
+          </div>
+        </a>
+        <a
+          href="https://www.opensourceleg.org/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="xcell raised exp-cell-5 exp-tile-cell"
+          data-bg="osl"
+        >
+          <div className="xcell-face">
             <span className="exp-stamp">Current</span>
             <span className="exp-meta">
               <span>Project Lead</span>
@@ -212,18 +200,18 @@ function Experience() {
               Led the hardware and software stack for OSL 2.0, a lower-limb
               robotic platform now used by more than 25 research groups.
             </p>
-          </a>
-        </div>
+          </div>
+        </a>
 
-        {/* Row 2 — Ballbot full-photo (left) + (NIT, Spider) stacked (right) */}
-        <div className="exp-row exp-row-1-1">
-          <a
-            href="https://robotics.umich.edu/academics/courses/rob-311/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="exp-big is-portrait"
-          >
-            <div className="exp-big-photo">
+        {/* Row 2 — Ballbot portrait-fill + (NIT, Spider) nested stack */}
+        <a
+          href="https://robotics.umich.edu/academics/courses/rob-311/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="xcell exp-cell-6 exp-portrait-cell"
+        >
+          <div className="xcell-face exp-photo-face">
+            <div className="exp-big-photo exp-portrait-photo">
               <Image
                 src="/projects/ballbot-main.jpg"
                 alt="ROB311 Ballbot"
@@ -241,71 +229,75 @@ function Experience() {
               Co-developed the balancing robot platform used as the hands-on
               teaching vehicle in U-M&rsquo;s introductory robotics course.
             </p>
-          </a>
-          <div className="exp-big-stack">
-            <a
-              href="https://www.nitt.edu/home/academics/departments/prod/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="exp-big"
-            >
+          </div>
+        </a>
+        <div className="exp-side exp-cell-6">
+          <a
+            href="https://www.nitt.edu/home/academics/departments/prod/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="xcell exp-compact"
+          >
+            <div className="xcell-face exp-photo-face">
               <div className="exp-big-photo">
                 <Image
                   src="/about/nitt.jpg"
                   alt="NIT Trichy"
                   fill
-                  sizes="(min-width: 960px) 50vw, 100vw"
+                  sizes="(min-width: 960px) 25vw, 100vw"
                   style={{ objectFit: 'cover', objectPosition: '0% 0%' }}
                 />
               </div>
               <span className="exp-meta">
-              <span>BTech, Production Engineering</span>
-              <span>2016–2020</span>
-            </span>
+                <span>BTech, Production Engineering</span>
+                <span>2016–2020</span>
+              </span>
               <h3>NIT Trichy</h3>
               <p>
                 Earned my BTech in Production Engineering with a minor in
                 Computer Science, building the mechanics-and-software
                 foundation that still anchors my work.
               </p>
-            </a>
-            <a
-              href="https://spider.nitt.edu/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="exp-big"
-            >
+            </div>
+          </a>
+          <a
+            href="https://spider.nitt.edu/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="xcell exp-compact"
+          >
+            <div className="xcell-face exp-photo-face">
               <div className="exp-big-photo">
                 <Image
                   src="/about/spider.jpg"
                   alt="Spider Tronix, NITT"
                   fill
-                  sizes="(min-width: 960px) 50vw, 100vw"
+                  sizes="(min-width: 960px) 25vw, 100vw"
                   style={{ objectFit: 'cover', objectPosition: '0% 30%' }}
                 />
               </div>
               <span className="exp-meta">
-              <span>Team Lead</span>
-              <span>2018–2020</span>
-            </span>
+                <span>Team Lead</span>
+                <span>2018–2020</span>
+              </span>
               <h3>Spider Tronix, NITT</h3>
               <p>
-                Led NIT Trichy&rsquo;s robotics and machine learning club, coordinating a
-                student team of roughly thirty across projects, builds, and
-                competitions.
+                Led NIT Trichy&rsquo;s robotics and machine learning club,
+                coordinating a student team of roughly thirty across projects,
+                builds, and competitions.
               </p>
-            </a>
-          </div>
+            </div>
+          </a>
         </div>
 
-        {/* Row 3 — IIT Madras + DRDO big pair */}
-        <div className="exp-row exp-row-1-1">
-          <a
-            href="https://ed.iitm.ac.in/~robotics_lab/index.html"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="exp-big"
-          >
+        {/* Row 3 — IIT Madras + DRDO */}
+        <a
+          href="https://ed.iitm.ac.in/~robotics_lab/index.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="xcell exp-cell-6"
+        >
+          <div className="xcell-face exp-photo-face">
             <div className="exp-big-photo">
               <Image
                 src="/about/iitm.jpg"
@@ -325,13 +317,15 @@ function Experience() {
               developing a transformation-based method for tuning surgical
               robot parameters.
             </p>
-          </a>
-          <a
-            href="https://www.drdo.gov.in/drdo/labs-and-establishments/defence-bio-engineering-electro-medical-laboratory-debel"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="exp-big"
-          >
+          </div>
+        </a>
+        <a
+          href="https://www.drdo.gov.in/drdo/labs-and-establishments/defence-bio-engineering-electro-medical-laboratory-debel"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="xcell exp-cell-6"
+        >
+          <div className="xcell-face exp-photo-face">
             <div className="exp-big-photo">
               <Image
                 src="/about/exo.jpg"
@@ -351,8 +345,8 @@ function Experience() {
               contributing to gait-cycle analysis and early design evaluation
               for their exoskeleton.
             </p>
-          </a>
-        </div>
+          </div>
+        </a>
       </div>
     </section>
   )

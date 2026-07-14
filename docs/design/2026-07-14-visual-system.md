@@ -1,7 +1,7 @@
 # Visual system: extruded comic lineart
 
-Status: implemented (panels, palette, type, kolam, Inter). Imagery-to-lineart and the
-`/about` sheet migration are still open.
+Status: implemented (panels, palette, type, kolam, Inter, and the `/about` Experience
+sheet migration). Imagery-to-lineart is the one remaining open item.
 Date: 2026-07-14
 
 ## The idea in one line
