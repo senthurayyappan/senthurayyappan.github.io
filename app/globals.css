@@ -1304,10 +1304,17 @@ img {
   margin-top: 64px;
   padding: 36px 0 44px 276px;
 }
-/* Sikku-kolam frieze (components/Kolam.tsx KolamStrip) */
+/* Sikku plait (components/Kolam.tsx KolamPlait) — render at the plait's
+   natural size (viewBox 456 x 27.6) instead of stretching to the column */
 .foot-ornament {
   margin: 0 0 28px;
   color: var(--ink-soft);
+}
+.foot-ornament svg {
+  display: block;
+  height: 28px;
+  width: auto;
+  max-width: 100%;
 }
 .foot-row {
   display: flex;
@@ -1397,6 +1404,9 @@ img {
   }
   .foot {
     padding-left: 0;
+  }
+  .foot-ornament svg {
+    margin-inline: auto;
   }
   .foot-row {
     justify-content: center;

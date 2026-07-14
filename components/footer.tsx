@@ -1,10 +1,10 @@
-import { KolamStrip } from './Kolam'
+import KolamPlait from './Kolam'
 
 export default function Footer() {
   return (
     <footer className="foot wrap">
       <div className="foot-ornament">
-        <KolamStrip count={19} altN={3} altSeed={5} />
+        <KolamPlait segments={19} />
       </div>
       <div className="foot-row">
         <span className="foot-end">The End</span>
