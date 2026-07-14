@@ -79,6 +79,106 @@
   --accent: var(--yellow);
 }
 
+/* ------------------------------------------------------------------ */
+/* Extruded panel system -- docs/design/2026-07-14-visual-system.md    */
+/* Geometry: footprint stays in the grid slot; the face lifts up-left  */
+/* by --d; side faces are skewed strips inside the slot. Camera is     */
+/* down-right, so DOM order IS painter's order: never add z-index.     */
+/* ------------------------------------------------------------------ */
+@property --d {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+.xsheet {
+  display: grid;
+  gap: 0;
+  /* compensates the cells' -2px keyline-collapse shift */
+  padding: 2px 0 0 2px;
+}
+.xsheet > .xcell {
+  /* butt the cells; adjacent 2px keylines collapse into one */
+  margin: -2px 0 0 -2px;
+}
+
+.xcell {
+  position: relative;
+  display: flex;
+  --d: 0px;
+  transition: --d 0.16s ease;
+}
+a.xcell {
+  text-decoration: none;
+  color: inherit;
+}
+.xcell.raised { --d: 12px; }
+.xcell:hover,
+.xcell:focus-visible { --d: 18px; }
+
+.xcell-face {
+  position: relative;
+  flex: 1;
+  display: block;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  padding: 16px 18px;
+  transform: translate(calc(var(--d) * -1), calc(var(--d) * -1));
+  transition: background 0.16s ease;
+}
+.xcell:hover .xcell-face,
+.xcell:focus-visible .xcell-face {
+  background: color-mix(in srgb, var(--accent) 12%, var(--paper));
+}
+
+/* Right side face: accent. Single-owner edges; diagonals 3px pre-skew
+   (2.12px perpendicular) because Chromium floors fractional borders. */
+.xcell::before {
+  content: '';
+  position: absolute;
+  top: calc(var(--d) * -1);
+  left: calc(100% - var(--d));
+  width: var(--d);
+  height: 100%;
+  box-sizing: border-box;
+  background: var(--accent);
+  border: 0 solid var(--ink);
+  border-top-width: min(calc(var(--d) * 99), 3px);
+  border-right-width: min(calc(var(--d) * 99), 2px);
+  border-bottom-width: min(calc(var(--d) * 99), 3px);
+  transform: skewY(45deg);
+  transform-origin: 0 0;
+}
+/* Bottom side face: blue, both themes. */
+.xcell::after {
+  content: '';
+  position: absolute;
+  top: calc(100% - var(--d));
+  left: calc(var(--d) * -1);
+  width: 100%;
+  height: var(--d);
+  box-sizing: border-box;
+  background: var(--blue);
+  border: 0 solid var(--ink);
+  border-bottom-width: min(calc(var(--d) * 99), 2px);
+  border-left-width: min(calc(var(--d) * 99), 3px);
+  transform: skewX(45deg);
+  transform-origin: 0 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xcell, .xcell-face { transition: none; }
+}
+
+/* Extruded display type -- 28px+ headings only (below that it reads as
+   a misprint). Stacked 1px steps, NEVER a single offset shadow. */
+.type-x {
+  text-shadow:
+    1px 1px 0 var(--accent),
+    2px 2px 0 var(--accent),
+    3px 3px 0 var(--accent);
+}
+
 * {
   box-sizing: border-box;
 }
