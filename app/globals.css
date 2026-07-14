@@ -31,7 +31,9 @@
   --paper-2: #edebe5; /* ink 4% over paper */
   --paper-3: #dbd9d3; /* ink 12% over paper */
   --ink-soft: rgba(21, 19, 13, 0.76);
-  --ink-mute: rgba(21, 19, 13, 0.54);
+  /* 0.59, not 0.54: the warm ink is lighter than the pure black it replaced,
+     and 0.54 lands at 3.87:1 on paper. 0.59 restores AA (4.55:1). */
+  --ink-mute: rgba(21, 19, 13, 0.59);
 
   --rule: rgba(21, 19, 13, 0.18);
   --rule-strong: rgba(21, 19, 13, 0.55);
@@ -166,7 +168,7 @@ a.xcell:focus-visible {
   --text: var(--ink);
   --accent: var(--red);
   --ink-soft: rgba(21, 19, 13, 0.76);
-  --ink-mute: rgba(21, 19, 13, 0.54);
+  --ink-mute: rgba(21, 19, 13, 0.59);
   --rule: rgba(21, 19, 13, 0.18);
   --rule-strong: rgba(21, 19, 13, 0.55);
   --paper-2: #edebe5;
