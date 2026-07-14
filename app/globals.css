@@ -792,6 +792,17 @@ img {
   /* absorb the column height the plain publications cell doesn't need */
   flex: 1;
 }
+/* The About tile rests at the hover depth (18px), not the 12px editorial raise
+   the .raised token gives. It is a narrow tile over a busy portrait between two
+   flat neighbours, where 12px reads as shallow; 18px is the depth every other
+   tile reaches on hover, so About now matches a hovered Publications tile at
+   rest. (Featured stays at 12 -- it is a wide panel on clean paper where 12
+   reads fine.) Specificity 0,3,0 beats both .xcell.raised and .xcell:hover, so
+   About sits at 18 in every state; its hover feedback is the title going accent
+   via .fp-story:hover h3, not a depth change. */
+.fp-sheet .fp-story-photo.raised {
+  --d: 18px;
+}
 /* The wash fades to --background, so it tracks the face: paper by day, ink
    at night, and the text sitting on it always has its own ground under it. */
 .fp-story-photo.fp-story .xcell-face {

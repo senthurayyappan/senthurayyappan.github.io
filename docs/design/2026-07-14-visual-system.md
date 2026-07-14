@@ -132,6 +132,12 @@ widths down to whole px -- the exact 2.83px computes to 2px and renders thin.
 Raise at most 1-2 cells per grid, ideally on a diagonal. If everything is raised,
 nothing is. Varied per-cell heights were tried and rejected as noise.
 
+One deliberate exception: the About tile on the home page rests at **18px**, not 12.
+It is a narrow tile carrying a busy portrait, sitting between two flat neighbours,
+and at 12px the extrusion read as shallow -- the owner asked for it to sit at the
+depth a tile reaches when hovered. This is a per-tile override, not a licence to vary
+heights freely; the wide Featured panel on clean paper still reads fine at 12.
+
 ### Hover
 
 Any cell rises to 18px and **its title goes accent**. Flat cells become solids on hover,
