@@ -38,10 +38,11 @@
   --rule: rgba(21, 19, 13, 0.18);
   --rule-strong: rgba(21, 19, 13, 0.55);
 
-  /* Backwards-compatible aliases. Live consumers: the code-block/syntax CSS
-     below (--sa-black/--sa-white/--sa-off-white) and theme-switch.tsx
-     (--sa-yellow). --sa-black/--sa-white alias the fixed ink/paper and never
-     flip; --sa-off-white follows the ground (flips via --paper-3). */
+  /* Backwards-compatible aliases -- all four below are LIVE, don't prune them:
+     the code-block/syntax CSS uses --sa-black/--sa-white/--sa-off-white, and
+     theme-switch.tsx uses --sa-yellow/--sa-black. --sa-black/--sa-white alias
+     the fixed ink/paper and never flip; --sa-off-white follows the ground
+     (flips via --paper-3). New code should prefer --ink/--paper/--accent. */
   --sa-black: var(--ink);
   --sa-white: var(--paper);
   --sa-off-white: var(--paper-3);
@@ -1533,9 +1534,6 @@ img {
 .sa-link:focus-visible {
   text-decoration-color: var(--accent) !important;
   transform: translateY(-1px);
-}
-.muted {
-  color: var(--muted);
 }
 .accent {
   color: var(--accent);
