@@ -220,7 +220,13 @@ The new generator is much simpler:
 
 - Two counter-phase sine strands, approximated with quadratic Beziers
   (control offset `4/pi * amplitude` approximates a sine peak).
-- **Tight weave**: period 24, amplitude 10, stroke 1.8px.
+- **Open weave** (option A of the two drawn): crossings every `P=20px`
+  (P is a half-period), amplitude `A=15`, stroke 2. The load-bearing number is
+  `A/P = 0.75`; the tighter option B (denser, smaller eyes) was rejected as
+  crowded at footer scale. NOTE: the plait first shipped with `P` mistakenly
+  standing in for the full period, which flattened `A/P` to ~0.42 and produced
+  a flat bead-chain — the very failure this section warns against. Fixed by
+  halving P and raising A.
 - Pulli dots at the lens centres (half-period midpoints).
 - Crossings every half-period, **alternating which strand rides over** -- achieved by
   drawing strand A, then strand B with a ground-coloured casing beneath its ink, then

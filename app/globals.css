@@ -519,13 +519,23 @@ img {
   gap: 36px;
   align-items: center;
 }
+/* The lead cell earns more room than the 16/18 primitive default: at full
+   width the image sets the panel height and the copy is centred against it,
+   so a tight face padding reads as a cramped title. */
+.xcell-face.featured {
+  padding: 30px 32px;
+}
 /* inner picture frame, distinct from the panel keyline (inset by the
-   face padding, so the two never double up) */
+   face padding, so the two never double up).
+   5/4 at full width — the image is half the face, so a landscape crop leaves
+   the panel shorter than the copy beside it wants to be. The single-column
+   layout below 1240px goes back to 4/3: there the image spans the whole face,
+   and 5/4 at that width is a wall. */
 .featured .img-frame {
   position: relative;
   background: var(--paper-2);
   border: 1px solid var(--rule-strong);
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 5 / 4;
   overflow: hidden;
   width: 100%;
 }
@@ -539,10 +549,12 @@ img {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 18px;
+  gap: 22px;
 }
 .featured .copy h3 {
-  margin: -10px 0 0;
+  /* no negative top margin — it was pulling the title into the face padding
+     and is the reason the title looked squeezed against the panel edge */
+  margin: 0;
   font-family: var(--font-serif-display), Georgia, serif;
   font-weight: 400;
   font-size: 56px;
@@ -1302,14 +1314,16 @@ img {
   padding: 36px 0 44px 276px;
 }
 /* Sikku plait (components/Kolam.tsx KolamPlait) — render at the plait's
-   natural size (viewBox 456 x 27.6) instead of stretching to the column */
+   natural 1:1 size (23 segments => viewBox 460 x 39) instead of stretching to
+   the column. The height must track the viewBox: squash it and the open weave
+   collapses back into the flat bead-chain the plait exists to avoid. */
 .foot-ornament {
   margin: 0 0 28px;
   color: var(--ink-soft);
 }
 .foot-ornament svg {
   display: block;
-  height: 28px;
+  height: 39px;
   width: auto;
   max-width: 100%;
 }
@@ -1351,6 +1365,10 @@ img {
     grid-template-columns: 1fr;
     gap: 32px;
   }
+  /* stacked: the image now spans the full face, so keep the landscape crop */
+  .featured .img-frame {
+    aspect-ratio: 4 / 3;
+  }
   .featured .copy h3 {
     font-size: 44px;
   }
@@ -1363,6 +1381,9 @@ img {
     padding: 28px 20px;
   }
   .fp-story .xcell-face {
+    padding: 24px 20px;
+  }
+  .xcell-face.featured {
     padding: 24px 20px;
   }
   .fp-lead h3 {

@@ -4,15 +4,28 @@
 // inverts for free at night (rice flour on dark earth). Replaces the old
 // D4-medallion generator wholesale -- see docs/design/2026-07-14-visual-system.md.
 // Footer border ONLY; kolams were tried and rejected everywhere else.
+//
+// This is the OPEN weave (brainstorm option A). The whole thing lives or dies
+// on A/P = 0.75: at that ratio the strands rise into rope; flatten it and the
+// plait collapses into a chain of beads, which is precisely what a sikku kolam
+// is not. Keep the constants in that proportion.
 
 import { useId } from 'react'
 
-const P = 24 // px between crossings (half-period)
-const A = 10 // strand amplitude
-const STROKE = 1.8
-const CASING = STROKE * 3.2
-const DOT_R = 1.6
-const CLIP_R = 5.5 // reclaim radius at alternate crossings
+// The OPEN weave (the brainstorm's option A, full period 40 -> crossings every
+// 20). A tight variant was drawn too and NOT chosen: its eyes shrink and the
+// dots crowd the strands at footer scale. What matters is the ratio A/P = 0.75
+// -- flatten that and the plait stops reading as a rope and starts reading as
+// a chain of beads, which is the exact thing a sikku kolam is not.
+const P = 20 // px between crossings (HALF the sine period, not the period)
+const A = 15 // strand amplitude
+const STROKE = 2
+const CASING = STROKE * 3.5
+const DOT_R = 2.3
+// Reclaim radius at alternate crossings. Must exceed CASING/2 (3.5) to undo
+// the casing damage, and stay under P/2 (10) so it can't reach the peaks or
+// the neighbouring crossings.
+const CLIP_R = 7
 
 function strandPath(n: number, y: number, sign: 1 | -1) {
   // n half-waves of a sine approximated by quadratic beziers; control
@@ -33,7 +46,9 @@ export function KolamPlait({ segments = 19 }: { segments?: number }) {
   // components), so two plaits on one page can't collide.
   const clipId = useId()
   const n = Math.max(2, segments)
-  const y = A + STROKE + 2
+  // half-height: the peak, plus the casing (wider than the ink), plus 1px.
+  // Sizing off STROKE instead would clip the casing at the peaks.
+  const y = A + CASING / 2 + 1
   const w = n * P
   const h = 2 * y
   const a = strandPath(n, y, 1)

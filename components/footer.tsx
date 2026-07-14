@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <footer className="foot wrap">
       <div className="foot-ornament">
-        <KolamPlait segments={19} />
+        <KolamPlait segments={23} />
       </div>
       <div className="foot-row">
         <span className="foot-end">The End</span>

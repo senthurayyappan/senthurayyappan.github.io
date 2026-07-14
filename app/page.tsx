@@ -230,7 +230,7 @@ function FrontPackage() {
     <section className="section" id="inside-the-paper">
       <SectionHead title="Around the site" />
       <div className="xsheet fp-sheet">
-        <Link href="/projects" className="xcell raised fp-lead">
+        <Link href="/projects" className="xcell fp-lead">
           {/* face is a div: contains flow content (h3, p, ul) */}
           <div className="xcell-face">
             <div className="fp-lead-photo">
@@ -285,7 +285,7 @@ function FrontPackage() {
 
         {/* not a cell: a plain grid area holding two stacked cells */}
         <div className="fp-side">
-          <Link href="/about" className="xcell fp-story fp-story-photo">
+          <Link href="/about" className="xcell raised fp-story fp-story-photo">
             <div className="xcell-face">
               <h3>About</h3>
               <p className="dek">
