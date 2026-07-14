@@ -1278,32 +1278,38 @@ img {
 .foot-bar {
   margin: 0 0 28px;
 }
+/* Shallow rest depth: half a content tile's 12px hover lift, so the footer
+   reads as a quiet slab rather than a raised, attention-seeking panel. Set
+   here (not via .raised) precisely so it stays below the panel depth. */
+.foot-key {
+  --d: 6px;
+}
 .foot-key-face {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
   flex-wrap: wrap;
-  min-height: 44px;
-  padding: 18px 24px;
+  min-height: 32px;
+  padding: 14px 22px;
 }
 /* Pin the footer key at its rest depth on hover (overrides .xcell:hover by
    specificity, so source order does not matter). */
 @media (hover: hover) {
   .foot-bar .xcell:hover {
-    --d: 12px;
+    --d: 6px;
   }
 }
 .foot-end {
   font-family: var(--font-serif-display), Georgia, serif;
-  font-size: 22px;
+  font-size: 18px;
   letter-spacing: 0.02em;
   white-space: nowrap;
   margin-right: auto;
 }
 .foot-copy {
   font-family: var(--font-sans), system-ui, sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   color: var(--ink-mute);
 }
 .foot-source {

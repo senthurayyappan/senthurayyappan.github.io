@@ -258,10 +258,12 @@ The footer is now a single wide, low-profile extruded key —
 `.xsheet.foot-bar > .xcell.raised.foot-key > .xcell-face.foot-key-face` — so a
 keyboard's widest key IS the site's own extrusion language, no parallel geometry.
 "The End" (serif display) sits left, the `.foot-copy` line right, on a face that
-flips dark with a paper keyline like every panel. It rests at `.raised` (12px); the
-hover lift is suppressed (`.foot-bar .xcell:hover { --d: 12px }`) because a footer is
-not interactive and a bar that jumps on hover reads as a broken button. At ≤1240px the
-face centres its contents.
+flips dark with a paper keyline like every panel. It rests at a shallow **6px** (set on
+`.foot-key`, half a content tile's 12px hover lift) so the extrusion is a refined lip
+rather than a protruding slab that competes with the content above; the hover lift is
+suppressed (`.foot-bar .xcell:hover { --d: 6px }`) because a footer is not interactive
+and a bar that jumps on hover reads as a broken button. At ≤1240px the face centres its
+contents.
 
 ## Imagery: continuous lineart
 
