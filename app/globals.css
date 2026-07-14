@@ -7,39 +7,38 @@
    ========================================================================== */
 
 :root {
-  /* Paper + ink */
-  --paper: #f6f4ee;
-  --paper-2: #edeae1;
-  --paper-3: #ddd8cb;
-  --ink: #1f1b16;
-  --ink-soft: #3a332a;
-  --ink-mute: #6b6155;
+  /* The logo palette. These five are the ONLY hues on the site.
+     Every neutral below is --black or --white at reduced alpha — never a
+     new tint. Do not add a colour that isn't one of these five. */
+  --yellow: #f9c90a;
+  --red: #ef2841;
+  --blue: #007d7e;
+  --black: #000000;
+  --white: #f6f4ee;
 
-  /* Poster palette — used SPARINGLY */
-  --indigo: #2a4d6e;
-  --red-oxide: #a6382e;
-  --mustard: #c9a227;
-  --yellow: #f2c72e;
-  --olive: #728c16;
-  --teal: #24a68e;
-  --cream: #efe3c7;
+  /* Surfaces + text, derived from --black over --white */
+  --paper: var(--white);
+  --paper-2: #eceae4; /* black 4% over paper */
+  --paper-3: #d8d7d1; /* black 12% over paper */
+  --ink: var(--black);
+  --ink-soft: rgba(0, 0, 0, 0.76);
+  --ink-mute: rgba(0, 0, 0, 0.54);
 
-  --rule: rgba(31, 27, 22, 0.18);
-  --rule-strong: rgba(31, 27, 22, 0.55);
+  --rule: rgba(0, 0, 0, 0.18);
+  --rule-strong: rgba(0, 0, 0, 0.55);
 
-  /* Backwards-compatible aliases (used by older components) */
-  --sa-black: #1f1b16;
-  --sa-white: #f6f4ee;
-  --sa-off-white: #ddd8cb;
-  --sa-yellow: #f2c72e;
-  --sa-red: #a6382e;
-  --sa-blue: #2a4d6e;
-  --sa-green: #728c16;
+  /* Backwards-compatible aliases (used by the comic-panel legacy CSS) */
+  --sa-black: var(--black);
+  --sa-white: var(--white);
+  --sa-off-white: var(--paper-3);
+  --sa-yellow: var(--yellow);
+  --sa-red: var(--red);
+  --sa-blue: var(--blue);
 
   --background: var(--paper);
   --text: var(--ink);
   --muted: var(--ink-mute);
-  --accent: var(--red-oxide);
+  --accent: var(--red);
 
   /* All body/prose text shares one face; --font-serif is kept as an alias
      so older components keep resolving. */
@@ -49,38 +48,35 @@
   --max: 1180px;
   --gutter: 28px;
 
-  /* Syntax highlighting (kept for code blocks) */
-  --sh-class: #4c97f8;
-  --sh-identifier: #d1d5db;
-  --sh-sign: #8996a3;
-  --sh-string: #5eead4;
-  --sh-keyword: #f47067;
-  --sh-comment: #9ca3af;
-  --sh-jsxliterals: #a5b4fc;
-  --sh-property: #f59e0b;
-  --sh-entity: #f59e0b;
-  --sh-background: #1a1612;
+  /* Syntax highlighting — brand hues on a black block, neutrals as white
+     at alpha. Code blocks stay dark in both themes. */
+  --sh-background: var(--black);
+  --sh-identifier: rgba(246, 244, 238, 0.87);
+  --sh-sign: rgba(246, 244, 238, 0.55);
+  --sh-comment: rgba(246, 244, 238, 0.45);
+  --sh-keyword: var(--red);
+  --sh-string: var(--blue);
+  --sh-jsxliterals: var(--blue);
+  --sh-class: var(--yellow);
+  --sh-property: var(--yellow);
+  --sh-entity: var(--yellow);
 }
 
 .dark {
-  --paper: #1a1612;
-  --paper-2: #221c16;
-  --paper-3: #2c251d;
-  --ink: #f4ecdc;
-  --ink-soft: #dccfb4;
-  --ink-mute: #9c907f;
-  --rule: rgba(244, 236, 220, 0.18);
-  --rule-strong: rgba(244, 236, 220, 0.55);
-  --cream: #2c251d;
+  --paper: var(--black);
+  --paper-2: #0f0f0e; /* white 6% over black */
+  --paper-3: #222221; /* white 14% over black */
+  --ink: var(--white);
+  --ink-soft: rgba(246, 244, 238, 0.76);
+  --ink-mute: rgba(246, 244, 238, 0.56);
 
-  --sa-black: #1a1612;
-  --sa-white: #f4ecdc;
-  --sa-off-white: #2c251d;
+  --rule: rgba(246, 244, 238, 0.18);
+  --rule-strong: rgba(246, 244, 238, 0.55);
 
   --background: var(--paper);
   --text: var(--ink);
   --muted: var(--ink-mute);
-  --accent: var(--mustard);
+  --accent: var(--yellow);
 }
 
 * {
@@ -119,8 +115,8 @@ img {
 }
 
 ::selection {
-  background: var(--mustard);
-  color: var(--ink);
+  background: var(--yellow);
+  color: var(--black);
 }
 
 /* Layout primitives ------------------------------------------------------- */
@@ -472,10 +468,10 @@ img {
   border-bottom: none;
 }
 .post-row:hover {
-  background: rgba(31, 27, 22, 0.035);
+  background: rgba(0, 0, 0, 0.04);
 }
 .dark .post-row:hover {
-  background: rgba(244, 236, 220, 0.04);
+  background: rgba(246, 244, 238, 0.05);
 }
 .post-row .date {
   font-family: var(--font-serif-body), Georgia, serif;
@@ -937,8 +933,8 @@ img {
   position: absolute;
   top: 14px;
   left: 14px;
-  background: var(--red-oxide);
-  color: var(--cream);
+  background: var(--red);
+  color: var(--white);
   padding: 5px 11px;
   font-family: var(--font-serif-display), Georgia, serif;
   font-size: 12px;
@@ -946,8 +942,8 @@ img {
   z-index: 2;
 }
 .dark .exp-stamp {
-  background: var(--mustard);
-  color: var(--ink);
+  background: var(--yellow);
+  color: var(--black);
 }
 
 /* "Visit project" link with animated arrow */
@@ -1602,16 +1598,13 @@ img {
   border-radius: 0 3px 3px 0;
 }
 .prose .callout-note {
-  --callout-accent: var(--sa-blue);
+  --callout-accent: var(--blue);
 }
 .prose .callout-tip {
-  --callout-accent: var(--sa-green);
+  --callout-accent: var(--yellow);
 }
 .prose .callout-warning {
-  --callout-accent: var(--sa-red);
-}
-.dark .prose .callout-warning {
-  --callout-accent: var(--sa-yellow);
+  --callout-accent: var(--red);
 }
 .prose .callout-header {
   display: flex;

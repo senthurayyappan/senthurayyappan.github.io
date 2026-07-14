@@ -18,13 +18,13 @@ const H = T / 2
 
 // count of rounded corners (0..4) -> fill; crossings (0) stay paper.
 // Two-tone from the logo's palette: teardrops/commas in the accent,
-// rounder shapes in teal.
+// rounder shapes in blue.
 const SHAPE_FILLS: (string | null)[] = [
   null,
   null,
-  'var(--teal)',
+  'var(--blue)',
   'var(--accent)',
-  'var(--teal)',
+  'var(--blue)',
 ]
 
 // ponytail: mulberry32 — deterministic seeds so the build is reproducible

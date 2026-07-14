@@ -100,7 +100,7 @@ const RecentUpdates: React.FC<RecentUpdatesProps> = ({ latestPost }) => {
             rel="noopener noreferrer"
           >
             <div className="text-left">
-              <span className="text-[var(--sa-green)] uppercase tracking-wider leading-none font-extrabold">
+              <span className="text-[var(--yellow)] uppercase tracking-wider leading-none font-extrabold">
                 {currentFood}
               </span>
             </div>
