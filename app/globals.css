@@ -132,10 +132,17 @@ a.xcell:focus-visible {
   color: inherit;
 }
 .xcell.raised { --d: 12px; }
-.xcell:focus-visible {
+/* Keyboard lift: the cell-as-anchor case, plus wrapper cells (a div cell
+   holding inner links, e.g. Featured) via any keyboard-focused descendant. */
+.xcell:focus-visible,
+.xcell:has(:focus-visible) {
   --d: 18px;
-  /* the face carries the accent outline + tint + lift; the UA ring would
-     hug the static footprint 18px away from it */
+}
+/* The face carries the accent outline + tint + lift; the UA ring would hug
+   the static footprint 18px away from it. Suppress it ONLY on the
+   cell-as-anchor -- inner links inside wrapper cells keep their own ring,
+   since the face outline alone doesn't say WHICH link has focus. */
+a.xcell:focus-visible {
   outline: none;
 }
 
@@ -148,10 +155,13 @@ a.xcell:focus-visible {
   padding: 16px 18px;
   transform: translate(calc(var(--d) * -1), calc(var(--d) * -1));
   transition: background 0.16s ease;
-  /* The face is a lit paper object where daylight rules hold: everything
-     ON it re-anchors to its light-theme value, including --accent (red;
+  /* The face is a lit paper object where daylight rules hold: tokens used
+     ON it re-anchor to their light-theme values, including --accent (red;
      yellow-on-paper is ~1.4:1). The side-face pseudos hang off .xcell,
-     not the face, so they correctly keep the flipping night accent. */
+     not the face, so they correctly keep the flipping night accent.
+     --muted/--sa-off-white are :root-substituted chains this block cannot
+     reach -- on faces use --ink-mute/--paper-3 directly. The hex values
+     below mirror the :root light set and must be kept in sync with it. */
   color: var(--ink);
   --text: var(--ink);
   --accent: var(--red);
@@ -164,7 +174,8 @@ a.xcell:focus-visible {
 }
 /* Tint via background-color, never the background shorthand: faces may
    carry background-image layers (photo tiles) that a shorthand would reset. */
-.xcell:focus-visible .xcell-face {
+.xcell:focus-visible .xcell-face,
+.xcell:has(:focus-visible) .xcell-face {
   background-color: color-mix(in srgb, var(--accent) 12%, var(--paper));
   /* the UA ring hugs the static footprint; move the indicator onto the lifted face */
   outline: 2px solid var(--accent);
@@ -788,10 +799,6 @@ img {
   background-size: 100% 100%, cover;
   background-position: center center, var(--fp-story-photo-pos);
   background-repeat: no-repeat, no-repeat;
-}
-.fp-story-photo.is-about-rai {
-  --fp-story-photo-src: url('/about/rai.jpg');
-  --fp-story-photo-pos: center center;
 }
 .fp-sheet .fp-story-photo .more {
   margin-top: 0;
