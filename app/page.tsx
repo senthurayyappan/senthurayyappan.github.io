@@ -101,8 +101,8 @@ function shortDate(d: string) {
 function Hero() {
   return (
     <section className="hero">
-      <p className="hero-greeting type-x">Hello there!</p>
       <p className="hero-intro">
+        <span className="hero-greeting type-x">Hello there!</span>
         I&rsquo;m a <span className="hero-hl hl-role">PhD student</span> at
         the <span className="hero-hl hl-place">Neurobionics Lab</span>, advised
         by <span className="hero-hl hl-person">Prof. Elliott Rouse</span>. My

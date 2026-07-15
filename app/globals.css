@@ -450,16 +450,16 @@ img {
   padding: 32px 0 24px;
   position: relative;
 }
-/* Big serif-display greeting carrying the misregistered extrusion, matching
-   the section heads -- the home page's one display line. type-x is crisp here
-   because it sits on an isolated display line, not inline running text. */
+/* Big serif-display greeting, floated as a run-in lead so the intro paragraph
+   wraps around it. type-x stays crisp because it is still one unbroken phrase,
+   not words buried mid-sentence. */
 .hero-greeting {
-  margin: 0;
-  padding-top: 8px;
+  float: left;
+  margin: 2px 0.32em 2px 0;
   font-family: var(--font-serif-display), Georgia, serif;
   font-weight: 400;
   font-size: 44px;
-  line-height: 1.05;
+  line-height: 1;
   letter-spacing: -0.01em;
   color: var(--text);
 }
@@ -476,16 +476,14 @@ img {
 /* Key facts highlighted in the intro. Colour, not the misregistered shadow --
    type-x smears when set on inline words inside running text. Each entity gets
    a distinct treatment that flips with the theme: role in accent (red/yellow),
-   place in teal, person in the strongest ink/paper weight. */
+   the two proper nouns (place, person) in the strongest ink/paper weight. */
 .hero-hl {
   font-weight: 600;
 }
 .hl-role {
   color: var(--accent);
 }
-.hl-place {
-  color: var(--blue);
-}
+.hl-place,
 .hl-person {
   color: var(--text);
   font-weight: 700;
@@ -1480,6 +1478,9 @@ img {
     padding: 32px 0 20px;
   }
   .hero-greeting {
+    float: none;
+    display: block;
+    margin: 0 0 6px;
     font-size: 32px;
   }
   .hero-intro {
