@@ -7,34 +7,49 @@
    ========================================================================== */
 
 :root {
-  /* The logo palette. These five are the ONLY hues on the site.
-     Every neutral below is --black or --white at reduced alpha — never a
-     new tint. Do not add a colour that isn't one of these five. */
+  /* The logo palette. These five are the ONLY hues on the site:
+     yellow, red, blue, ink, paper. There is no pure black — --ink #15130d
+     is the warm tonal mirror of --paper #f6f4ee (same warm bias, inverted
+     lightness). Every neutral below is --ink or --paper at reduced alpha —
+     never a new tint. Do not add a colour that isn't one of these five.
+
+     --paper and --ink are the two fixed poles and never flip; what flips is
+     which pole is the ground. .dark swaps --background/--text and follows
+     with --accent, the alpha neutrals, and the --paper-2/3 ground tints.
+     Panel faces are cut from the ground, so they flip with it — see the
+     extruded panel system below.
+
+     #15130d = rgb(21 19 13): the rgba(21, 19, 13, *) literals in this
+     file derive from it — a future ink change must update them together. */
   --yellow: #f9c90a;
   --red: #ef2841;
   --blue: #007d7e;
-  --black: #000000;
-  --white: #f6f4ee;
+  --ink: #15130d;
+  --paper: #f6f4ee;
 
-  /* Surfaces + text, derived from --black over --white */
-  --paper: var(--white);
-  --paper-2: #eceae4; /* black 4% over paper */
-  --paper-3: #d8d7d1; /* black 12% over paper */
-  --ink: var(--black);
-  --ink-soft: rgba(0, 0, 0, 0.76);
-  --ink-mute: rgba(0, 0, 0, 0.54);
+  /* Ground tints + prose neutrals. These style things sitting ON the
+     ground, so they DO flip in .dark. Light values: ink over paper. */
+  --paper-2: #edebe5; /* ink 4% over paper */
+  --paper-3: #dbd9d3; /* ink 12% over paper */
+  --ink-soft: rgba(21, 19, 13, 0.76);
+  /* 0.59, not 0.54: the warm ink is lighter than the pure black it replaced,
+     and 0.54 lands at 3.87:1 on paper. 0.59 restores AA (4.55:1). */
+  --ink-mute: rgba(21, 19, 13, 0.59);
 
-  --rule: rgba(0, 0, 0, 0.18);
-  --rule-strong: rgba(0, 0, 0, 0.55);
+  --rule: rgba(21, 19, 13, 0.18);
+  --rule-strong: rgba(21, 19, 13, 0.55);
 
-  /* Backwards-compatible aliases (used by the comic-panel legacy CSS) */
-  --sa-black: var(--black);
-  --sa-white: var(--white);
+  /* Backwards-compatible aliases (used by the comic-panel legacy CSS).
+     --sa-black/--sa-white alias the fixed ink/paper and never flip;
+     --sa-off-white follows the ground (flips via --paper-3). */
+  --sa-black: var(--ink);
+  --sa-white: var(--paper);
   --sa-off-white: var(--paper-3);
   --sa-yellow: var(--yellow);
   --sa-red: var(--red);
   --sa-blue: var(--blue);
 
+  /* The page ground and the prose on it — the tokens that flip. */
   --background: var(--paper);
   --text: var(--ink);
   --muted: var(--ink-mute);
@@ -48,9 +63,9 @@
   --max: 1180px;
   --gutter: 28px;
 
-  /* Syntax highlighting — brand hues on a black block, neutrals as white
+  /* Syntax highlighting — brand hues on an ink block, neutrals as paper
      at alpha. Code blocks stay dark in both themes. */
-  --sh-background: var(--black);
+  --sh-background: var(--ink);
   --sh-identifier: rgba(246, 244, 238, 0.87);
   --sh-sign: rgba(246, 244, 238, 0.55);
   --sh-comment: rgba(246, 244, 238, 0.45);
@@ -63,20 +78,157 @@
 }
 
 .dark {
-  --paper: var(--black);
-  --paper-2: #0f0f0e; /* white 6% over black */
-  --paper-3: #222221; /* white 14% over black */
-  --ink: var(--white);
+  /* --paper and --ink are deliberately NOT redefined here; the ground
+     tokens below just point at the other pole. Everything that sits on the
+     ground -- prose, tints, and panel faces -- follows these. */
+  --paper-2: #23211b; /* paper 6% over ink */
+  --paper-3: #34322c; /* paper 14% over ink */
   --ink-soft: rgba(246, 244, 238, 0.76);
   --ink-mute: rgba(246, 244, 238, 0.56);
 
   --rule: rgba(246, 244, 238, 0.18);
   --rule-strong: rgba(246, 244, 238, 0.55);
 
-  --background: var(--paper);
-  --text: var(--ink);
+  --background: var(--ink);
+  --text: var(--paper);
   --muted: var(--ink-mute);
   --accent: var(--yellow);
+}
+
+/* ------------------------------------------------------------------ */
+/* Extruded panel system -- docs/design/2026-07-14-visual-system.md    */
+/* Geometry: footprint stays in the grid slot; the face lifts up-left  */
+/* by --d; side faces are skewed strips inside the slot. Camera is     */
+/* down-right, so DOM order IS painter's order: never add z-index.     */
+/* ------------------------------------------------------------------ */
+@property --d {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+.xsheet {
+  display: grid;
+  /* tracks must stay contiguous -- never set gap, justify-content, or align-content on a sheet; the -2px keyline collapse depends on butted tracks. */
+  gap: 0;
+  /* compensates the cells' -2px keyline-collapse shift */
+  padding: 2px 0 0 2px;
+}
+.xsheet > .xcell {
+  /* butt the cells; adjacent 2px keylines collapse into one */
+  margin: -2px 0 0 -2px;
+}
+
+.xcell {
+  position: relative;
+  display: flex;
+  --d: 0px;
+  transition: --d 0.16s ease;
+}
+a.xcell {
+  text-decoration: none;
+  color: inherit;
+}
+/* beat the global a:hover { color: var(--accent) } accent hijack */
+a.xcell:hover,
+a.xcell:focus-visible {
+  color: inherit;
+}
+.xcell.raised { --d: 12px; }
+/* Keyboard lift: the cell-as-anchor case, plus wrapper cells (a div cell
+   holding inner links, e.g. Featured) via any keyboard-focused descendant. */
+.xcell:focus-visible,
+.xcell:has(:focus-visible) {
+  --d: 18px;
+}
+/* The face carries the accent outline + tint + lift; the UA ring would hug
+   the static footprint 18px away from it. Suppress it ONLY on the
+   cell-as-anchor -- inner links inside wrapper cells keep their own ring,
+   since the face outline alone doesn't say WHICH link has focus. */
+a.xcell:focus-visible {
+  outline: none;
+}
+
+/* The face is a slab cut from the ground: it takes the ground's colour, so
+   panels go dark at night with everything else. Every token used inside a
+   face therefore just inherits the theme -- there is NO daylight re-anchor,
+   and there must not be one: the tokens downstream (--ink-soft, --rule,
+   --accent, --paper-2) are already written to flip, and re-anchoring them
+   is what pinned face interiors to daylight.
+
+   Consequence: the KEYLINE inverts too (--text = ink by day, paper at
+   night). It has to. An ink keyline on an ink face is ~1.2:1 and the
+   outline that defines the whole language would dissolve. */
+.xcell-face {
+  position: relative;
+  flex: 1;
+  display: block;
+  background: var(--background);
+  border: 2px solid var(--text);
+  padding: 16px 18px;
+  transform: translate(calc(var(--d) * -1), calc(var(--d) * -1));
+}
+/* No face tint on hover or focus -- the lift plus the title going accent is
+   the whole hover language. Focus keeps an outline anyway: a lift alone is
+   not a sufficient focus indicator. The UA ring would hug the static
+   footprint, 18px away from the face, so put the ring on the face. */
+.xcell:focus-visible .xcell-face,
+.xcell:has(:focus-visible) .xcell-face {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+/* hover lift only on hover-capable devices; touch would stick at 18px after tap */
+@media (hover: hover) {
+  .xcell:hover { --d: 18px; }
+}
+
+/* Right side face: accent. Single-owner edges; diagonals 3px pre-skew
+   (2.12px perpendicular) because Chromium floors fractional borders.
+   Keylines are --text, matching the face: all linework inverts together. */
+.xcell::before {
+  content: '';
+  position: absolute;
+  top: calc(var(--d) * -1);
+  left: calc(100% - var(--d));
+  width: var(--d);
+  height: 100%;
+  box-sizing: border-box;
+  background: var(--accent);
+  border: 0 solid var(--text);
+  border-top-width: min(calc(var(--d) * 99), 3px);
+  border-right-width: min(calc(var(--d) * 99), 2px);
+  border-bottom-width: min(calc(var(--d) * 99), 3px);
+  transform: skewY(45deg);
+  transform-origin: 0 0;
+}
+/* Bottom side face: blue, both themes. */
+.xcell::after {
+  content: '';
+  position: absolute;
+  top: calc(100% - var(--d));
+  left: calc(var(--d) * -1);
+  width: 100%;
+  height: var(--d);
+  box-sizing: border-box;
+  background: var(--blue);
+  border: 0 solid var(--text);
+  border-bottom-width: min(calc(var(--d) * 99), 2px);
+  border-left-width: min(calc(var(--d) * 99), 3px);
+  transform: skewX(45deg);
+  transform-origin: 0 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xcell, .rec-glyph { transition: none; }
+}
+
+/* Extruded display type -- 28px+ headings only (below that it reads as
+   a misprint). Stacked 1px steps, NEVER a single offset shadow. */
+.type-x {
+  text-shadow:
+    1px 1px 0 var(--accent),
+    2px 2px 0 var(--accent),
+    3px 3px 0 var(--accent);
 }
 
 * {
@@ -91,8 +243,8 @@ html {
 body {
   margin: 0;
   padding: 0;
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--background);
+  color: var(--text);
   font-family: var(--font-serif-body), 'Iowan Old Style', Georgia, serif;
   font-size: 19px;
   line-height: 1.6;
@@ -116,7 +268,7 @@ img {
 
 ::selection {
   background: var(--yellow);
-  color: var(--black);
+  color: var(--ink);
 }
 
 /* Layout primitives ------------------------------------------------------- */
@@ -191,7 +343,7 @@ img {
   align-items: center;
   gap: 10px;
   padding: 10px 0 10px 4px;
-  color: var(--ink);
+  color: var(--text);
   font-size: 18px;
   line-height: 1.2;
   letter-spacing: -0.005em;
@@ -274,20 +426,20 @@ img {
 /* Editorial type helpers ------------------------------------------------- */
 
 .label {
-  font-family: var(--font-serif-body), Georgia, serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-weight: 400;
-  font-size: 15px;
-  letter-spacing: 0.02em;
+  font-size: 14px;
+  letter-spacing: 0.01em;
   color: var(--ink-mute);
 }
 
-/* Metadata voice: small quiet serif, normal case and roman. Never mono/uppercase
+/* Metadata voice: small quiet sans, normal case and roman. Never mono/uppercase
    kickers or italics — both read as generic AI design. */
 .meta-line {
-  font-family: var(--font-serif-body), Georgia, serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-weight: 400;
   font-size: 14px;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
   text-transform: none;
   color: color-mix(in srgb, var(--text) 62%, transparent);
 }
@@ -298,35 +450,46 @@ img {
   padding: 32px 0 24px;
   position: relative;
 }
+/* Big serif-display greeting, floated as a run-in lead so the intro paragraph
+   wraps around it. line-height is compressed below one body line (28px * 1.5 =
+   42px) so the float reserves just under a single line: the first line of prose
+   sits beside it and everything after flows full-width directly beneath, with
+   no orphaned second line leaving a gap under the greeting. type-x stays crisp
+   because it is still one unbroken phrase, not words buried mid-sentence. */
+.hero-greeting {
+  float: left;
+  margin: 0 0.32em 0 0;
+  font-family: var(--font-serif-display), Georgia, serif;
+  font-weight: 400;
+  font-size: 44px;
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
 .hero-intro {
   margin: 0;
   max-width: 54rem;
-  padding: 28px 0 24px;
+  padding: 20px 0 24px;
   font-family: var(--font-serif-body), Georgia, serif;
   font-size: 28px;
   line-height: 1.5;
   letter-spacing: -0.005em;
-  color: var(--ink);
+  color: var(--text);
 }
-/* Folio line — newspaper-style dateline between two rules:
-   edition left, title right. */
-.hero-folio {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 24px;
-  padding: 13px 0;
-  border-top: 1px solid var(--rule-strong);
-  border-bottom: 1px solid var(--rule-strong);
-  font-family: var(--font-serif-display), Georgia, serif;
-  font-weight: 400;
-  font-size: 18px;
-  letter-spacing: -0.005em;
-  line-height: 1.25;
-  color: var(--ink);
+/* Key facts highlighted in the intro. Colour, not the misregistered shadow --
+   type-x smears when set on inline words inside running text. Each entity gets
+   a distinct treatment that flips with the theme: role in accent (red/yellow),
+   the two proper nouns (place, person) in the strongest ink/paper weight. */
+.hero-hl {
+  font-weight: 600;
 }
-.hero-folio span:last-child {
-  text-align: right;
+.hl-role {
+  color: var(--accent);
+}
+.hl-place,
+.hl-person {
+  color: var(--text);
+  font-weight: 700;
 }
 
 /* Section header --------------------------------------------------------- */
@@ -352,12 +515,14 @@ img {
   letter-spacing: -0.01em;
 }
 .section-head .right {
-  font-family: var(--font-serif-body), Georgia, serif;
-  font-size: 15px;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 14px;
   color: var(--ink-mute);
 }
 
-/* Featured post ---------------------------------------------------------- */
+/* Featured post — one raised cell; .featured doubles as the .xcell-face
+   (panel chrome comes from the primitive; this block owns the inner
+   two-column layout only) --------------------------------------------- */
 
 .featured {
   display: grid;
@@ -365,11 +530,23 @@ img {
   gap: 36px;
   align-items: center;
 }
+/* The lead cell earns more room than the 16/18 primitive default: at full
+   width the image sets the panel height and the copy is centred against it,
+   so a tight face padding reads as a cramped title. */
+.xcell-face.featured {
+  padding: 30px 32px;
+}
+/* inner picture frame, distinct from the panel keyline (inset by the
+   face padding, so the two never double up).
+   5/4 at full width — the image is half the face, so a landscape crop leaves
+   the panel shorter than the copy beside it wants to be. The single-column
+   layout below 1240px goes back to 4/3: there the image spans the whole face,
+   and 5/4 at that width is a wall. */
 .featured .img-frame {
   position: relative;
   background: var(--paper-2);
   border: 1px solid var(--rule-strong);
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 5 / 4;
   overflow: hidden;
   width: 100%;
 }
@@ -383,10 +560,12 @@ img {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 18px;
+  gap: 22px;
 }
 .featured .copy h3 {
-  margin: -10px 0 0;
+  /* no negative top margin — it was pulling the title into the face padding
+     and is the reason the title looked squeezed against the panel edge */
+  margin: 0;
   font-family: var(--font-serif-display), Georgia, serif;
   font-weight: 400;
   font-size: 56px;
@@ -418,8 +597,8 @@ img {
   display: flex;
   gap: 18px;
   align-items: baseline;
-  font-family: var(--font-serif-body), Georgia, serif;
-  font-size: 15px;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 14px;
   color: var(--ink-mute);
 }
 .featured .read-on {
@@ -430,7 +609,7 @@ img {
   font-family: var(--font-serif-display), Georgia, serif;
   font-size: 18px;
   align-self: flex-start;
-  border-bottom: 1px solid var(--ink);
+  border-bottom: 1px solid var(--text);
   padding-bottom: 4px;
   transition: color 0.2s ease, border-color 0.2s ease;
 }
@@ -468,14 +647,14 @@ img {
   border-bottom: none;
 }
 .post-row:hover {
-  background: rgba(0, 0, 0, 0.04);
+  background: rgba(21, 19, 13, 0.04);
 }
 .dark .post-row:hover {
   background: rgba(246, 244, 238, 0.05);
 }
 .post-row .date {
-  font-family: var(--font-serif-body), Georgia, serif;
-  font-size: 15px;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 14px;
   color: var(--ink-mute);
   white-space: nowrap;
 }
@@ -487,35 +666,24 @@ img {
   letter-spacing: -0.01em;
 }
 .post-row .read {
-  font-family: var(--font-serif-body), Georgia, serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-size: 14px;
   color: var(--ink-mute);
   white-space: nowrap;
 }
 
-/* Recommendations — three-column broadsheet -------------------------------- */
+/* Recommendations — extruded sheet ---------------------------------------- */
+/* Chrome comes from the panel system (.xsheet/.xcell/.xcell-face); only the
+   sheet's column count and the inner column layout live here. */
 
-.rec-grid {
-  display: grid;
+.rec-sheet {
   grid-template-columns: repeat(3, 1fr);
-  gap: 0;
-  border-top: 1px solid var(--rule-strong);
-  border-bottom: 1px solid var(--rule-strong);
-  border-left: 1px solid var(--rule-strong);
-  border-right: 1px solid var(--rule-strong);
 }
-.rec-cell {
+.rec-sheet .xcell-face {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 22px 24px 26px;
-  border-right: 1px solid var(--rule-strong);
-  position: relative;
-  color: var(--ink);
   min-height: 180px;
-}
-.rec-cell:last-child {
-  border-right: none;
 }
 .rec-meta {
   display: flex;
@@ -526,25 +694,21 @@ img {
   border-bottom: 1px solid var(--rule);
 }
 .rec-kind {
-  font-family: var(--font-serif-body), Georgia, serif;
-  font-size: 15px;
-  letter-spacing: 0.02em;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.01em;
   color: var(--ink-mute);
 }
 .rec-glyph {
   display: inline-flex;
   align-items: center;
   color: var(--ink-soft);
-  transition: color 0.18s ease, transform 0.25s ease;
+  transition: transform 0.25s ease;
 }
 .rec-glyph svg {
   display: block;
   width: 38px;
   height: auto;
-}
-.rec-cell:hover .rec-glyph {
-  color: var(--accent);
-  transform: translateX(2px);
 }
 .rec-name {
   font-family: var(--font-serif-display), Georgia, serif;
@@ -553,50 +717,56 @@ img {
   line-height: 1.1;
   letter-spacing: -0.01em;
   margin-top: auto;
-  transition: color 0.18s ease;
+  transition: color 0.2s ease;
 }
-.rec-cell:hover .rec-name {
-  color: var(--accent);
+/* Hover: the lift plus the name going accent, the same language the fp-sheet
+   and Featured cells speak. The glyph nudge adds the motion the (removed)
+   face tint used to carry. 26px clears the 24px large-text threshold, so red
+   on paper at 3.78:1 still meets AA. */
+@media (hover: hover) {
+  .rec-sheet .xcell:hover .rec-glyph {
+    transform: translateX(2px);
+  }
+  .rec-sheet .xcell:hover .rec-name {
+    color: var(--accent);
+  }
 }
 
-/* Front-page package — "Inside the Paper" -------------------------------- */
+/* Front-page package — extruded sheet ("Around the site") ----------------- */
+/* Chrome comes from the panel system (.xsheet/.xcell/.xcell-face); this
+   block owns only the column split and the inner column layouts. */
 
-.front-package {
-  display: grid;
-  grid-template-columns: 1.7fr 1fr;
-  gap: 0;
-  border-top: 1px solid var(--rule-strong);
-  border-bottom: 1px solid var(--rule-strong);
-  border-left: 1px solid var(--rule-strong);
-  border-right: 1px solid var(--rule-strong);
+.fp-sheet {
+  grid-template-columns: 3fr 2fr;
 }
-.fp-lead {
+/* fp-lead — photo at top inside 14px face padding, text inset another
+   14px (28px effective). */
+.fp-lead .xcell-face {
   display: flex;
   flex-direction: column;
   gap: 14px;
-  position: relative;
-  color: var(--ink);
-  padding: 14px 14px 32px 14px;
-  border-right: 1px solid var(--rule-strong);
+  padding: 14px 14px 32px;
 }
-.fp-lead > *:not(.fp-lead-photo) {
+.fp-lead .xcell-face > *:not(.fp-lead-photo) {
   padding-inline: 14px;
 }
+/* Not a cell: a plain grid area stacking two cells. The .xsheet > .xcell
+   margin rule cannot reach these nested cells, so the wrapper itself
+   mirrors the -2px keyline collapse a direct cell would get, and the
+   second inner cell collapses the keyline it shares with the first. */
 .fp-side {
   display: flex;
   flex-direction: column;
+  margin: -2px 0 0 -2px;
 }
-.fp-story {
+.fp-side .xcell + .xcell {
+  margin-top: -2px;
+}
+.fp-story .xcell-face {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  position: relative;
-  color: var(--ink);
-  padding: 28px 28px 28px 28px;
-  border-bottom: 1px solid var(--rule-strong);
-}
-.fp-story:last-child {
-  border-bottom: none;
+  padding: 28px;
 }
 
 /* Lead photo (top of lead column) */
@@ -626,12 +796,27 @@ img {
    but the minifier collapses that `0%` to a unitless `0` — invalid in
    color-mix(), which takes a <percentage> — voiding the whole
    background-image and blanking the photo in production builds only.
-   Applies to .exp-tile too. */
+   Applies to .exp-tile-cell too. */
 .fp-story-photo {
   --fp-story-photo-src: url('/sa-publications.jpg');
   --fp-story-photo-pos: 35% center;
+  /* absorb the column height the plain publications cell doesn't need */
   flex: 1;
-  padding-right: 28px;
+}
+/* The About tile rests at the hover depth (18px), not the 12px editorial raise
+   the .raised token gives. It is a narrow tile over a busy portrait between two
+   flat neighbours, where 12px reads as shallow; 18px is the depth every other
+   tile reaches on hover, so About now matches a hovered Publications tile at
+   rest. (Featured stays at 12 -- it is a wide panel on clean paper where 12
+   reads fine.) Specificity 0,3,0 beats both .xcell.raised and .xcell:hover, so
+   About sits at 18 in every state; its hover feedback is the title going accent
+   via .fp-story:hover h3, not a depth change. */
+.fp-sheet .fp-story-photo.raised {
+  --d: 18px;
+}
+/* The wash fades to --background, so it tracks the face: paper by day, ink
+   at night, and the text sitting on it always has its own ground under it. */
+.fp-story-photo.fp-story .xcell-face {
   justify-content: flex-end;
   background-image:
     linear-gradient(
@@ -646,11 +831,7 @@ img {
   background-position: center center, var(--fp-story-photo-pos);
   background-repeat: no-repeat, no-repeat;
 }
-.fp-story-photo.is-about-rai {
-  --fp-story-photo-src: url('/about/rai.jpg');
-  --fp-story-photo-pos: center center;
-}
-.front-package .fp-story-photo .more {
+.fp-sheet .fp-story-photo .more {
   margin-top: 0;
 }
 
@@ -703,7 +884,7 @@ img {
   letter-spacing: -0.01em;
 }
 
-.front-package .more {
+.fp-sheet .more {
   margin-top: auto;
   padding-top: 6px;
   font-family: var(--font-serif-display), Georgia, serif;
@@ -713,7 +894,7 @@ img {
   gap: 8px;
   align-self: flex-start;
 }
-.front-package .more svg {
+.fp-sheet .more svg {
   color: var(--accent);
   opacity: 0;
   transform: translateX(-8px);
@@ -738,7 +919,7 @@ img {
   font-family: var(--font-serif-body), Georgia, serif;
   font-size: 17px;
   line-height: 1.65;
-  color: var(--ink);
+  color: var(--text);
   text-align: justify;
   text-wrap: pretty;
 }
@@ -770,7 +951,7 @@ img {
   margin-bottom: 0;
 }
 .profile-lede a {
-  color: var(--ink);
+  color: var(--text);
   text-decoration: underline;
   text-decoration-color: var(--accent);
   text-decoration-thickness: 2px;
@@ -789,8 +970,8 @@ img {
   flex-wrap: wrap;
   gap: 40px;
   padding: 28px 0;
-  border-top: 2px solid var(--ink);
-  border-bottom: 2px solid var(--ink);
+  border-top: 2px solid var(--text);
+  border-bottom: 2px solid var(--text);
 }
 .profile-affiliations-logo {
   display: inline-flex;
@@ -811,36 +992,48 @@ img {
   object-fit: contain;
 }
 
-/* Experience: a framed newspaper page. Big panels mirror Quick Tour's
-   fp-lead — photo at top inside 14px outer padding, text inset another
-   14px (28px effective). Highlighted tiles use the fp-story-photo
-   treatment — image fills the panel as background with a paper-tinted
-   gradient washing the bottom so the meta + title + dek stay readable. */
-.exp-grid {
-  border-top: 1px solid var(--rule-strong);
-  border-bottom: 1px solid var(--rule-strong);
-  border-left: 1px solid var(--rule-strong);
-  border-right: 1px solid var(--rule-strong);
+/* Experience — extruded sheet (docs/design/2026-07-14-visual-system.md).
+   A 12-col grid; cells span 7/5 then 6/6 then 6/6 so the panels butt into one
+   sheet. Chrome (keylines, skewed side faces, hover lift) is the .xcell /
+   .xcell-face primitive; this block owns only the grid spans and each panel's
+   inner layout. */
+.exp-sheet {
+  grid-template-columns: repeat(12, 1fr);
 }
-.exp-row {
-  display: grid;
-  border-bottom: 1px solid var(--rule-strong);
-  align-items: stretch;
+.exp-cell-7 { grid-column: span 7; }
+.exp-cell-6 { grid-column: span 6; }
+.exp-cell-5 { grid-column: span 5; }
+
+/* Nested stack column (NIT + Spider) — same collapse trick as .fp-side: the
+   wrapper mirrors the -2px pull and the second cell collapses the shared
+   keyline (the .xsheet > .xcell child combinator can't reach nested cells). */
+.exp-side {
+  margin: -2px 0 0 -2px;
+  display: flex;
+  flex-direction: column;
 }
-.exp-row:last-child {
-  border-bottom: none;
+.exp-side > .xcell { flex: 1; }
+.exp-side > .xcell + .xcell { margin-top: -2px; }
+
+/* Shared face type. Titles go accent on hover (the sheet hover language). */
+.exp-sheet h3 {
+  margin: 0;
+  font-family: var(--font-serif-display), Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  transition: color 0.18s ease;
 }
-.exp-row-7-5 {
-  grid-template-columns: 7fr 5fr;
+.exp-sheet p {
+  margin: 0;
+  font-family: var(--font-serif-body), Georgia, serif;
+  line-height: 1.6;
+  color: var(--ink-soft);
 }
-.exp-row-1-1 {
-  grid-template-columns: 1fr 1fr;
-}
-.exp-row-1-1-1 {
-  grid-template-columns: 1fr 1fr 1fr;
+.exp-sheet .xcell:hover h3 {
+  color: var(--accent);
 }
 
-/* Shared text styles */
 /* Role on the left, timeline on the right — one justified row, no "·" strings. */
 .exp-meta {
   display: flex;
@@ -848,44 +1041,21 @@ img {
   align-items: baseline;
   gap: 16px;
   flex-wrap: wrap;
-  font-family: var(--font-serif-body), Georgia, serif;
-  font-size: 15px;
-  letter-spacing: 0.02em;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.01em;
   color: var(--ink-mute);
 }
-.exp-grid h3 {
-  margin: 0;
-  font-family: var(--font-serif-display), Georgia, serif;
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  color: var(--ink);
-  transition: color 0.18s ease;
-}
-.exp-grid p {
-  margin: 0;
-  font-family: var(--font-serif-body), Georgia, serif;
-  line-height: 1.6;
-  color: var(--ink-soft);
-}
-.exp-grid a:hover h3 {
-  color: var(--accent);
-}
 
-/* BIG panel — modeled on .fp-lead: 14px outer padding, photo at top with
-   the parent's padding only, text inset another 14px via padding-inline. */
-.exp-big {
+/* Photo-top face: image frame at top, text below inset a further 14px.
+   Modeled on the home page's .fp-lead. */
+.exp-photo-face {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 14px 14px 32px;
-  border-right: 1px solid var(--rule-strong);
-  text-decoration: none;
-  color: inherit;
+  gap: 12px;
+  padding: 14px 14px 28px;
 }
-.exp-row > .exp-big:last-child {
-  border-right: none;
-}
-.exp-big > *:not(.exp-big-photo) {
+.exp-photo-face > *:not(.exp-big-photo) {
   padding-inline: 14px;
 }
 .exp-big-photo {
@@ -894,7 +1064,6 @@ img {
   background: var(--paper-2);
   border: 1px solid var(--rule-strong);
   overflow: hidden;
-  margin-bottom: 6px;
 }
 .exp-big-photo img {
   width: 100%;
@@ -902,84 +1071,74 @@ img {
   object-fit: cover;
   display: block;
 }
-.exp-big h3 {
+.exp-photo-face h3 {
   font-size: 30px;
   line-height: 1.05;
 }
-.exp-big p {
+.exp-photo-face p {
   font-size: 16px;
   line-height: 1.55;
   max-width: 52ch;
 }
-.exp-big.is-lead h3 {
-  font-size: 42px;
+
+/* RAI lead (span 7): bigger title, taller 4/3 photo. */
+.exp-lead h3 {
+  font-size: 40px;
   line-height: 1;
 }
-.exp-big.is-lead p {
-  font-size: 17px;
-}
-.exp-big.is-portrait .exp-big-photo {
-  flex: 1 1 auto;
-  min-height: 440px;
-  aspect-ratio: auto;
-}
-/* First row stretches taller to give the OSL tile bg-image more room */
-.exp-grid > .exp-row:first-child .exp-big-photo {
+.exp-lead .exp-big-photo {
   aspect-ratio: 4 / 3;
 }
 
-/* "Current" stamp on lead photo */
+/* Compact photo-top (NIT / Spider stack): smaller title + dek. */
+.exp-compact .exp-photo-face {
+  padding: 14px 14px 22px;
+}
+.exp-compact h3 {
+  font-size: 23px;
+}
+.exp-compact p {
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* Ballbot (span 6): the photo fills the face height instead of a fixed ratio. */
+.exp-portrait-photo {
+  flex: 1 1 auto;
+  min-height: 360px;
+  aspect-ratio: auto;
+}
+
+/* "Current" stamp on the tile. Absolute vs the positioned .xcell-face; colours
+   are absolute (red/paper by day, yellow/ink at night), not theme tokens. */
 .exp-stamp {
   position: absolute;
   top: 14px;
   left: 14px;
   background: var(--red);
-  color: var(--white);
+  color: var(--paper);
   padding: 5px 11px;
-  font-family: var(--font-serif-display), Georgia, serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-weight: 500;
   font-size: 12px;
   letter-spacing: 0.04em;
   z-index: 2;
 }
 .dark .exp-stamp {
   background: var(--yellow);
-  color: var(--black);
-}
-
-/* "Visit project" link with animated arrow */
-.exp-more {
-  margin-top: 4px;
-  font-family: var(--font-serif-display), Georgia, serif;
-  font-size: 17px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  align-self: flex-start;
   color: var(--ink);
 }
-.exp-more svg {
-  color: var(--accent);
-  opacity: 0;
-  transform: translateX(-8px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  flex: 0 0 auto;
-}
-.exp-big:hover .exp-more svg {
-  opacity: 1;
-  transform: translateX(0);
-}
 
-/* TILE — fp-story-photo style: image fills the panel, gradient washes
-   the bottom 70% to paper so the text reads cleanly.                     */
-.exp-tile {
-  position: relative;
+/* Open-Source Leg "Current" tile: image fills the face with a gradient washing
+   to the ground so meta + title + dek stay readable. Same pattern (and the
+   same `transparent`-stop minifier caveat) as the home page's .fp-story-photo:
+   fade to --background so the wash tracks the theme. */
+.exp-tile-cell .xcell-face {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   gap: 10px;
   padding: 28px;
-  text-decoration: none;
-  color: var(--ink);
   background-image:
     linear-gradient(
       180deg,
@@ -993,57 +1152,24 @@ img {
   background-position: center center, var(--exp-tile-pos, center);
   background-repeat: no-repeat, no-repeat;
 }
-.exp-tile h3 {
-  font-size: 24px;
+.exp-tile-cell h3 {
+  font-size: 26px;
   line-height: 1.1;
 }
-.exp-tile p {
-  font-size: 14px;
+.exp-tile-cell p {
+  font-size: 15px;
   line-height: 1.5;
-  max-width: 38ch;
+  max-width: 40ch;
 }
-.exp-tile[data-bg="osl"] {
+.exp-tile-cell[data-bg='osl'] {
   --exp-tile-src: url('/about/sa-main.jpg');
   --exp-tile-pos: center center;
 }
-.exp-tile[data-bg="rai"] {
-  --exp-tile-src: url('/about/rai.jpg');
-  --exp-tile-pos: center center;
-}
-.exp-tile[data-bg="ballbot"] {
-  --exp-tile-src: url('/projects/ballbot-main.jpg');
-  --exp-tile-pos: center top;
-}
-.exp-tile[data-bg="iitm"] {
-  --exp-tile-src: url('/about/iitm.jpg');
-  --exp-tile-pos: 10% center;
-}
-
-/* Tiles sharing a row with a big panel: vertical rule on the right
-   (handled by the .exp-big's border-right). When tiles are stacked,
-   horizontal rules between them. */
-.exp-tile-stack {
-  display: flex;
-  flex-direction: column;
-}
-.exp-tile-stack > .exp-tile {
-  flex: 1;
-  border-bottom: 1px solid var(--rule-strong);
-}
-.exp-tile-stack > .exp-tile:last-child {
-  border-bottom: none;
-}
-.exp-big-stack {
-  display: flex;
-  flex-direction: column;
-}
-.exp-big-stack > .exp-big {
-  flex: 1;
-  border-right: none;
-  border-bottom: 1px solid var(--rule-strong);
-}
-.exp-big-stack > .exp-big:last-child {
-  border-bottom: none;
+/* Rest the "Current" tile at 18px, matching the home page's About tile: an
+   image-fill tile over a busy photo reads shallow at the 12px editorial raise
+   (0,3,0 beats .xcell.raised / .xcell:hover, so it holds 18 in every state). */
+.exp-sheet .exp-tile-cell.raised {
+  --d: 18px;
 }
 
 /* Chronology: two-column CV table with dates as the running gutter.        */
@@ -1055,7 +1181,7 @@ img {
   border-bottom: 1px solid var(--rule-strong);
   border-left: 1px solid var(--rule-strong);
   border-right: 1px solid var(--rule-strong);
-  color: var(--ink);
+  color: var(--text);
 }
 .chronology-table tr {
   border-bottom: 1px solid var(--rule-strong);
@@ -1089,7 +1215,7 @@ img {
   font-size: 28px;
   line-height: 1.08;
   letter-spacing: -0.01em;
-  color: var(--ink);
+  color: var(--text);
 }
 .chronology-org {
   margin: 6px 0 0;
@@ -1123,7 +1249,7 @@ img {
   font-family: var(--font-serif-display), Georgia, serif;
   font-size: 22px;
   line-height: 1.1;
-  color: var(--ink);
+  color: var(--text);
   margin-bottom: 6px;
 }
 .profile-tool-list {
@@ -1138,7 +1264,7 @@ img {
   font-weight: 400;
   font-size: 17px;
   line-height: 1.35;
-  color: var(--ink);
+  color: var(--text);
   padding: 8px 0;
   border-bottom: 1px solid var(--rule);
 }
@@ -1153,26 +1279,50 @@ img {
   margin-top: 64px;
   padding: 36px 0 44px 276px;
 }
-/* Sikku-kolam frieze (components/Kolam.tsx KolamStrip) */
-.foot-ornament {
+/* The "space bar": a single wide, low-profile extruded key built from the
+   panel primitives (.xsheet/.xcell/.xcell-face). It flips dark, carries the
+   accent-right / blue-bottom side faces, and rests raised (.raised = 12px)
+   like a key sitting proud of the board. It is NOT interactive, so the hover
+   lift is suppressed just below -- a moving footer bar reads as a broken
+   button. A single-cell sheet needs no extra grid setup: the cell fills the
+   one implicit track full-width. */
+.foot-bar {
   margin: 0 0 28px;
-  color: var(--ink-soft);
 }
-.foot-row {
+/* Shallow rest depth: half a content tile's 12px hover lift, so the footer
+   reads as a quiet slab rather than a raised, attention-seeking panel. Set
+   here (not via .raised) precisely so it stays below the panel depth. */
+.foot-key {
+  --d: 6px;
+}
+.foot-key-face {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 24px;
   flex-wrap: wrap;
+  min-height: 32px;
+  padding: 14px 22px;
+}
+/* Pin the footer key at its rest depth on hover (overrides .xcell:hover by
+   specificity, so source order does not matter). */
+@media (hover: hover) {
+  .foot-bar .xcell:hover {
+    --d: 6px;
+  }
 }
 .foot-end {
   font-family: var(--font-serif-display), Georgia, serif;
-  font-size: 22px;
+  font-size: 18px;
   letter-spacing: 0.02em;
   white-space: nowrap;
   margin-right: auto;
 }
-.foot-copy,
+.foot-copy {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 13px;
+  color: var(--ink-mute);
+}
 .foot-source {
   font-family: var(--font-serif-body), Georgia, serif;
   font-size: 15px;
@@ -1192,31 +1342,36 @@ img {
     grid-template-columns: 1fr;
     gap: 32px;
   }
+  /* stacked: the image now spans the full face, so keep the landscape crop */
+  .featured .img-frame {
+    aspect-ratio: 4 / 3;
+  }
   .featured .copy h3 {
     font-size: 44px;
   }
 }
 
-@media (max-width: 960px) {  .front-package {
+@media (max-width: 960px) {  .fp-sheet {
     grid-template-columns: 1fr;
   }
-  .fp-lead {
+  .fp-lead .xcell-face {
     padding: 28px 20px;
-    border-right: none;
-    border-bottom: 1px solid var(--rule-strong);
   }
-  .fp-story {
+  .fp-story .xcell-face {
+    padding: 24px 20px;
+  }
+  .xcell-face.featured {
     padding: 24px 20px;
   }
   .fp-lead h3 {
     font-size: 38px;
   }
-  .hero-intro {
-    padding: 24px 0 20px;
-    font-size: 24px;
+  .hero-greeting {
+    font-size: 38px;
   }
-  .hero-folio {
-    font-size: 16px;
+  .hero-intro {
+    padding: 18px 0 20px;
+    font-size: 24px;
   }
   .post-row {
     grid-template-columns: 1fr;
@@ -1230,17 +1385,11 @@ img {
     grid-column: 1;
     font-size: 22px;
   }
-  .rec-grid {
+  .rec-sheet {
     grid-template-columns: 1fr;
   }
-  .rec-cell {
-    border-right: none;
-    border-bottom: 1px solid var(--rule-strong);
+  .rec-sheet .xcell-face {
     min-height: 0;
-    padding: 22px 20px;
-  }
-  .rec-cell:last-child {
-    border-bottom: none;
   }
   .rec-name {
     font-size: 22px;
@@ -1251,7 +1400,7 @@ img {
   .foot {
     padding-left: 0;
   }
-  .foot-row {
+  .foot-key-face {
     justify-content: center;
     text-align: center;
     gap: 12px;
@@ -1274,33 +1423,27 @@ img {
     gap: 28px;
     padding: 22px 0;
   }
-  .exp-row-7-5,
-  .exp-row-1-1,
-  .exp-row-1-1-1 {
-    grid-template-columns: 1fr;
+  /* Single column: every cell (and the nested stack) spans the full grid, so
+     the sheet stacks vertically. The -2px keyline collapse still applies. */
+  .exp-cell-7,
+  .exp-cell-6,
+  .exp-cell-5,
+  .exp-side {
+    grid-column: 1 / -1;
   }
-  .exp-row > .exp-big {
-    border-right: none;
-    border-bottom: 1px solid var(--rule-strong);
+  .exp-lead h3 {
+    font-size: 32px;
   }
-  .exp-row > .exp-big:last-child {
-    border-bottom: none;
-  }
-  .exp-big.is-lead h3 {
-    font-size: 34px;
-  }
-  .exp-big h3 {
+  .exp-photo-face h3 {
     font-size: 26px;
   }
-  .exp-tile {
+  .exp-portrait-photo {
+    min-height: 300px;
+  }
+  .exp-tile-cell .xcell-face {
     min-height: 280px;
   }
-  .exp-row > .exp-tile {
-    border-bottom: 1px solid var(--rule-strong);
-  }
-  .exp-row > .exp-tile:last-child {
-    border-bottom: none;
-  }  .chronology-table,
+  .chronology-table,
   .chronology-table tbody,
   .chronology-table tr,
   .chronology-table th,
@@ -1337,26 +1480,24 @@ img {
   }  .hero {
     padding: 32px 0 20px;
   }
+  .hero-greeting {
+    float: none;
+    display: block;
+    margin: 0 0 6px;
+    font-size: 32px;
+  }
   .hero-intro {
     max-width: none;
-    padding: 18px 0 16px;
+    padding: 14px 0 16px;
     font-size: 20px;
-  }
-  .hero-folio {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-    font-size: 16px;
-  }
-  .hero-folio span:last-child {
-    text-align: left;
   }
   .featured .copy h3 {
     font-size: 36px;
   }
   .section {
     padding: 44px 0;
-  }  .exp-tile {
+  }
+  .exp-tile-cell .xcell-face {
     min-height: 240px;
   }
 }
@@ -1718,15 +1859,13 @@ img {
 .prose li > ol {
   margin: 0.4em 0;
 }
+/* Figures are panels: paper face, ink keyline, in BOTH themes. */
 .prose figure {
   margin: 2.25rem 0;
-  border: 1px solid var(--sa-black);
+  border: 1px solid var(--ink);
   background-color: var(--paper);
-  box-shadow: 0 6px 6px -6px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 6px 6px -6px rgba(21, 19, 13, 0.5);
   overflow: hidden;
-}
-.dark .prose figure {
-  border-color: var(--sa-white);
 }
 .prose figure img {
   display: block;
@@ -1735,17 +1874,13 @@ img {
   margin: 0;
 }
 .prose figure figcaption {
-  border-top: 1px solid var(--sa-black);
+  border-top: 1px solid var(--ink);
   background-color: var(--paper);
-  color: var(--sa-black);
+  color: var(--ink);
   padding: 0.5rem 1rem;
   text-align: center;
   font-size: 0.85em;
   line-height: 1.4;
-}
-.dark .prose figure figcaption {
-  border-color: var(--sa-white);
-  color: var(--sa-white);
 }
 .prose hr {
   margin: 2rem 0;
@@ -1802,19 +1937,17 @@ table {
   box-sizing: border-box;
   overflow: visible;
 }
+/* Panels stay paper-faced with ink keylines in BOTH themes —
+   lit objects at night, per the visual-system spec. */
 .panel {
-  background-color: var(--background);
-  border: solid 1px var(--sa-black);
-  box-shadow: 0 6px 6px -6px rgba(0, 0, 0, 0.5);
+  background-color: var(--paper);
+  border: solid 1px var(--ink);
+  box-shadow: 0 6px 6px -6px rgba(21, 19, 13, 0.5);
   min-height: 200px;
   overflow: hidden;
   position: relative;
   background-size: cover;
   background-position: center;
-}
-.dark .panel {
-  border-color: var(--sa-white);
-  box-shadow: 0 6px 6px -6px rgba(0, 0, 0, 0.3);
 }
 .panel .text {
   background-color: var(--paper);
@@ -2006,9 +2139,6 @@ table {
   z-index: 10;
   transform: translate(-3px, -3px);
   box-shadow: 6px 6px 0 var(--ink) !important;
-}
-.dark .panel-link-hover:hover {
-  box-shadow: 6px 6px 0 var(--sa-white) !important;
 }
 .panel-button {
   border: 4px solid transparent;

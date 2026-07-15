@@ -154,7 +154,7 @@ export default function Page() {
     <section className="max-w-5xl py-6 md:py-10">
       <header className="mb-12">
         <h1
-          className="font-medium tracking-tight text-[var(--text)] leading-[0.95]"
+          className="type-x font-medium tracking-tight text-[var(--text)] leading-[0.95]"
           style={{
             fontFamily: 'var(--font-serif), Georgia, serif',
             fontSize: 'clamp(3rem, 2rem + 4vw, 5rem)',
