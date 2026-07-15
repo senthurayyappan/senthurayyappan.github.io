@@ -450,22 +450,6 @@ img {
   padding: 32px 0 24px;
   position: relative;
 }
-/* Big serif-display greeting, floated as a run-in lead so the intro paragraph
-   wraps around it. line-height is compressed below one body line (28px * 1.5 =
-   42px) so the float reserves just under a single line: the first line of prose
-   sits beside it and everything after flows full-width directly beneath, with
-   no orphaned second line leaving a gap under the greeting. type-x stays crisp
-   because it is still one unbroken phrase, not words buried mid-sentence. */
-.hero-greeting {
-  float: left;
-  margin: 0 0.32em 0 0;
-  font-family: var(--font-serif-display), Georgia, serif;
-  font-weight: 400;
-  font-size: 44px;
-  line-height: 0.9;
-  letter-spacing: -0.01em;
-  color: var(--text);
-}
 .hero-intro {
   margin: 0;
   max-width: 54rem;
@@ -1366,9 +1350,6 @@ img {
   .fp-lead h3 {
     font-size: 38px;
   }
-  .hero-greeting {
-    font-size: 38px;
-  }
   .hero-intro {
     padding: 18px 0 20px;
     font-size: 24px;
@@ -1479,12 +1460,6 @@ img {
     font-size: 17px;
   }  .hero {
     padding: 32px 0 20px;
-  }
-  .hero-greeting {
-    float: none;
-    display: block;
-    margin: 0 0 6px;
-    font-size: 32px;
   }
   .hero-intro {
     max-width: none;

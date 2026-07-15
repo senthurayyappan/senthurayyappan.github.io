@@ -102,8 +102,8 @@ function Hero() {
   return (
     <section className="hero">
       <p className="hero-intro">
-        <span className="hero-greeting type-x">Hello there!</span>
-        I&rsquo;m a <span className="hero-hl hl-role">PhD student</span> at
+        Hello there! I&rsquo;m a{' '}
+        <span className="hero-hl hl-role">PhD student</span> at
         the <span className="hero-hl hl-place">Neurobionics Lab</span>, advised
         by <span className="hero-hl hl-person">Prof. Elliott Rouse</span>. My
         research focuses on robot codesign: how a robot&rsquo;s mechanical
