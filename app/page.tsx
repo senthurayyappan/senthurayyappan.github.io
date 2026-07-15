@@ -101,16 +101,15 @@ function shortDate(d: string) {
 function Hero() {
   return (
     <section className="hero">
+      <p className="hero-greeting type-x">Hello there!</p>
       <p className="hero-intro">
-        Hello there! I&rsquo;m a PhD student at the Neurobionics Lab, advised
-        by Prof. Elliott Rouse. My research focuses on robot codesign: how a
-        robot&rsquo;s mechanical design and its control policy can co-evolve
-        inside a simulation environment.
+        I&rsquo;m a <span className="hero-hl hl-role">PhD student</span> at
+        the <span className="hero-hl hl-place">Neurobionics Lab</span>, advised
+        by <span className="hero-hl hl-person">Prof. Elliott Rouse</span>. My
+        research focuses on robot codesign: how a robot&rsquo;s mechanical
+        design and its control policy can co-evolve inside a simulation
+        environment.
       </p>
-      <div className="hero-folio">
-        <span>PhD W26</span>
-        <span>Neurobionics Lab, U-M Robotics</span>
-      </div>
     </section>
   )
 }
