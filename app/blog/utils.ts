@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
 
-type Metadata = {
+export type Metadata = {
   title: string
   publishedAt: string
   summary: string
@@ -11,6 +11,18 @@ type Metadata = {
   imagePosition?: string
   readingTime?: number
   tags?: string[]
+}
+
+export type BlogPost = {
+  metadata: Metadata
+  slug: string
+  content: string
+}
+
+export type TableOfContentsItem = {
+  depth: 2 | 3
+  title: string
+  slug: string
 }
 
 function parseFrontmatter(fileContent: string) {
@@ -70,7 +82,25 @@ function getMDXData(dir) {
 }
 
 export function getBlogPosts() {
-  return getMDXData(path.join(process.cwd(), 'app', 'blog', 'posts'))
+  return getMDXData(path.join(process.cwd(), 'app', 'blog', 'posts')) as BlogPost[]
+}
+
+export function slugifyHeading(value: string) {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/&/g, '-and-')
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+}
+
+export function getTableOfContents(content: string): TableOfContentsItem[] {
+  return Array.from(content.matchAll(/^(##|###)\s+(.+)$/gm)).map((match) => ({
+    depth: match[1].length as 2 | 3,
+    title: match[2].replace(/[`*_]/g, '').trim(),
+    slug: slugifyHeading(match[2].replace(/[`*_]/g, '').trim()),
+  }))
 }
 
 export function formatDate(date: string, includeRelative = false) {

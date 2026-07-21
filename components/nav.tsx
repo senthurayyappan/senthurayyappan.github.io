@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ThemeSwitch } from './theme-switch'
 import { SketchArrow } from './SketchArrow'
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation'
 
 const navItems = [
@@ -48,6 +48,25 @@ function RssIcon() {
   )
 }
 
+function MenuIcon({ open = false }: { open?: boolean }) {
+  return (
+    <svg className="comic-menu-icon" viewBox="0 0 32 32" aria-hidden="true">
+      {open ? (
+        <>
+          <path d="M7 7.5c5.8 5.6 11.9 11.3 18 17.1" />
+          <path d="M24.7 7.1C19 13.2 13.1 19 7.3 24.8" />
+        </>
+      ) : (
+        <>
+          <path d="M5.2 8.2c7.1-.5 14.2-.3 21.5.1" />
+          <path d="M4.8 15.9c7.5.5 14.8.2 22.3-.2" />
+          <path d="M5.3 23.5c7-.3 14.1-.2 21.3.2" />
+        </>
+      )}
+    </svg>
+  )
+}
+
 function NavList({ pathname, onClick }: { pathname: string; onClick?: () => void }) {
   return (
     <ul className="sidenav-list">
@@ -80,9 +99,32 @@ function SocialRow() {
 
 export function Navbar() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const drawerCloseButtonRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname() || '/';
 
-  const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
+  const closeSidebar = useCallback(() => {
+    setSidebarOpen(false)
+    requestAnimationFrame(() => menuButtonRef.current?.focus())
+  }, [])
+
+  useEffect(() => {
+    if (!isSidebarOpen) return
+
+    drawerCloseButtonRef.current?.focus()
+
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') closeSidebar()
+    }
+
+    document.addEventListener('keydown', closeOnEscape)
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      document.removeEventListener('keydown', closeOnEscape)
+      document.body.style.overflow = ''
+    }
+  }, [closeSidebar, isSidebarOpen])
 
   return (
     <>
@@ -95,28 +137,43 @@ export function Navbar() {
       </aside>
 
       <div className="md:hidden mobile-masthead">
-        <Link href="/" onClick={() => setSidebarOpen(false)} className="relative w-28 h-12 overflow-hidden" data-sketch="off">
-          <Image src="/logo/400.png" alt="SA" fill style={{ objectFit: 'contain', objectPosition: 'left center' }} priority />
-        </Link>
-        <div className="flex items-center gap-2">
+        <div className="mobile-masthead-control mobile-masthead-theme">
           <ThemeSwitch />
-          <button onClick={toggleSidebar} aria-label="Toggle navigation" aria-expanded={isSidebarOpen} className="comic-menu-button">
-            <span aria-hidden="true">{isSidebarOpen ? 'X' : '|||'}</span>
-          </button>
         </div>
+        <Link href="/" onClick={() => setSidebarOpen(false)} className="mobile-masthead-logo" data-sketch="off">
+          <Image src="/logo/800.png" alt="SA" fill sizes="112px" unoptimized priority />
+        </Link>
+        <button
+          ref={menuButtonRef}
+          onClick={() => setSidebarOpen(true)}
+          aria-label="Open navigation"
+          aria-expanded={isSidebarOpen}
+          aria-controls="mobile-navigation"
+          aria-hidden={isSidebarOpen}
+          tabIndex={isSidebarOpen ? -1 : undefined}
+          className={`comic-menu-button mobile-masthead-menu ${isSidebarOpen ? 'is-drawer-open' : ''}`}
+        >
+          <MenuIcon open={isSidebarOpen} />
+        </button>
       </div>
 
       {isSidebarOpen && (
-        <div className="fixed inset-0 z-30 md:hidden bg-[rgba(21,19,13,.38)]" onClick={toggleSidebar} />
+        <div className="fixed inset-0 z-30 md:hidden bg-[rgba(21,19,13,.38)]" onClick={closeSidebar} />
       )}
-      <aside className={`mobile-drawer md:hidden ${isSidebarOpen ? 'is-open' : ''}`}>
+      <aside
+        id="mobile-navigation"
+        className={`mobile-drawer md:hidden ${isSidebarOpen ? 'is-open' : ''}`}
+        aria-hidden={!isSidebarOpen}
+      >
         <div className="flex items-center justify-between">
           <Link href="/" onClick={() => setSidebarOpen(false)} className="relative w-28 h-12 overflow-hidden" data-sketch="off">
             <Image src="/logo/400.png" alt="SA" fill style={{ objectFit: 'contain', objectPosition: 'left center' }} />
           </Link>
-          <button onClick={toggleSidebar} aria-label="Close navigation" className="comic-menu-button">X</button>
+          <button ref={drawerCloseButtonRef} onClick={closeSidebar} aria-label="Close navigation" className="comic-menu-button">
+            <MenuIcon open />
+          </button>
         </div>
-        <nav aria-label="Mobile sections"><NavList pathname={pathname} onClick={toggleSidebar} /></nav>
+        <nav aria-label="Mobile sections"><NavList pathname={pathname} onClick={() => setSidebarOpen(false)} /></nav>
         <SocialRow />
       </aside>
     </>

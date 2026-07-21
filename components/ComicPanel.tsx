@@ -11,8 +11,8 @@ interface ComicPanelProps {
   title?: string;
   /** Optional: Position for the corner caption */
   titlePosition?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
-  /** Optional: Text for the description block */
-  description?: string;
+  /** Optional: Content for the description block */
+  description?: React.ReactNode;
   /** Optional: Position for the description block */
   descriptionPosition?: 'top' | 'bottom';
   /** Content to render inside the panel (e.g., speech bubbles) */
@@ -73,20 +73,19 @@ const ComicPanel: React.FC<ComicPanelProps> = ({
         {title && <p className={`${titleClass} relative z-10`}>{title}</p>}
 
         {/* Render description - Add z-index */}
-        {description && <p className={`${descriptionClass} relative z-10`}>{description}</p>}
+        {description && <div className={`${descriptionClass} relative z-10`}>{description}</div>}
 
         {/* Children Wrapper */}
         <div className={`relative z-0 ${childrenClassName} h-full overflow-auto`}>
           {children}
         </div>
 
-        {/* 3. Conditionally render the Link overlay */}
+        {/* Keep one hit area above every decorative layer so titles, captions,
+            and artwork all behave as the same link. */}
         {href && (
           <Link href={href} legacyBehavior>
-            {/* Make the link cover the entire panel area using absolute positioning */}
-            {/* z-0 places it below text (z-10) but clickable */}
             <a 
-              className="absolute inset-0 z-0" 
+              className="panel-hit-area"
               data-sketch="off"
               {...(newTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
               aria-label={title || 'Panel link'}

@@ -1,0 +1,128 @@
+---
+title: 'Designing a Robot That Can Change Its Mind'
+publishedAt: '2026-07-20'
+image: '/projects/osl-v2.jpg'
+imagePosition: 'center center'
+summary: 'A field note on treating morphology, control, and simulation as one continuous design conversation.'
+tags: robotics, codesign, simulation
+---
+
+Most robots begin life as a sequence of decisions. A mechanical shape is chosen, an actuator is sized, and only then does someone ask a controller to make the assembled machine behave. That sequence feels tidy, but it hides a costly assumption: **the body has already been decided**.
+
+I am more interested in what happens when the body is allowed back into the conversation.
+
+<FloatImage
+  src="/projects/oslsim.jpg"
+  alt="A simulated leg mechanism shown against a dark background"
+  caption="Simulation is most useful when it can still change the hardware."
+  side="right"
+  shape="soft"
+  width={640}
+  height={640}
+/>
+
+Imagine tuning a walking controller and discovering that every stable gait demands the same awkward burst of torque. In a conventional pipeline, that is a controls problem. In a codesign pipeline, it may be evidence that a link is too long, a transmission ratio is wrong, or a spring belongs somewhere the original drawing did not include.
+
+The point is not to optimize every variable at once. It is to preserve the possibility that evidence from one discipline can revise a decision in another. A useful design process should make those revisions cheap enough to try.
+
+## The loop, not the artifact
+
+The finished robot is easy to photograph. The loop that produced it is harder to see. Mine usually has four parts:
+
+1. describe a candidate body with a small set of meaningful parameters;
+2. generate a simulation from that description;
+3. test a family of tasks and controllers; and
+4. return the results to the design variables.
+
+That final arrow matters most. Without it, simulation is only a report card. With it, simulation becomes a design material.
+
+<Callout title="Working principle">
+  A model does not need to be perfect to be useful. It needs to be consistent enough that a better result in simulation usually points toward a better physical decision.
+</Callout>
+
+One compact way to represent the loop is to make evaluation a function of both the body and the policy:
+
+```tsx
+type Robot = {
+  linkLengths: number[]
+  gearRatio: number
+  springStiffness: number
+}
+
+async function evaluate(robot: Robot, controller: Controller) {
+  const model = await buildSimulation(robot)
+  const trials = await runTasks(model, controller)
+
+  return {
+    energy: mean(trials.map((trial) => trial.energy)),
+    trackingError: rms(trials.map((trial) => trial.error)),
+    robustness: successRate(trials),
+  }
+}
+```
+
+The code is the uncomplicated part. The interesting work is deciding which parameters are allowed to move and which measurements deserve to steer them.
+
+## Choosing variables with physical meaning
+
+An optimizer will happily search over a thousand numbers. A designer still has to manufacture the answer. I prefer variables that survive the trip from a script to a machine shop: link length, pulley radius, material thickness, motor choice, spring stiffness.
+
+<FloatImage
+  src="/projects/osl-hardware.jpg"
+  alt="Open-source robotic leg hardware on a workbench"
+  caption="The parameterization should speak the same language as the hardware."
+  side="left"
+  shape="box"
+  width={720}
+  height={620}
+/>
+
+This keeps the search space legible. If a candidate performs well, I can explain what changed. If it fails, I can often trace the failure back to a physical tradeoff rather than a mysterious coordinate in a large vector.
+
+There is another advantage: meaningful parameters invite human judgment. A designer can freeze a dimension because of a bearing standard, narrow a range because of packaging, or add a candidate because experience suggests it will be easier to assemble. The algorithm does not lose authority when a human intervenes; the process gains context.
+
+### Constraints are part of the design
+
+Mass limits, collision envelopes, thermal ceilings, and available stock are not annoyances added after optimization. They define what a design is. Encoding them early prevents the search from spending its imagination on robots that cannot exist.
+
+> A feasible design space is smaller than an unconstrained one, but much richer in useful answers.
+
+## Reading the results like a designer
+
+The temptation is to reduce every trial to one score. I rarely trust that score on its own. Two robots can earn the same objective value for completely different reasons: one may be efficient but fragile, while another is robust and slightly wasteful.
+
+I like to keep a small dashboard of interpretable signals:
+
+- peak and continuous actuator torque;
+- tracking error across tasks, not only on the nominal task;
+- energy or cost of transport;
+- sensitivity to mass and contact uncertainty; and
+- the number of constraints sitting uncomfortably close to their limits.
+
+<Figure
+  src="/projects/robot-ci.jpg"
+  alt="A robotics continuous-integration workflow rendered as a dithered illustration"
+  caption="A repeatable pipeline turns each candidate into evidence instead of a one-off demo."
+  width={1200}
+  height={720}
+/>
+
+Plots and aggregate scores tell me where to look. Videos often tell me why. A controller that succeeds by exploiting an unintended collision may look excellent numerically and terrible on screen. The reverse happens too: a slightly imperfect trajectory may reveal a passive dynamic worth preserving.
+
+## What changes when the robot can change
+
+Codesign does not remove the need for taste. It gives taste more evidence to work with. The designer still decides which compromises are elegant, which risks are acceptable, and which strange candidate deserves a second look.
+
+The largest shift is psychological. Hardware stops feeling like a verdict delivered to the controls team. Control stops being a patch applied to mechanical decisions. Both become provisional descriptions of the same behavior.
+
+<Callout title="A useful stopping rule" tone="blue">
+  Stop when the next simulation would teach you less than the next physical prototype. The purpose of the loop is not to avoid building; it is to build the right question.
+</Callout>
+
+## A small experiment to try
+
+Take a mechanism you already understand and expose just two body parameters. Choose one familiar controller and three tasks: nominal, perturbed, and deliberately unfair. Then map performance over the two-dimensional design space.
+
+Do not begin with an optimizer. Look at the landscape first. Find the ridges, flat regions, and sudden failures. Ask what each shape means physically. Once the map starts telling a mechanical story, automate the search.
+
+That is the kind of loop I want this blog to document: not only polished robots, but the intermediate representations, failed hypotheses, code, and small observations that made the final object possible.

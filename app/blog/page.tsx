@@ -1,5 +1,5 @@
-import { BlogPosts } from '@/components/posts'
-import ComicPanel from '@/components/ComicPanel'
+import { BlogExplorer } from '@/components/BlogExplorer'
+import { formatDate, getBlogPosts } from './utils'
 
 export const metadata = {
   title: 'Blog',
@@ -7,9 +7,13 @@ export const metadata = {
 }
 
 export default function Page() {
+  const posts = getBlogPosts()
+    .sort((a, b) => new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime())
+    .map(({ slug, metadata }) => ({ slug, metadata, formattedDate: formatDate(metadata.publishedAt) }))
+
   return (
-    <section className="py-4 comic grid grid-cols-2 md:grid-cols-3 gap-2 grid-rows-[minmax(200px,1fr)_minmax(200px,1fr)_auto_auto]">
-      <BlogPosts />
-    </section>
+    <main className="blog-index py-4">
+      <BlogExplorer posts={posts} />
+    </main>
   )
 }
