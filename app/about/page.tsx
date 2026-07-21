@@ -11,32 +11,7 @@ export default function Page() {
   return (
     <div className="comic grid grid-cols-2 md:grid-cols-3 gap-2 grid-rows-[minmax(200px,1fr)_minmax(200px,1fr)_auto_auto]">
       {/* Header Panel */}    
-      <ComicPanel description="Senthur Ayyappan, PhD Student @ Neurobionics Lab, U-M" className='col-span-2 row-span-2' titlePosition='bottom-right' imageSrc='/about/sa-header.jpg'>
-        <div className='gym-badges bg-white p-2 border-2 border-black rounded-sm text-black' style={{position: 'absolute', bottom: '12%', left: '5%', display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: '90%'}}>
-          <p className='font-medium pb-2'>Gym Badges</p>
-          
-          <div className="grid grid-cols-6 grid-rows-1 gap-2 pb-1">
-            <Link href="https://www.nitt.edu/" target="_blank" className="rounded-full panel-button">
-              <Image src="/nitt.png" alt="NIT Trichy" width={48} height={48} className='p-1 w-10 h-10 sm:w-12 sm:h-12'/>
-            </Link>
-            <Link href="https://www.iitm.ac.in/" target="_blank" className="rounded-full panel-button">
-              <Image src="/iitm.png" alt="IIT Madras" width={48} height={48} className='p-1 w-10 h-10 sm:w-12 sm:h-12'/>
-            </Link>
-            <Link href="https://www.drdo.gov.in/" target="_blank" className="rounded-full panel-button">
-              <Image src="/drdo.png" alt="DRDO" width={48} height={48} className='p-1 w-10 h-10 sm:w-12 sm:h-12'/>
-            </Link>
-            <Link href="https://www.nsf.gov/" target="_blank" className="rounded-full panel-button">
-              <Image src="/nsf.png" alt="NSF" width={48} height={48} className='w-10 h-10 sm:w-12 sm:h-12'/>
-            </Link>            
-            <Link href="https://robotics.umich.edu/" target="_blank" className="panel-button">
-              <Image src="/mrobotics.png" alt="Michigan Robotics" width={48} height={48} className='p-1 w-10 h-10 sm:w-12 sm:h-12'/>
-            </Link>
-            <Link href="https://www.rai-inst.com/" target="_blank" className="panel-button">
-              <Image src="/rai.jpg" alt="RAI" width={48} height={48} className='p-1 w-10 h-10 sm:w-12 sm:h-12'/>
-            </Link>             
-          </div>
-        </div>
-      </ComicPanel>
+      <ComicPanel description="Senthur Ayyappan, PhD Student @ Neurobionics Lab, U-M" className='col-span-2 row-span-2' titlePosition='bottom-right' imageSrc='/about/sa-header.jpg' />
 
       <ComicPanel
         className="col-span-2 md:col-span-1 row-span-2 h-full" 
@@ -65,6 +40,22 @@ export default function Page() {
             powered prostheses and exoskeletons to ballbots and parametric CAD
             tools for robot simulation.
           </p>
+          <div className="about-affiliations" aria-label="Affiliations">
+            <div className="about-affiliations-logos">
+              {gymBadges.map((badge) => (
+                <Link
+                  key={badge.alt}
+                  href={badge.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={badge.alt}
+                  className={`about-affiliation-link ${badge.alt === 'NSF' ? 'about-affiliation-link--nsf' : ''}`}
+                >
+                  <Image src={badge.src} alt="" width={52} height={52} />
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </ComicPanel>
 
@@ -146,3 +137,12 @@ export default function Page() {
     </div>
   )
 }
+
+const gymBadges = [
+  { href: 'https://www.nitt.edu/', src: '/nitt.png', alt: 'NIT Trichy' },
+  { href: 'https://www.iitm.ac.in/', src: '/iitm.png', alt: 'IIT Madras' },
+  { href: 'https://www.drdo.gov.in/', src: '/drdo.png', alt: 'DRDO' },
+  { href: 'https://www.nsf.gov/', src: '/nsf.png', alt: 'NSF' },
+  { href: 'https://robotics.umich.edu/', src: '/mrobotics.png', alt: 'Michigan Robotics' },
+  { href: 'https://www.rai-inst.com/', src: '/rai.jpg', alt: 'Robotics and AI Institute' },
+]

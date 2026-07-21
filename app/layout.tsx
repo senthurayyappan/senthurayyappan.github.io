@@ -9,6 +9,7 @@ import Footer from '@/components/footer'
 import { baseUrl } from './sitemap'
 import { ThemeProvider } from 'next-themes'
 import PerformanceMonitor from '@/components/PerformanceMonitor'
+import { LinkSketches } from '@/components/LinkSketches'
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -60,6 +61,7 @@ export default function RootLayout({
     >
       <body className="antialiased min-h-full">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <LinkSketches />
           <main className="site-shell">
             <Navbar />
             <div className="site-content">{children}</div>

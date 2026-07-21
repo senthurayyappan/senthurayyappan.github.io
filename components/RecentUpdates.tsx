@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { SketchAnnotation } from './SketchAnnotation';
 
 const RecentUpdates: React.FC = () => {
   const latestPostTitle = "The Ballbot Always Wins";
@@ -19,26 +20,24 @@ const RecentUpdates: React.FC = () => {
   return (
     <div className="h-full w-full p-3 sm:p-6 overflow-y-auto flex flex-col gap-4 sm:gap-6 justify-between">
       {/* Latest Blog Post Section */}
-      <Link
-        href={`/blog/${latestPostSlug}`}
-        className='block p-3 sm:p-4 border border-current md:mb-2 lg:mb-4 panel-link-hover'
-      >
-
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-4 gap-1 sm:gap-0">
-            <span className="text-xs font-medium tracking-tight muted">Latest post</span>
-            <span className="text-xs font-medium muted">April 26, 2025</span>
-          </div>
-
+      <div className="latest-post-cell md:mb-2 lg:mb-4">
+        <Link
+          href={`/blog/${latestPostSlug}`}
+          className="latest-post-card"
+          data-sketch="off"
+        >
           <div className="space-y-3">
             <h2 className="w-full text-2xl sm:text-4xl font-medium tracking-tight title">
-              {latestPostTitle}
+              <SketchAnnotation color="#ef2841" padding={4}>{latestPostTitle}</SketchAnnotation>
             </h2>
 
             <p className="w-full leading-relaxed text-sm sm:text-base">
               {latestPostSummary}
             </p>
           </div>
-      </Link>
+          <span className="latest-post-date">April 26, 2025</span>
+        </Link>
+      </div>
 
       {/* Writing Section */}
       <div className="flex-1">
@@ -46,9 +45,9 @@ const RecentUpdates: React.FC = () => {
           <p className="w-full leading-relaxed text-base sm:text-lg font-normal">
             Hello there! I&rsquo;m a PhD student in Robotics at the University of
             Michigan, working with Prof. Elliott Rouse in the Neurobionics Lab.
-            My research focuses on robot codesign: how a robot&rsquo;s mechanical
-            design and control policy can co-evolve inside simulation instead
-            of being engineered one after the other.
+            My research focuses on robot codesign: how a robot&rsquo;s
+            mechanical design and control policy can co-evolve inside simulation
+            instead of being engineered one after the other.
           </p>
         </div>
       </div>
@@ -64,7 +63,7 @@ const RecentUpdates: React.FC = () => {
             rel="noopener noreferrer"
           >
             <div className="text-left">
-              <span className="text-[var(--sa-blue)] tracking-tight leading-tight font-medium">{currentLanguage}</span>
+              <span data-sketch-target className="text-[var(--sa-blue)] tracking-tight leading-tight font-medium">{currentLanguage}</span>
             </div>
           </Link>
 
@@ -75,7 +74,7 @@ const RecentUpdates: React.FC = () => {
             rel="noopener noreferrer"
           >
             <div className="text-left">
-              <span className="text-[var(--sa-green)] tracking-tight leading-tight font-medium">{currentFood}</span>
+              <span data-sketch-target className="text-[var(--sa-green)] tracking-tight leading-tight font-medium">{currentFood}</span>
             </div>
           </Link>
 
@@ -86,7 +85,7 @@ const RecentUpdates: React.FC = () => {
             rel="noopener noreferrer"
           >
             <div className="text-left">
-              <span className="text-[var(--sa-red)] tracking-tight leading-tight font-medium">{currentSong}</span>
+              <span data-sketch-target className="text-[var(--sa-red)] tracking-tight leading-tight font-medium">{currentSong}</span>
             </div>
           </Link>
         </div>

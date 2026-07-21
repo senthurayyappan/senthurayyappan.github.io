@@ -60,7 +60,7 @@ export default function Footer() {
             href="/rss"
           >
             <ArrowIcon />
-            <p className="ml-2 h-7 sa-link">rss</p>
+            <p data-sketch-target className="ml-2 h-7 sa-link">rss</p>
           </a>
         </li>
         <li>
@@ -71,7 +71,7 @@ export default function Footer() {
             href="https://github.com/senthurayyappan/senthurayyappan.github.io"
           >
             <ArrowIcon />
-            <p className="ml-2 h-7 sa-link">source</p>
+            <p data-sketch-target className="ml-2 h-7 sa-link">source</p>
           </a>
         </li>
       </ul>

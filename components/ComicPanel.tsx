@@ -43,46 +43,29 @@ const ComicPanel: React.FC<ComicPanelProps> = ({
   newTab = true, // Default to opening in new tab
   priority = false, // Default to not prioritizing
 }) => {
-  // Set background image style if imageSrc is provided
-  const panelStyle: React.CSSProperties = imageSrc
-    ? { 
-        backgroundImage: `url(${imageSrc})`,
-        backgroundPosition: imagePosition,
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-      }
-    : {};
-
   // Determine the CSS class for the title/caption
   const titleClass = `text ${titlePosition}`;
   // Determine the CSS class for the description
   const descriptionClass = `description description-${descriptionPosition}`;
 
-  // Add will-change hint if the panel is linkable to potentially improve transition rendering
-  const dynamicStyles: React.CSSProperties = {
-    ...panelStyle,
-    ...(href && { willChange: 'filter, border-width, border-color' }),
-  };
-
   return (
     // 1. Outermost div: Always present, receives grid layout classes.
     // Added relative positioning to act as a container for the absolute link.
-    <div className={`${className} comic-cell relative`}>
+    <div className={`${className} comic-cell ${href ? 'comic-cell-link' : ''} relative`}>
       {/* 2. Inner div: Handles visual styling (panel class, background) */}
       {/* Conditionally add the panel-link-hover class if href is present */}
       <div
-        className={`panel ${href ? 'panel-link-hover' : ''} h-full w-full transition-all duration-200 ease-in-out`} // Base transition still useful
-        style={dynamicStyles} // Apply combined styles here
+        className={`panel ${href ? 'panel-link-hover' : ''} h-full w-full`}
       >
-        {/* Preload critical images using Next.js Image component for better performance */}
-        {imageSrc && priority && (
+        {imageSrc && (
           <Image
             src={imageSrc}
             alt=""
             fill
-            className="object-cover opacity-0 pointer-events-none"
+            className="panel-art pointer-events-none"
+            style={{ objectPosition: imagePosition }}
             priority={priority}
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            sizes="(max-width: 767px) 92vw, (max-width: 1200px) 50vw, 720px"
           />
         )}
 
@@ -104,6 +87,7 @@ const ComicPanel: React.FC<ComicPanelProps> = ({
             {/* z-0 places it below text (z-10) but clickable */}
             <a 
               className="absolute inset-0 z-0" 
+              data-sketch="off"
               {...(newTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
               aria-label={title || 'Panel link'}
             ></a>

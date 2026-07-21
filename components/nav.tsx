@@ -55,7 +55,7 @@ function NavList({ pathname, onClick }: { pathname: string; onClick?: () => void
         return (
           <li key={href}>
             <Link href={href} onClick={onClick} aria-current={active ? 'page' : undefined}>
-              {label}
+              <span data-sketch-target>{label}</span>
               <span className="sn-arrow" aria-hidden="true">{'->'}</span>
             </Link>
           </li>
@@ -86,7 +86,7 @@ export function Navbar() {
   return (
     <>
       <aside className="sidenav hidden md:block tracking-tight">
-        <Link href="/" className="sidenav-mark" aria-label="Senthur Ayyappan - home">
+        <Link href="/" className="sidenav-mark" aria-label="Senthur Ayyappan - home" data-sketch="off">
           <Image src="/logo/640.png" alt="Senthur Ayyappan" width={220} height={120} priority />
         </Link>
         <nav aria-label="Sections"><NavList pathname={pathname} /></nav>
@@ -94,7 +94,7 @@ export function Navbar() {
       </aside>
 
       <div className="md:hidden mobile-masthead">
-        <Link href="/" onClick={() => setSidebarOpen(false)} className="relative w-28 h-12 overflow-hidden">
+        <Link href="/" onClick={() => setSidebarOpen(false)} className="relative w-28 h-12 overflow-hidden" data-sketch="off">
           <Image src="/logo/400.png" alt="SA" fill style={{ objectFit: 'contain', objectPosition: 'left center' }} priority />
         </Link>
         <div className="flex items-center gap-2">
@@ -110,7 +110,7 @@ export function Navbar() {
       )}
       <aside className={`mobile-drawer md:hidden ${isSidebarOpen ? 'is-open' : ''}`}>
         <div className="flex items-center justify-between">
-          <Link href="/" onClick={() => setSidebarOpen(false)} className="relative w-28 h-12 overflow-hidden">
+          <Link href="/" onClick={() => setSidebarOpen(false)} className="relative w-28 h-12 overflow-hidden" data-sketch="off">
             <Image src="/logo/400.png" alt="SA" fill style={{ objectFit: 'contain', objectPosition: 'left center' }} />
           </Link>
           <button onClick={toggleSidebar} aria-label="Close navigation" className="comic-menu-button">X</button>
