@@ -2,30 +2,6 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
-import { Young_Serif, Newsreader, Inter } from 'next/font/google'
-
-const youngSerif = Young_Serif({
-  subsets: ['latin'],
-  weight: ['400'],
-  variable: '--font-serif-display',
-  display: 'swap',
-})
-
-const newsreader = Newsreader({
-  subsets: ['latin'],
-  style: ['normal', 'italic'],
-  axes: ['opsz'],
-  variable: '--font-serif-body',
-  display: 'swap',
-})
-
-const inter = Inter({
-  subsets: ['latin'],
-  weight: ['400', '500', '600'],
-  variable: '--font-sans',
-  display: 'swap',
-})
-
 import { Navbar } from '@/components/nav'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
@@ -40,12 +16,10 @@ export const metadata: Metadata = {
     default: 'Senthur Ayyappan',
     template: '%s | Senthur Ayyappan',
   },
-  description:
-    'PhD student at the Neurobionics Lab, U-M Robotics, advised by Prof. Elliott Rouse. Working on co-design — co-evolving a robot’s mechanical design and its control inside a simulator.',
+  description: 'PhD student at the Neurobionics Lab, U-M Robotics, working on robot codesign across mechanics, simulation, and control.',
   openGraph: {
     title: 'Senthur Ayyappan | PhD Student, Michigan Robotics',
-    description:
-      'PhD student at the Neurobionics Lab, U-M Robotics, advised by Prof. Elliott Rouse. Working on co-design — co-evolving a robot’s mechanical design and its control inside a simulator.',
+    description: 'PhD student at the Neurobionics Lab, U-M Robotics, working on robot codesign across mechanics, simulation, and control.',
     url: baseUrl,
     siteName: 'Senthur Ayyappan',
     locale: 'en_US',
@@ -67,8 +41,7 @@ export const metadata: Metadata = {
   },
 }
 
-const cx = (...classes: (string | undefined | false)[]) =>
-  classes.filter(Boolean).join(' ')
+const cx = (...classes) => classes.filter(Boolean).join(' ')
 
 export default function RootLayout({
   children,
@@ -81,20 +54,17 @@ export default function RootLayout({
       className={cx(
         GeistSans.variable,
         GeistMono.variable,
-        youngSerif.variable,
-        newsreader.variable,
-        inter.variable,
-        'h-full'
+        "h-full"
       )}
       suppressHydrationWarning
     >
       <body className="antialiased min-h-full">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <main className="page-grid wrap">
+          <main className="site-shell">
             <Navbar />
-            <div className="page-content min-w-0">{children}</div>
+            <div className="site-content">{children}</div>
           </main>
-          <Footer />
+          <div className="site-footer"><Footer /></div>
           <Analytics />
           <SpeedInsights />
           <PerformanceMonitor />

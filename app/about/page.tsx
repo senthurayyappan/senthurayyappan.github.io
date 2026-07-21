@@ -1,406 +1,148 @@
 import Image from 'next/image'
+import Link from 'next/link'
+import ComicPanel from '@/components/ComicPanel'
 
 export const metadata = {
   title: 'About',
   description: 'About Senthur Raj Ayyappan',
 }
 
-const affiliations: { name: string; logo: string; url: string }[] = [
-  { name: 'NIT Trichy', logo: '/nitt.png', url: 'https://www.nitt.edu/' },
-  { name: 'IIT Madras', logo: '/iitm.png', url: 'https://www.iitm.ac.in/' },
-  { name: 'DRDO', logo: '/drdo.png', url: 'https://www.drdo.gov.in/' },
-  { name: 'NSF', logo: '/nsf.png', url: 'https://www.nsf.gov/' },
-  {
-    name: 'Michigan Robotics',
-    logo: '/mrobotics.png',
-    url: 'https://robotics.umich.edu/',
-  },
-  { name: 'RAI', logo: '/rai.jpg', url: 'https://rai-inst.com/' },
-]
-
-const skills: { label: string; items: string[] }[] = [
-  {
-    label: 'Languages',
-    items: ['Python', 'C++', 'TypeScript', 'Bash'],
-  },
-  {
-    label: 'Simulation',
-    items: ['MuJoCo', 'Gazebo', 'IsaacSim', 'CoppeliaSim'],
-  },
-  {
-    label: 'Design',
-    items: ['Onshape', 'Solidworks', 'Fusion 360', 'Blender'],
-  },
-]
-
-const chronology: {
-  date: string
-  title: string
-  org: string
-}[] = [
-    {
-      date: '2026–present',
-      title: 'PhD Student',
-      org: 'Robotics, University of Michigan',
-    },
-    {
-      date: '2021–2025',
-      title: 'Project Lead, Research Engineer',
-      org: 'Neurobionics Lab, U-M',
-    },
-    {
-      date: 'Nov 2024 – Jan 2025',
-      title: 'Private Consultant',
-      org: 'Robotics and AI Institute',
-    },
-    {
-      date: 'May 2020 – July 2020',
-      title: 'Research Intern',
-      org: 'DRDO/DEBEL Exoskeleton Project',
-    },
-    {
-      date: 'Dec 2018 – July 2019',
-      title: 'Research Intern',
-      org: 'Robotics Lab, IIT Madras',
-    },
-    {
-      date: 'July 2016 – June 2020',
-      title: 'National Institute of Technology Tiruchirappalli',
-      org: 'Bachelor of Technology, Production Engineering',
-    },
-    {
-      date: '2013–2015',
-      title: 'Maharishi International Residential School',
-      org: 'Central Board of Secondary Education',
-    },
-  ]
-
-function SectionHead({ title, right }: { title: string; right?: string }) {
-  return (
-    <div className="section-head">
-      <h2 className="type-x">{title}</h2>
-      {right && <span className="right">{right}</span>}
-    </div>
-  )
-}
-
-function Lede() {
-  return (
-    <section className="profile-lede">
-      <div className="profile-portrait">
-        <Image
-          src="/about/sa-header.jpg"
-          alt="Senthur Ayyappan"
-          fill
-          sizes="(min-width: 960px) 50vw, 100vw"
-          style={{ objectFit: 'cover' }}
-          priority
-        />
-      </div>
-      <p>
-        I'm currently a PhD student in Robotics at the University of
-        Michigan, working with Professor Elliott Rouse in the Neurobionics
-        Lab. My research focuses on robot codesign: how a robot&rsquo;s
-        mechanical design and control policy can co-evolve inside simulation
-        instead of being engineered one after the other. Before starting the
-        PhD, I spent 2021 to 2025 as a project lead and research engineer in
-        the same lab, leading the Open-Source Leg ecosystem, developing the
-        version 2.0 hardware, and building the software stack that lets
-        researchers interface with the platform. The project is now used by
-        more than 25 research groups worldwide.
-      </p>
-      <p>
-        My work has moved between hardware, simulation, and control. As a
-        private consultant for the Robotics and AI Institute, I worked on the
-        co-design of the next-generation Ultra Mobility Vehicle and developed
-        an open-source Python package for connecting parametric CAD assemblies
-        to simulation frameworks like Isaac Sim and MuJoCo. Before Michigan,
-        I earned my BTech in Production Engineering at NIT Trichy with a minor
-        in Computer Science, led Spider Tronix, and worked on research
-        internships at DRDO/DEBEL and IIT Madras spanning powered exoskeleton
-        simulation, gait-cycle modeling, and impedance control for bilateral
-        teleoperation.
-      </p>
-    </section>
-  )
-}
-
-function Affiliations() {
-  return (
-    <section className="profile-affiliations">
-      {affiliations.map(({ name, logo, url }) => (
-        <a
-          key={name}
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="profile-affiliations-logo"
-          aria-label={name}
-          title={name}
-        >
-          <Image src={logo} alt={name} width={48} height={48} />
-        </a>
-      ))}
-    </section>
-  )
-}
-
-function Experience() {
-  return (
-    <section className="section" id="experience">
-      <SectionHead title="Experience" />
-      {/* Extruded sheet: a 12-col grid whose cells span 7/5 then 6/6 then 6/6.
-          Chrome (keylines, side faces, hover lift) is the .xcell primitive; the
-          NIT+Spider stack is a nested column like the home page's .fp-side. */}
-      <div className="xsheet exp-sheet">
-        {/* Row 1 — RAI photo-lead + Open-Source Leg "Current" tile (raised) */}
-        <a
-          href="https://rai-inst.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="xcell exp-cell-7"
-        >
-          <div className="xcell-face exp-photo-face exp-lead">
-            <div className="exp-big-photo">
-              <Image
-                src="/about/rai.jpg"
-                alt="Robotics & AI Institute"
-                fill
-                sizes="(min-width: 960px) 50vw, 100vw"
-                style={{ objectFit: 'cover' }}
-              />
-            </div>
-            <span className="exp-meta">
-              <span>Private Consultant</span>
-              <span>2024–2025</span>
-            </span>
-            <h3>Robotics &amp; AI Institute</h3>
-            <p>
-              Worked on the co-design of the next-generation Ultra Mobility
-              Vehicle and built open-source tooling to connect parametric CAD
-              assemblies with simulation workflows in Isaac Sim and MuJoCo.
-            </p>
-          </div>
-        </a>
-        <a
-          href="https://www.opensourceleg.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="xcell raised exp-cell-5 exp-tile-cell"
-          data-bg="osl"
-        >
-          <div className="xcell-face">
-            <span className="exp-stamp">Current</span>
-            <span className="exp-meta">
-              <span>Project Lead</span>
-              <span>2021–2025</span>
-            </span>
-            <h3>The Open-Source Leg</h3>
-            <p>
-              Led the hardware and software stack for OSL 2.0, a lower-limb
-              robotic platform now used by more than 25 research groups.
-            </p>
-          </div>
-        </a>
-
-        {/* Row 2 — Ballbot portrait-fill + (NIT, Spider) nested stack */}
-        <a
-          href="https://robotics.umich.edu/academics/courses/rob-311/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="xcell exp-cell-6 exp-portrait-cell"
-        >
-          <div className="xcell-face exp-photo-face">
-            <div className="exp-big-photo exp-portrait-photo">
-              <Image
-                src="/projects/ballbot-main.jpg"
-                alt="ROB311 Ballbot"
-                fill
-                sizes="(min-width: 960px) 50vw, 100vw"
-                style={{ objectFit: 'cover' }}
-              />
-            </div>
-            <span className="exp-meta">
-              <span>Research Engineer</span>
-              <span>2022–2023</span>
-            </span>
-            <h3>ROB311 Ballbot</h3>
-            <p>
-              Co-developed the balancing robot platform used as the hands-on
-              teaching vehicle in U-M&rsquo;s introductory robotics course.
-            </p>
-          </div>
-        </a>
-        <div className="exp-side exp-cell-6">
-          <a
-            href="https://www.nitt.edu/home/academics/departments/prod/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="xcell exp-compact"
-          >
-            <div className="xcell-face exp-photo-face">
-              <div className="exp-big-photo">
-                <Image
-                  src="/about/nitt.jpg"
-                  alt="NIT Trichy"
-                  fill
-                  sizes="(min-width: 960px) 25vw, 100vw"
-                  style={{ objectFit: 'cover', objectPosition: '0% 0%' }}
-                />
-              </div>
-              <span className="exp-meta">
-                <span>BTech, Production Engineering</span>
-                <span>2016–2020</span>
-              </span>
-              <h3>NIT Trichy</h3>
-              <p>
-                Earned my BTech in Production Engineering with a minor in
-                Computer Science, building the mechanics-and-software
-                foundation that still anchors my work.
-              </p>
-            </div>
-          </a>
-          <a
-            href="https://spider.nitt.edu/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="xcell exp-compact"
-          >
-            <div className="xcell-face exp-photo-face">
-              <div className="exp-big-photo">
-                <Image
-                  src="/about/spider.jpg"
-                  alt="Spider Tronix, NITT"
-                  fill
-                  sizes="(min-width: 960px) 25vw, 100vw"
-                  style={{ objectFit: 'cover', objectPosition: '0% 30%' }}
-                />
-              </div>
-              <span className="exp-meta">
-                <span>Team Lead</span>
-                <span>2018–2020</span>
-              </span>
-              <h3>Spider Tronix, NITT</h3>
-              <p>
-                Led NIT Trichy&rsquo;s robotics and machine learning club,
-                coordinating a student team of roughly thirty across projects,
-                builds, and competitions.
-              </p>
-            </div>
-          </a>
-        </div>
-
-        {/* Row 3 — IIT Madras + DRDO */}
-        <a
-          href="https://ed.iitm.ac.in/~robotics_lab/index.html"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="xcell exp-cell-6"
-        >
-          <div className="xcell-face exp-photo-face">
-            <div className="exp-big-photo">
-              <Image
-                src="/about/iitm.jpg"
-                alt="IIT Madras"
-                fill
-                sizes="(min-width: 960px) 50vw, 100vw"
-                style={{ objectFit: 'cover', objectPosition: '10% 0%' }}
-              />
-            </div>
-            <span className="exp-meta">
-              <span>Research Intern</span>
-              <span>2019</span>
-            </span>
-            <h3>IIT Madras</h3>
-            <p>
-              Worked on impedance control for bilateral teleoperation,
-              developing a transformation-based method for tuning surgical
-              robot parameters.
-            </p>
-          </div>
-        </a>
-        <a
-          href="https://www.drdo.gov.in/drdo/labs-and-establishments/defence-bio-engineering-electro-medical-laboratory-debel"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="xcell exp-cell-6"
-        >
-          <div className="xcell-face exp-photo-face">
-            <div className="exp-big-photo">
-              <Image
-                src="/about/exo.jpg"
-                alt="DRDO | DEBEL"
-                fill
-                sizes="(min-width: 960px) 50vw, 100vw"
-                style={{ objectFit: 'cover', objectPosition: '0% 90%' }}
-              />
-            </div>
-            <span className="exp-meta">
-              <span>Research Intern</span>
-              <span>2020</span>
-            </span>
-            <h3>DRDO | DEBEL</h3>
-            <p>
-              Built simulation models for a lower-limb powered exoskeleton,
-              contributing to gait-cycle analysis and early design evaluation
-              for their exoskeleton.
-            </p>
-          </div>
-        </a>
-      </div>
-    </section>
-  )
-}
-
-function Chronology() {
-  return (
-    <section className="section" id="chronology">
-      <SectionHead title="Chronology" right="Selected timeline" />
-      <table className="chronology-table">
-        <tbody>
-          {chronology.map(({ date, title, org }) => (
-            <tr key={`${date}-${title}`}>
-              <th scope="row">{date}</th>
-              <td>
-                <h3>{title}</h3>
-                <p className="chronology-org">{org}</p>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </section>
-  )
-}
-
-function Tools() {
-  return (
-    <section className="section" id="tools">
-      <SectionHead title="Tools of the trade" />
-      <div className="profile-tools">
-        {skills.map(({ label, items }) => (
-          <div key={label} className="profile-tool">
-            <span className="profile-tool-label">{label}</span>
-            <ul className="profile-tool-list">
-              {items.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-    </section>
-  )
-}
-
 export default function Page() {
   return (
-    <>
-      <Lede />
-      <Affiliations />
-      <Experience />
-      <Chronology />
-      <Tools />
-    </>
+    <div className="comic grid grid-cols-2 md:grid-cols-3 gap-2 grid-rows-[minmax(200px,1fr)_minmax(200px,1fr)_auto_auto]">
+      {/* Header Panel */}    
+      <ComicPanel description="Senthur Ayyappan, PhD Student @ Neurobionics Lab, U-M" className='col-span-2 row-span-2' titlePosition='bottom-right' imageSrc='/about/sa-header.jpg'>
+        <div className='gym-badges bg-white p-2 border-2 border-black rounded-sm text-black' style={{position: 'absolute', bottom: '12%', left: '5%', display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: '90%'}}>
+          <p className='font-medium pb-2'>Gym Badges</p>
+          
+          <div className="grid grid-cols-6 grid-rows-1 gap-2 pb-1">
+            <Link href="https://www.nitt.edu/" target="_blank" className="rounded-full panel-button">
+              <Image src="/nitt.png" alt="NIT Trichy" width={48} height={48} className='p-1 w-10 h-10 sm:w-12 sm:h-12'/>
+            </Link>
+            <Link href="https://www.iitm.ac.in/" target="_blank" className="rounded-full panel-button">
+              <Image src="/iitm.png" alt="IIT Madras" width={48} height={48} className='p-1 w-10 h-10 sm:w-12 sm:h-12'/>
+            </Link>
+            <Link href="https://www.drdo.gov.in/" target="_blank" className="rounded-full panel-button">
+              <Image src="/drdo.png" alt="DRDO" width={48} height={48} className='p-1 w-10 h-10 sm:w-12 sm:h-12'/>
+            </Link>
+            <Link href="https://www.nsf.gov/" target="_blank" className="rounded-full panel-button">
+              <Image src="/nsf.png" alt="NSF" width={48} height={48} className='w-10 h-10 sm:w-12 sm:h-12'/>
+            </Link>            
+            <Link href="https://robotics.umich.edu/" target="_blank" className="panel-button">
+              <Image src="/mrobotics.png" alt="Michigan Robotics" width={48} height={48} className='p-1 w-10 h-10 sm:w-12 sm:h-12'/>
+            </Link>
+            <Link href="https://www.rai-inst.com/" target="_blank" className="panel-button">
+              <Image src="/rai.jpg" alt="RAI" width={48} height={48} className='p-1 w-10 h-10 sm:w-12 sm:h-12'/>
+            </Link>             
+          </div>
+        </div>
+      </ComicPanel>
+
+      <ComicPanel
+        className="col-span-2 md:col-span-1 row-span-2 h-full" 
+        title="Project Lead @ Open-Source Leg"
+        imageSrc='/about/sa-main.jpg'
+        titlePosition="top-right"
+        href='https://www.opensourceleg.org/'
+        description='An end-to-end open-source platform that makes prosthetics research more accessible.'
+      >
+      </ComicPanel>
+
+      <ComicPanel className="col-span-2 md:col-span-3">
+        <div className="about-copy">
+          <p>
+            I&rsquo;m currently a PhD student in Robotics at the University of
+            Michigan, working with Professor Elliott Rouse in the Neurobionics
+            Lab. My research focuses on robot codesign: how a robot&rsquo;s
+            mechanical design and control policy can co-evolve inside simulation
+            instead of being engineered one after the other.
+          </p>
+          <p>
+            Before starting the PhD, I spent 2021 to 2025 leading the
+            Open-Source Leg ecosystem, developing its version 2.0 hardware and
+            the software stack used by more than 25 research groups worldwide.
+            My work has moved between hardware, simulation, and control—from
+            powered prostheses and exoskeletons to ballbots and parametric CAD
+            tools for robot simulation.
+          </p>
+        </div>
+      </ComicPanel>
+
+      <ComicPanel 
+        className="col-span-2 md:col-span-1 row-span-2 h-full" 
+        title="Consultant @ Robotics and AI Institute"
+        titlePosition="top-right"
+        imageSrc='/about/rai.jpg'
+        href='https://rai-inst.com/'
+        description='Worked on co-design of the next-generation Ultra-Mobility Vehicle (UMV)'
+      >
+      </ComicPanel>
+
+      <ComicPanel 
+        className="col-span-2 md:col-span-1 row-span-1 h-full" 
+        title="Research Intern @ DRDO | DEBEL"
+        imageSrc='/about/exo.jpg'
+        imagePosition='0% 90%'
+        titlePosition="top-right"
+        href='https://www.drdo.gov.in/drdo/labs-and-establishments/defence-bio-engineering-electro-medical-laboratory-debel'
+        description='Worked on 2D modeling and simulation of a lower-limb powered exoskeleton'
+      >
+      </ComicPanel>
+
+      <ComicPanel 
+        className="col-span-2 md:col-span-1 row-span-1 h-full" 
+        title="Research Intern @ IIT Madras"
+        imageSrc='/about/iitm.jpg'
+        imagePosition='10% 0%'
+        titlePosition="top-right"
+        href='https://ed.iitm.ac.in/~robotics_lab/index.html'
+        description='Developed a transformation-based approach to determine impedance parameters for teleoperated surgical robots'
+      >
+      </ComicPanel>
+
+      <ComicPanel 
+        className="col-span-2 row-span-1 h-full" 
+        title="Team Lead @ Spider Tronix, NITT"
+        imageSrc='/about/spider.jpg'
+        imagePosition='0% 30%'
+        titlePosition="top-right"
+        href='https://spider.nitt.edu/'
+        description='Led a team of around 30 self-motivated undergraduate students working on various robotics and machine learning projects'
+      >
+      </ComicPanel>
+      
+      {/* Education Panel */}
+      <ComicPanel 
+        className="col-span-2 h-full" 
+        title="CGPA: 8.44/10.0" 
+        titlePosition="top-right"
+        description='BTech in Production Engineering with a minor degree in CS'
+        imageSrc='/about/nitt.jpg'
+        imagePosition='0% 0%'
+        href='https://www.nitt.edu/home/academics/departments/prod/'
+      />
+      
+      <ComicPanel className="col-span-1" imageSrc="/projects/ballbot-main.jpg" title="Projects" titlePosition='bottom-right' href="/projects" newTab={false}/>
+
+      <ComicPanel className='row-span-1' imageSrc="/sa-publications.jpg" href="/publications" newTab={false}>
+          <p className="speech" style={{ position: 'absolute', top: '5%', right: '5%' }}>
+            Publications
+          </p>
+      </ComicPanel>
+      
+      <ComicPanel 
+        className="col-span-2" 
+        title="Skills" 
+        titlePosition="bottom-right"
+        childrenClassName="p-6 md:p-12"
+        imageSrc='/backgrounds/radial-lines.jpg'
+      >
+        <div className='flex flex-col gap-2'>
+          <p className='bg-white p-1 border-2 border-black rounded-sm text-black'><span className="font-bold">Languages:</span> Python, C++, Rust (Novice), JS, TSX, Bash</p>
+          <p className='bg-white p-1 border-2 border-black rounded-sm text-black'><span className="font-bold">Simulation:</span> Gazebo, MuJoCo, V-REP (now CoppeliaSim)</p>
+          <p className='bg-white p-1 border-2 border-black rounded-sm text-black'><span className="font-bold">Design:</span> Onshape, Solidworks, Fusion360, Blender</p>
+        </div>
+      </ComicPanel>
+    </div>
   )
 }

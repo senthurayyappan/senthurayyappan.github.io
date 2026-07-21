@@ -1,1483 +1,235 @@
 @import 'tailwindcss';
 
-/* ==========================================================================
-   Senthur Ayyappan — Personal Almanac
-   Vintage Tamil cinema × Japanese editorial.
-   Paper + ink palette, Young Serif display + Newsreader text, kolam ornaments.
-   ========================================================================== */
-
 :root {
-  /* The logo palette. These five are the ONLY hues on the site:
-     yellow, red, blue, ink, paper. There is no pure black — --ink #15130d
-     is the warm tonal mirror of --paper #f6f4ee (same warm bias, inverted
-     lightness). Every neutral below is --ink or --paper at reduced alpha —
-     never a new tint. Do not add a colour that isn't one of these five.
+  --font-display: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-reading: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --dot-spacing: 4px;
+  --dot-opacity: 0.01;
+  --dot-color: var(--sa-black);
 
-     --paper and --ink are the two fixed poles and never flip; what flips is
-     which pole is the ground. .dark swaps --background/--text and follows
-     with --accent, the alpha neutrals, and the --paper-2/3 ground tints.
-     Panel faces are cut from the ground, so they flip with it — see the
-     extruded panel system below.
+  /* The five fixed colours in the SA mark. */
+  --white: #f6f4ee;
+  --black: #15130d;
+  --sa-black: #15130d;
+  --sa-white: #f6f4ee;
+  --sa-off-white: #e8e4da;
+  --sa-yellow: #f9c90a;
+  --sa-red: #ef2841;
+  --sa-blue: #007d7e;
+  --sa-green: var(--sa-blue);
+  --rule: color-mix(in srgb, var(--text) 22%, transparent);
 
-     #15130d = rgb(21 19 13): the rgba(21, 19, 13, *) literals in this
-     file derive from it — a future ink change must update them together. */
-  --yellow: #f9c90a;
-  --red: #ef2841;
-  --blue: #007d7e;
-  --ink: #15130d;
-  --paper: #f6f4ee;
+  /* --- Light Mode Syntax Highlighting Vars --- */
+  --sh-class: #4c97f8;        /* Example: Brighter blue */
+  --sh-identifier: #d1d5db;   /* Example: Light gray */
+  --sh-sign: #8996a3;        /* Example: Same as light */
+  --sh-string: #5eead4;       /* Example: Teal */
+  --sh-keyword: #f47067;      /* Example: Brighter red */
+  --sh-comment: #9ca3af;      /* Example: Gray */
+  --sh-jsxliterals: #a5b4fc;  /* Example: Indigo */
+  --sh-property: #f59e0b;     /* Example: Amber */
+  --sh-entity: #f59e0b;      /* Example: Amber */
+  --sh-background: var(--sa-black);
 
-  /* Ground tints + prose neutrals. These style things sitting ON the
-     ground, so they DO flip in .dark. Light values: ink over paper. */
-  --paper-2: #edebe5; /* ink 4% over paper */
-  --paper-3: #dbd9d3; /* ink 12% over paper */
-  --ink-soft: rgba(21, 19, 13, 0.76);
-  /* 0.59, not 0.54: the warm ink is lighter than the pure black it replaced,
-     and 0.54 lands at 3.87:1 on paper. 0.59 restores AA (4.55:1). */
-  --ink-mute: rgba(21, 19, 13, 0.59);
-
-  --rule: rgba(21, 19, 13, 0.18);
-  --rule-strong: rgba(21, 19, 13, 0.55);
-
-  /* Backwards-compatible aliases (used by the comic-panel legacy CSS).
-     --sa-black/--sa-white alias the fixed ink/paper and never flip;
-     --sa-off-white follows the ground (flips via --paper-3). */
-  --sa-black: var(--ink);
-  --sa-white: var(--paper);
-  --sa-off-white: var(--paper-3);
-  --sa-yellow: var(--yellow);
-  --sa-red: var(--red);
-  --sa-blue: var(--blue);
-
-  /* The page ground and the prose on it — the tokens that flip. */
-  --background: var(--paper);
-  --text: var(--ink);
-  --muted: var(--ink-mute);
-  --accent: var(--red);
-
-  /* All body/prose text shares one face; --font-serif is kept as an alias
-     so older components keep resolving. */
-  --font-serif: var(--font-serif-body);
-
-  /* Layout */
-  --max: 1180px;
-  --gutter: 28px;
-
-  /* Syntax highlighting — brand hues on an ink block, neutrals as paper
-     at alpha. Code blocks stay dark in both themes. */
-  --sh-background: var(--ink);
-  --sh-identifier: rgba(246, 244, 238, 0.87);
-  --sh-sign: rgba(246, 244, 238, 0.55);
-  --sh-comment: rgba(246, 244, 238, 0.45);
-  --sh-keyword: var(--red);
-  --sh-string: var(--blue);
-  --sh-jsxliterals: var(--blue);
-  --sh-class: var(--yellow);
-  --sh-property: var(--yellow);
-  --sh-entity: var(--yellow);
-}
-
-.dark {
-  /* --paper and --ink are deliberately NOT redefined here; the ground
-     tokens below just point at the other pole. Everything that sits on the
-     ground -- prose, tints, and panel faces -- follows these. */
-  --paper-2: #23211b; /* paper 6% over ink */
-  --paper-3: #34322c; /* paper 14% over ink */
-  --ink-soft: rgba(246, 244, 238, 0.76);
-  --ink-mute: rgba(246, 244, 238, 0.56);
-
-  --rule: rgba(246, 244, 238, 0.18);
-  --rule-strong: rgba(246, 244, 238, 0.55);
-
-  --background: var(--ink);
-  --text: var(--paper);
-  --muted: var(--ink-mute);
-  --accent: var(--yellow);
-}
-
-/* ------------------------------------------------------------------ */
-/* Extruded panel system -- docs/design/2026-07-14-visual-system.md    */
-/* Geometry: footprint stays in the grid slot; the face lifts up-left  */
-/* by --d; side faces are skewed strips inside the slot. Camera is     */
-/* down-right, so DOM order IS painter's order: never add z-index.     */
-/* ------------------------------------------------------------------ */
-@property --d {
-  syntax: '<length>';
-  inherits: true;
-  initial-value: 0px;
-}
-
-.xsheet {
-  display: grid;
-  /* tracks must stay contiguous -- never set gap, justify-content, or align-content on a sheet; the -2px keyline collapse depends on butted tracks. */
-  gap: 0;
-  /* compensates the cells' -2px keyline-collapse shift */
-  padding: 2px 0 0 2px;
-}
-.xsheet > .xcell {
-  /* butt the cells; adjacent 2px keylines collapse into one */
-  margin: -2px 0 0 -2px;
-}
-
-.xcell {
-  position: relative;
-  display: flex;
-  --d: 0px;
-  transition: --d 0.16s ease;
-}
-a.xcell {
-  text-decoration: none;
-  color: inherit;
-}
-/* beat the global a:hover { color: var(--accent) } accent hijack */
-a.xcell:hover,
-a.xcell:focus-visible {
-  color: inherit;
-}
-.xcell.raised { --d: 12px; }
-/* Keyboard lift: the cell-as-anchor case, plus wrapper cells (a div cell
-   holding inner links, e.g. Featured) via any keyboard-focused descendant. */
-.xcell:focus-visible,
-.xcell:has(:focus-visible) {
-  --d: 18px;
-}
-/* The face carries the accent outline + tint + lift; the UA ring would hug
-   the static footprint 18px away from it. Suppress it ONLY on the
-   cell-as-anchor -- inner links inside wrapper cells keep their own ring,
-   since the face outline alone doesn't say WHICH link has focus. */
-a.xcell:focus-visible {
-  outline: none;
-}
-
-/* The face is a slab cut from the ground: it takes the ground's colour, so
-   panels go dark at night with everything else. Every token used inside a
-   face therefore just inherits the theme -- there is NO daylight re-anchor,
-   and there must not be one: the tokens downstream (--ink-soft, --rule,
-   --accent, --paper-2) are already written to flip, and re-anchoring them
-   is what pinned face interiors to daylight.
-
-   Consequence: the KEYLINE inverts too (--text = ink by day, paper at
-   night). It has to. An ink keyline on an ink face is ~1.2:1 and the
-   outline that defines the whole language would dissolve. */
-.xcell-face {
-  position: relative;
-  flex: 1;
-  display: block;
-  background: var(--background);
-  border: 2px solid var(--text);
-  padding: 16px 18px;
-  transform: translate(calc(var(--d) * -1), calc(var(--d) * -1));
-}
-/* No face tint on hover or focus -- the lift plus the title going accent is
-   the whole hover language. Focus keeps an outline anyway: a lift alone is
-   not a sufficient focus indicator. The UA ring would hug the static
-   footprint, 18px away from the face, so put the ring on the face. */
-.xcell:focus-visible .xcell-face,
-.xcell:has(:focus-visible) .xcell-face {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-/* hover lift only on hover-capable devices; touch would stick at 18px after tap */
-@media (hover: hover) {
-  .xcell:hover { --d: 18px; }
-}
-
-/* Right side face: accent. Single-owner edges; diagonals 3px pre-skew
-   (2.12px perpendicular) because Chromium floors fractional borders.
-   Keylines are --text, matching the face: all linework inverts together. */
-.xcell::before {
-  content: '';
-  position: absolute;
-  top: calc(var(--d) * -1);
-  left: calc(100% - var(--d));
-  width: var(--d);
-  height: 100%;
-  box-sizing: border-box;
-  background: var(--accent);
-  border: 0 solid var(--text);
-  border-top-width: min(calc(var(--d) * 99), 3px);
-  border-right-width: min(calc(var(--d) * 99), 2px);
-  border-bottom-width: min(calc(var(--d) * 99), 3px);
-  transform: skewY(45deg);
-  transform-origin: 0 0;
-}
-/* Bottom side face: blue, both themes. */
-.xcell::after {
-  content: '';
-  position: absolute;
-  top: calc(100% - var(--d));
-  left: calc(var(--d) * -1);
-  width: 100%;
-  height: var(--d);
-  box-sizing: border-box;
-  background: var(--blue);
-  border: 0 solid var(--text);
-  border-bottom-width: min(calc(var(--d) * 99), 2px);
-  border-left-width: min(calc(var(--d) * 99), 3px);
-  transform: skewX(45deg);
-  transform-origin: 0 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .xcell, .rec-glyph { transition: none; }
-}
-
-/* Extruded display type -- 28px+ headings only (below that it reads as
-   a misprint). Stacked 1px steps, NEVER a single offset shadow. */
-.type-x {
-  text-shadow:
-    1px 1px 0 var(--accent),
-    2px 2px 0 var(--accent),
-    3px 3px 0 var(--accent);
-}
-
-* {
-  box-sizing: border-box;
+  --background: var(--sa-white);
+  --muted: var(--sa-blue);
+  --accent: var(--sa-red);
+  --text: var(--sa-black);
 }
 
 html {
   min-width: 320px;
   background-color: var(--background);
+  overflow-x: visible;
+  scrollbar-gutter: stable;
+}
+
+/* --- Dark Mode Overrides --- */
+.dark {
+  --dot-color: var(--sa-white);
+  /* --- Dark Mode Syntax Highlighting Vars --- */
+  /* Replace these with your desired dark mode colors */
+  --sh-class: #4c97f8;        /* Example: Brighter blue */
+  --sh-identifier: #d1d5db;   /* Example: Light gray */
+  --sh-sign: #8996a3;        /* Example: Same as light */
+  --sh-string: #5eead4;       /* Example: Teal */
+  --sh-keyword: #f47067;      /* Example: Brighter red */
+  --sh-comment: #9ca3af;      /* Example: Gray */
+  --sh-jsxliterals: #a5b4fc;  /* Example: Indigo */
+  --sh-property: #f59e0b;     /* Example: Amber */
+  --sh-entity: #f59e0b;      /* Example: Amber */
+  --sh-background: var(--sa-black);
+
+  /* --- Other Dark Mode Vars --- */
+  --background: var(--sa-black);
+  --muted: var(--sa-blue);
+  --accent: var(--sa-yellow);
+  --text: var(--sa-white);
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  background: var(--background);
+  background-color: transparent;
   color: var(--text);
-  font-family: var(--font-serif-body), 'Iowan Old Style', Georgia, serif;
-  font-size: 19px;
+  overflow-x: visible;
+  margin: 0;
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 16px;
   line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  transition: background-color 0.35s ease, color 0.35s ease;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
-a:hover {
-  color: var(--accent);
-}
-
-img {
-  display: block;
-  max-width: 100%;
-}
+* { box-sizing: border-box; }
 
 ::selection {
-  background: var(--yellow);
-  color: var(--ink);
+  background: var(--sa-yellow);
+  color: var(--sa-black);
 }
 
-/* Layout primitives ------------------------------------------------------- */
-
-.wrap {
-  max-width: var(--max);
+.site-shell {
+  width: min(calc(100% - 64px), 1180px);
   margin: 0 auto;
-  padding: 0 var(--gutter);
-}
-
-.page-grid {
   display: grid;
   grid-template-columns: 220px minmax(0, 1fr);
   gap: 56px;
   align-items: start;
-  padding-top: 48px;
+  padding: 48px 0 28px;
 }
 
-.page-content {
-  min-width: 0;
-}
-.page-content .section {
-  padding: 40px 0 64px;
-}
-.page-content .section:first-child {
-  padding-top: 8px;
-}
+.site-content { min-width: 0; }
 
-/* Sidebar nav ------------------------------------------------------------ */
+.site-footer {
+  width: min(calc(100% - 64px), 1180px);
+  margin: 0 auto;
+  padding: 16px 0 28px 276px;
+}
 
 .sidenav {
   position: sticky;
   top: 48px;
   align-self: start;
-  font-family: var(--font-serif-display), Georgia, serif;
-  border-right: 1px solid var(--rule);
   padding-right: 32px;
+  border-right: 1px solid var(--rule);
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
 .sidenav-mark {
   display: flex;
   justify-content: center;
+  width: 100%;
   margin: 0 auto 22px;
   padding-bottom: 18px;
   border-bottom: 1px solid var(--rule);
   overflow: hidden;
-  width: 100%;
 }
+
 .sidenav-mark img {
   display: block;
-  height: auto;
   width: 100%;
   max-width: 220px;
+  height: auto;
   margin: 0 auto;
 }
 
 .sidenav-list {
   list-style: none;
-  padding: 0;
   margin: 0 0 24px;
+  padding: 0;
 }
+
 .sidenav-list li {
   margin: 0;
   border-bottom: 1px dotted var(--rule);
 }
-.sidenav-list li:last-child {
-  border-bottom: none;
-}
+
+.sidenav-list li:last-child { border-bottom: 0; }
+
 .sidenav-list a {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   gap: 10px;
   padding: 10px 0 10px 4px;
   color: var(--text);
-  font-size: 18px;
+  font-size: 15px;
+  font-weight: 500;
   line-height: 1.2;
-  letter-spacing: -0.005em;
-  transition: color 0.2s ease;
+  letter-spacing: -0.01em;
+  transition: color 180ms ease;
 }
+
 .sidenav-list .sn-arrow {
   display: inline-flex;
   color: var(--accent);
   opacity: 0;
   transform: translateX(-8px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition: opacity 180ms ease, transform 180ms ease;
 }
+
 .sidenav-list a:hover,
-.sidenav-list a[aria-current='page'] {
-  color: var(--accent);
-}
-.sidenav-list a:hover .sn-arrow {
+.sidenav-list a[aria-current='page'] { color: var(--accent); }
+
+.sidenav-list a:hover .sn-arrow,
+.sidenav-list a[aria-current='page'] .sn-arrow {
   opacity: 1;
-  transform: translateX(0);
+  transform: none;
 }
 
 .sidenav-social {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 18px;
+  gap: 17px;
   padding-top: 18px;
   border-top: 1px solid var(--rule);
 }
+
 .sidenav-social a {
   display: grid;
   place-items: center;
-  color: var(--ink-mute);
-  transition: color 0.18s ease, transform 0.18s ease;
-}
-.sidenav-social a:hover {
-  color: var(--accent);
-  transform: translateY(-1px);
-}
-.sidenav-social svg {
-  display: block;
+  color: color-mix(in srgb, var(--text) 58%, transparent);
+  transition: color 180ms ease, transform 180ms ease;
 }
 
-/* Mobile sidebar collapse ------------------------------------------------ */
+.sidenav-social a:hover { color: var(--accent); transform: translateY(-1px); }
+.sidenav-social svg { display: block; }
 
-.sidenav-mobile-bar {
-  display: none;
-}
-
-@media (max-width: 900px) {
-  .page-grid {
-    grid-template-columns: 1fr;
-    gap: 24px;
-    padding-top: 28px;
-  }
-  .sidenav {
-    position: static;
-    border-right: none;
-    border-bottom: 1px solid var(--rule);
-    padding-right: 0;
-    padding-bottom: 16px;
-  }
-  .sidenav-mark {
-    margin-bottom: 16px;
-    padding-bottom: 14px;
-  }
-  .sidenav-mark img {
-    max-width: 140px;
-  }
-  .sidenav-list {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4px 24px;
-  }
-  .sidenav-social {
-    gap: 12px;
-  }
-}
-
-/* Editorial type helpers ------------------------------------------------- */
-
-.label {
-  font-family: var(--font-sans), system-ui, sans-serif;
-  font-weight: 400;
-  font-size: 14px;
-  letter-spacing: 0.01em;
-  color: var(--ink-mute);
-}
-
-/* Metadata voice: small quiet sans, normal case and roman. Never mono/uppercase
-   kickers or italics — both read as generic AI design. */
-.meta-line {
-  font-family: var(--font-sans), system-ui, sans-serif;
-  font-weight: 400;
-  font-size: 14px;
-  letter-spacing: 0.01em;
-  text-transform: none;
-  color: color-mix(in srgb, var(--text) 62%, transparent);
-}
-
-/* Hero ------------------------------------------------------------------- */
-
-.hero {
-  padding: 32px 0 24px;
-  position: relative;
-}
-.hero-intro {
-  margin: 0;
-  max-width: 54rem;
-  padding: 20px 0 24px;
-  font-family: var(--font-serif-body), Georgia, serif;
-  font-size: 28px;
-  line-height: 1.5;
-  letter-spacing: -0.005em;
-  color: var(--text);
-}
-/* Key facts highlighted in the intro. Colour, not the misregistered shadow --
-   type-x smears when set on inline words inside running text. Each entity gets
-   a distinct treatment that flips with the theme: role in accent (red/yellow),
-   the two proper nouns (place, person) in the strongest ink/paper weight. */
-.hero-hl {
-  font-weight: 600;
-}
-.hl-role {
-  color: var(--accent);
-}
-.hl-place,
-.hl-person {
-  color: var(--text);
-  font-weight: 700;
-}
-
-/* Section header --------------------------------------------------------- */
-
-.section {
-  padding: 64px 0;
-}
-.section-head {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 24px;
-  align-items: baseline;
-  margin-bottom: 32px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--rule-strong);
-}
-.section-head h2 {
-  margin: 0;
-  font-family: var(--font-serif-display), Georgia, serif;
-  font-weight: 400;
-  font-size: 44px;
-  line-height: 1;
-  letter-spacing: -0.01em;
-}
-.section-head .right {
-  font-family: var(--font-sans), system-ui, sans-serif;
-  font-size: 14px;
-  color: var(--ink-mute);
-}
-
-/* Featured post — one raised cell; .featured doubles as the .xcell-face
-   (panel chrome comes from the primitive; this block owns the inner
-   two-column layout only) --------------------------------------------- */
-
-.featured {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 36px;
+.mobile-masthead {
+  position: sticky;
+  top: 0;
+  z-index: 25;
   align-items: center;
-}
-/* The lead cell earns more room than the 16/18 primitive default: at full
-   width the image sets the panel height and the copy is centred against it,
-   so a tight face padding reads as a cramped title. */
-.xcell-face.featured {
-  padding: 30px 32px;
-}
-/* inner picture frame, distinct from the panel keyline (inset by the
-   face padding, so the two never double up).
-   5/4 at full width — the image is half the face, so a landscape crop leaves
-   the panel shorter than the copy beside it wants to be. The single-column
-   layout below 1240px goes back to 4/3: there the image spans the whole face,
-   and 5/4 at that width is a wall. */
-.featured .img-frame {
-  position: relative;
-  background: var(--paper-2);
-  border: 1px solid var(--rule-strong);
-  aspect-ratio: 5 / 4;
-  overflow: hidden;
-  width: 100%;
-}
-.featured .img-frame img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.featured .copy {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 22px;
-}
-.featured .copy h3 {
-  /* no negative top margin — it was pulling the title into the face padding
-     and is the reason the title looked squeezed against the panel edge */
-  margin: 0;
-  font-family: var(--font-serif-display), Georgia, serif;
-  font-weight: 400;
-  font-size: 56px;
-  line-height: 0.98;
-  letter-spacing: -0.02em;
-  transition: color 0.2s ease;
-}
-/* The whole copy block is one link — title and "Read the post" light up together. */
-.featured .copy:hover h3 {
-  color: var(--accent);
-}
-.featured .copy:hover .read-on {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
-}
-.featured .copy:hover .read-on svg {
-  opacity: 1;
-  transform: translateX(0);
-}
-.featured .dek {
-  font-family: var(--font-serif-body), Georgia, serif;
-  font-size: 21px;
-  line-height: 1.5;
-  color: var(--ink-soft);
-  max-width: 50ch;
-  margin: 0;
-}
-.featured .copy .meta {
-  display: flex;
-  gap: 18px;
-  align-items: baseline;
-  font-family: var(--font-sans), system-ui, sans-serif;
-  font-size: 14px;
-  color: var(--ink-mute);
-}
-.featured .read-on {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 8px;
-  font-family: var(--font-serif-display), Georgia, serif;
-  font-size: 18px;
-  align-self: flex-start;
-  border-bottom: 1px solid var(--text);
-  padding-bottom: 4px;
-  transition: color 0.2s ease, border-color 0.2s ease;
-}
-.featured .read-on svg {
-  color: var(--accent);
-  opacity: 0;
-  transform: translateX(-8px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-.featured .read-on:hover {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
-}
-.featured .read-on:hover svg {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* Posts list (typographic) ---------------------------------------------- */
-
-.posts {
-  display: grid;
-  grid-template-columns: 1fr;
-}
-.post-row {
-  display: grid;
-  grid-template-columns: 110px 1fr auto;
-  gap: 28px;
-  padding: 22px 0;
-  align-items: baseline;
-  border-bottom: 1px solid var(--rule);
-  transition: background-color 0.2s ease;
-}
-.post-row:last-child {
-  border-bottom: none;
-}
-.post-row:hover {
-  background: rgba(21, 19, 13, 0.04);
-}
-.dark .post-row:hover {
-  background: rgba(246, 244, 238, 0.05);
-}
-.post-row .date {
-  font-family: var(--font-sans), system-ui, sans-serif;
-  font-size: 14px;
-  color: var(--ink-mute);
-  white-space: nowrap;
-}
-.post-row .title {
-  font-family: var(--font-serif-display), Georgia, serif;
-  font-weight: 400;
-  font-size: 26px;
-  line-height: 1.1;
-  letter-spacing: -0.01em;
-}
-.post-row .read {
-  font-family: var(--font-sans), system-ui, sans-serif;
-  font-size: 14px;
-  color: var(--ink-mute);
-  white-space: nowrap;
-}
-
-/* Recommendations — extruded sheet ---------------------------------------- */
-/* Chrome comes from the panel system (.xsheet/.xcell/.xcell-face); only the
-   sheet's column count and the inner column layout live here. */
-
-.rec-sheet {
-  grid-template-columns: repeat(3, 1fr);
-}
-.rec-sheet .xcell-face {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  min-height: 180px;
-}
-.rec-meta {
-  display: flex;
   justify-content: space-between;
-  align-items: baseline;
-  gap: 12px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--rule);
-}
-.rec-kind {
-  font-family: var(--font-sans), system-ui, sans-serif;
-  font-size: 14px;
-  letter-spacing: 0.01em;
-  color: var(--ink-mute);
-}
-.rec-glyph {
-  display: inline-flex;
-  align-items: center;
-  color: var(--ink-soft);
-  transition: transform 0.25s ease;
-}
-.rec-glyph svg {
-  display: block;
-  width: 38px;
-  height: auto;
-}
-.rec-name {
-  font-family: var(--font-serif-display), Georgia, serif;
-  font-weight: 400;
-  font-size: 26px;
-  line-height: 1.1;
-  letter-spacing: -0.01em;
-  margin-top: auto;
-  transition: color 0.2s ease;
-}
-/* Hover: the lift plus the name going accent, the same language the fp-sheet
-   and Featured cells speak. The glyph nudge adds the motion the (removed)
-   face tint used to carry. 26px clears the 24px large-text threshold, so red
-   on paper at 3.78:1 still meets AA. */
-@media (hover: hover) {
-  .rec-sheet .xcell:hover .rec-glyph {
-    transform: translateX(2px);
-  }
-  .rec-sheet .xcell:hover .rec-name {
-    color: var(--accent);
-  }
-}
-
-/* Front-page package — extruded sheet ("Around the site") ----------------- */
-/* Chrome comes from the panel system (.xsheet/.xcell/.xcell-face); this
-   block owns only the column split and the inner column layouts. */
-
-.fp-sheet {
-  grid-template-columns: 3fr 2fr;
-}
-/* fp-lead — photo at top inside 14px face padding, text inset another
-   14px (28px effective). */
-.fp-lead .xcell-face {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  padding: 14px 14px 32px;
-}
-.fp-lead .xcell-face > *:not(.fp-lead-photo) {
-  padding-inline: 14px;
-}
-/* Not a cell: a plain grid area stacking two cells. The .xsheet > .xcell
-   margin rule cannot reach these nested cells, so the wrapper itself
-   mirrors the -2px keyline collapse a direct cell would get, and the
-   second inner cell collapses the keyline it shares with the first. */
-.fp-side {
-  display: flex;
-  flex-direction: column;
-  margin: -2px 0 0 -2px;
-}
-.fp-side .xcell + .xcell {
-  margin-top: -2px;
-}
-.fp-story .xcell-face {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 28px;
-}
-
-/* Lead photo (top of lead column) */
-.fp-lead-photo {
-  position: relative;
-  aspect-ratio: 16 / 9;
-  background: var(--paper-2);
-  border: 1px solid var(--rule-strong);
-  overflow: hidden;
-  margin-bottom: 10px;
-}
-.fp-lead-photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-/* Photo-overlay variant (About): full-bleed image with paper-tinted wash.
-   Uses a layered background-image (gradient over image) so children render
-   naturally on top of both layers — no z-index gymnastics.
-   Text is pinned to the BOTTOM of the block so the face/upper composition
-   of the photo stays visible at the top.
-
-   Keep the fade-out stop as plain `transparent`. Writing it as
-   color-mix(in srgb, var(--background) 0%, transparent) is the same color,
-   but the minifier collapses that `0%` to a unitless `0` — invalid in
-   color-mix(), which takes a <percentage> — voiding the whole
-   background-image and blanking the photo in production builds only.
-   Applies to .exp-tile-cell too. */
-.fp-story-photo {
-  --fp-story-photo-src: url('/sa-publications.jpg');
-  --fp-story-photo-pos: 35% center;
-  /* absorb the column height the plain publications cell doesn't need */
-  flex: 1;
-}
-/* The About tile rests at the hover depth (18px), not the 12px editorial raise
-   the .raised token gives. It is a narrow tile over a busy portrait between two
-   flat neighbours, where 12px reads as shallow; 18px is the depth every other
-   tile reaches on hover, so About now matches a hovered Publications tile at
-   rest. (Featured stays at 12 -- it is a wide panel on clean paper where 12
-   reads fine.) Specificity 0,3,0 beats both .xcell.raised and .xcell:hover, so
-   About sits at 18 in every state; its hover feedback is the title going accent
-   via .fp-story:hover h3, not a depth change. */
-.fp-sheet .fp-story-photo.raised {
-  --d: 18px;
-}
-/* The wash fades to --background, so it tracks the face: paper by day, ink
-   at night, and the text sitting on it always has its own ground under it. */
-.fp-story-photo.fp-story .xcell-face {
-  justify-content: flex-end;
-  background-image:
-    linear-gradient(
-      180deg,
-      transparent 0%,
-      transparent 5%,
-      var(--background) 70%,
-      var(--background) 100%
-    ),
-    var(--fp-story-photo-src);
-  background-size: 100% 100%, cover;
-  background-position: center center, var(--fp-story-photo-pos);
-  background-repeat: no-repeat, no-repeat;
-}
-.fp-sheet .fp-story-photo .more {
-  margin-top: 0;
-}
-
-.fp-lead h3 {
-  margin: 0 0 10px;
-  font-family: var(--font-serif-display), Georgia, serif;
-  font-weight: 400;
-  font-size: 52px;
-  line-height: 0.98;
-  letter-spacing: -0.015em;
-}
-.fp-story h3 {
-  margin: 0;
-  font-family: var(--font-serif-display), Georgia, serif;
-  font-weight: 400;
-  font-size: 28px;
-  line-height: 1.05;
-  letter-spacing: -0.01em;
-}
-
-.fp-lead .dek {
-  margin: 0;
-  font-family: var(--font-serif-body), Georgia, serif;
-  font-size: 19px;
-  line-height: 1.5;
-  color: var(--ink-soft);
-  max-width: 50ch;
-}
-.fp-story .dek {
-  margin: 0;
-  font-family: var(--font-serif-body), Georgia, serif;
-  font-size: 16px;
-  line-height: 1.55;
-  color: var(--ink-soft);
-}
-
-.teaser-list {
-  list-style: none;
-  margin: 6px 0 0;
-  padding: 0;
-  border-top: 1px solid var(--rule);
-}
-.teaser-list li {
-  padding: 9px 0;
-  border-bottom: 1px solid var(--rule);
-}
-.teaser-list .name {
-  font-family: var(--font-serif-display), Georgia, serif;
-  font-size: 19px;
-  letter-spacing: -0.01em;
-}
-
-.fp-sheet .more {
-  margin-top: auto;
-  padding-top: 6px;
-  font-family: var(--font-serif-display), Georgia, serif;
-  font-size: 17px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  align-self: flex-start;
-}
-.fp-sheet .more svg {
-  color: var(--accent);
-  opacity: 0;
-  transform: translateX(-8px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  flex: 0 0 auto;
-}
-.fp-lead:hover .more svg,
-.fp-story:hover .more svg {
-  opacity: 1;
-  transform: translateX(0);
-}
-.fp-lead:hover h3,
-.fp-story:hover h3 {
-  color: var(--accent);
-}
-
-/* About page ------------------------------------------------------------- */
-
-/* Lede: bio with a small portrait floated top-left so prose wraps around. */
-.profile-lede {
-  padding: 48px 0;
-  font-family: var(--font-serif-body), Georgia, serif;
-  font-size: 17px;
-  line-height: 1.65;
-  color: var(--text);
-  text-align: justify;
-  text-wrap: pretty;
-}
-.profile-lede::after {
-  content: '';
-  display: block;
-  clear: both;
-}
-.profile-portrait {
-  position: relative;
-  width: min(58%, 640px);
-  aspect-ratio: 16 / 10;
-  float: left;
-  margin: 6px 34px 16px 0;
-  background: var(--paper-2);
-  border: 1px solid var(--rule-strong);
-  overflow: hidden;
-}
-.profile-portrait img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.profile-lede p {
-  margin: 0 0 16px;
-}
-.profile-lede p:last-child {
-  margin-bottom: 0;
-}
-.profile-lede a {
-  color: var(--text);
-  text-decoration: underline;
-  text-decoration-color: var(--accent);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 3px;
-  transition: color 0.18s ease;
-}
-.profile-lede a:hover {
-  color: var(--accent);
-}
-
-/* Affiliations: centered strip of full-color logos, scale on hover.       */
-.profile-affiliations {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 40px;
-  padding: 28px 0;
-  border-top: 2px solid var(--text);
+  padding: 10px 4vw;
   border-bottom: 2px solid var(--text);
-}
-.profile-affiliations-logo {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  transition: transform 0.2s ease;
-}
-.profile-affiliations-logo:hover,
-.profile-affiliations-logo:focus-visible {
-  transform: scale(1.18);
-  outline: none;
-}
-.profile-affiliations-logo img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
+  background: var(--background);
 }
 
-/* Experience — extruded sheet (docs/design/2026-07-14-visual-system.md).
-   A 12-col grid; cells span 7/5 then 6/6 then 6/6 so the panels butt into one
-   sheet. Chrome (keylines, skewed side faces, hover lift) is the .xcell /
-   .xcell-face primitive; this block owns only the grid spans and each panel's
-   inner layout. */
-.exp-sheet {
-  grid-template-columns: repeat(12, 1fr);
-}
-.exp-cell-7 { grid-column: span 7; }
-.exp-cell-6 { grid-column: span 6; }
-.exp-cell-5 { grid-column: span 5; }
-
-/* Nested stack column (NIT + Spider) — same collapse trick as .fp-side: the
-   wrapper mirrors the -2px pull and the second cell collapses the shared
-   keyline (the .xsheet > .xcell child combinator can't reach nested cells). */
-.exp-side {
-  margin: -2px 0 0 -2px;
-  display: flex;
-  flex-direction: column;
-}
-.exp-side > .xcell { flex: 1; }
-.exp-side > .xcell + .xcell { margin-top: -2px; }
-
-/* Shared face type. Titles go accent on hover (the sheet hover language). */
-.exp-sheet h3 {
-  margin: 0;
-  font-family: var(--font-serif-display), Georgia, serif;
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  color: var(--text);
-  transition: color 0.18s ease;
-}
-.exp-sheet p {
-  margin: 0;
-  font-family: var(--font-serif-body), Georgia, serif;
-  line-height: 1.6;
-  color: var(--ink-soft);
-}
-.exp-sheet .xcell:hover h3 {
-  color: var(--accent);
-}
-
-/* Role on the left, timeline on the right — one justified row, no "·" strings. */
-.exp-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 16px;
-  flex-wrap: wrap;
-  font-family: var(--font-sans), system-ui, sans-serif;
-  font-size: 14px;
-  letter-spacing: 0.01em;
-  color: var(--ink-mute);
-}
-
-/* Photo-top face: image frame at top, text below inset a further 14px.
-   Modeled on the home page's .fp-lead. */
-.exp-photo-face {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 14px 14px 28px;
-}
-.exp-photo-face > *:not(.exp-big-photo) {
-  padding-inline: 14px;
-}
-.exp-big-photo {
-  position: relative;
-  aspect-ratio: 16 / 9;
-  background: var(--paper-2);
-  border: 1px solid var(--rule-strong);
-  overflow: hidden;
-}
-.exp-big-photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.exp-photo-face h3 {
-  font-size: 30px;
-  line-height: 1.05;
-}
-.exp-photo-face p {
-  font-size: 16px;
-  line-height: 1.55;
-  max-width: 52ch;
-}
-
-/* RAI lead (span 7): bigger title, taller 4/3 photo. */
-.exp-lead h3 {
-  font-size: 40px;
-  line-height: 1;
-}
-.exp-lead .exp-big-photo {
-  aspect-ratio: 4 / 3;
-}
-
-/* Compact photo-top (NIT / Spider stack): smaller title + dek. */
-.exp-compact .exp-photo-face {
-  padding: 14px 14px 22px;
-}
-.exp-compact h3 {
-  font-size: 23px;
-}
-.exp-compact p {
-  font-size: 15px;
-  line-height: 1.5;
-}
-
-/* Ballbot (span 6): the photo fills the face height instead of a fixed ratio. */
-.exp-portrait-photo {
-  flex: 1 1 auto;
-  min-height: 360px;
-  aspect-ratio: auto;
-}
-
-/* "Current" stamp on the tile. Absolute vs the positioned .xcell-face; colours
-   are absolute (red/paper by day, yellow/ink at night), not theme tokens. */
-.exp-stamp {
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  background: var(--red);
-  color: var(--paper);
-  padding: 5px 11px;
-  font-family: var(--font-sans), system-ui, sans-serif;
-  font-weight: 500;
-  font-size: 12px;
-  letter-spacing: 0.04em;
-  z-index: 2;
-}
-.dark .exp-stamp {
-  background: var(--yellow);
-  color: var(--ink);
-}
-
-/* Open-Source Leg "Current" tile: image fills the face with a gradient washing
-   to the ground so meta + title + dek stay readable. Same pattern (and the
-   same `transparent`-stop minifier caveat) as the home page's .fp-story-photo:
-   fade to --background so the wash tracks the theme. */
-.exp-tile-cell .xcell-face {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  gap: 10px;
-  padding: 28px;
-  background-image:
-    linear-gradient(
-      180deg,
-      transparent 0%,
-      transparent 12%,
-      var(--background) 78%,
-      var(--background) 100%
-    ),
-    var(--exp-tile-src);
-  background-size: 100% 100%, cover;
-  background-position: center center, var(--exp-tile-pos, center);
-  background-repeat: no-repeat, no-repeat;
-}
-.exp-tile-cell h3 {
-  font-size: 26px;
-  line-height: 1.1;
-}
-.exp-tile-cell p {
-  font-size: 15px;
-  line-height: 1.5;
-  max-width: 40ch;
-}
-.exp-tile-cell[data-bg='osl'] {
-  --exp-tile-src: url('/about/sa-main.jpg');
-  --exp-tile-pos: center center;
-}
-/* Rest the "Current" tile at 18px, matching the home page's About tile: an
-   image-fill tile over a busy photo reads shallow at the 12px editorial raise
-   (0,3,0 beats .xcell.raised / .xcell:hover, so it holds 18 in every state). */
-.exp-sheet .exp-tile-cell.raised {
-  --d: 18px;
-}
-
-/* Chronology: two-column CV table with dates as the running gutter.        */
-.chronology-table {
-  width: 100%;
-  white-space: normal; /* the global `table` rule sets nowrap for prose tables */
-  border-collapse: collapse;
-  border-top: 1px solid var(--rule-strong);
-  border-bottom: 1px solid var(--rule-strong);
-  border-left: 1px solid var(--rule-strong);
-  border-right: 1px solid var(--rule-strong);
-  color: var(--text);
-}
-.chronology-table tr {
-  border-bottom: 1px solid var(--rule-strong);
-}
-.chronology-table tr:last-child {
-  border-bottom: none;
-}
-.chronology-table th,
-.chronology-table td {
-  vertical-align: top;
-  text-align: left;
-}
-.chronology-table th {
-  width: 230px;
-  padding: 22px 28px 22px 18px;
-  border-right: 1px solid var(--rule-strong);
-  font-family: var(--font-serif-body), Georgia, serif;
-  font-size: 16px;
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  line-height: 1.45;
-  color: var(--ink-mute);
-}
-.chronology-table td {
-  padding: 20px 18px 22px 28px;
-}
-.chronology-table h3 {
-  margin: 0;
-  font-family: var(--font-serif-display), Georgia, serif;
-  font-weight: 400;
-  font-size: 28px;
-  line-height: 1.08;
-  letter-spacing: -0.01em;
-  color: var(--text);
-}
-.chronology-org {
-  margin: 6px 0 0;
-  font-family: var(--font-serif-body), Georgia, serif;
-  font-size: 16px;
-  line-height: 1.45;
-  color: var(--ink-soft);
-}
-
-/* Tools of the trade: clean three-column trio at the bottom.               */
-.profile-tools {
+.comic-menu-button {
+  width: 40px;
+  height: 40px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0;
-  border-top: 1px solid var(--rule-strong);
-  border-bottom: 1px solid var(--rule-strong);
-  border-left: 1px solid var(--rule-strong);
-  border-right: 1px solid var(--rule-strong);
-}
-.profile-tool {
-  padding: 24px 28px 26px;
-  border-right: 1px solid var(--rule-strong);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.profile-tool:last-child {
-  border-right: none;
-}
-.profile-tool-label {
-  font-family: var(--font-serif-display), Georgia, serif;
-  font-size: 22px;
-  line-height: 1.1;
+  place-items: center;
+  border: 2px solid var(--text);
+  background: var(--background);
   color: var(--text);
-  margin-bottom: 6px;
-}
-.profile-tool-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-}
-.profile-tool-list li {
-  font-family: var(--font-serif-body), Georgia, serif;
-  font-weight: 400;
-  font-size: 17px;
-  line-height: 1.35;
-  color: var(--text);
-  padding: 8px 0;
-  border-bottom: 1px solid var(--rule);
-}
-.profile-tool-list li:last-child {
-  border-bottom: none;
+  box-shadow: 4px 4px 0 var(--sa-blue);
+  font: 700 25px/1 var(--font-geist-mono), monospace;
 }
 
-/* Editorial footer ------------------------------------------------------- */
-
-/* Footer aligns with the main content column (sidebar 220px + 56px gap) */
-.foot {
-  margin-top: 64px;
-  padding: 36px 0 44px 276px;
-}
-/* The "space bar": a single wide, low-profile extruded key built from the
-   panel primitives (.xsheet/.xcell/.xcell-face). It flips dark, carries the
-   accent-right / blue-bottom side faces, and rests raised (.raised = 12px)
-   like a key sitting proud of the board. It is NOT interactive, so the hover
-   lift is suppressed just below -- a moving footer bar reads as a broken
-   button. A single-cell sheet needs no extra grid setup: the cell fills the
-   one implicit track full-width. */
-.foot-bar {
-  margin: 0 0 28px;
-}
-/* Shallow rest depth: half a content tile's 12px hover lift, so the footer
-   reads as a quiet slab rather than a raised, attention-seeking panel. Set
-   here (not via .raised) precisely so it stays below the panel depth. */
-.foot-key {
-  --d: 6px;
-}
-.foot-key-face {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  flex-wrap: wrap;
-  min-height: 32px;
-  padding: 14px 22px;
-}
-/* Pin the footer key at its rest depth on hover (overrides .xcell:hover by
-   specificity, so source order does not matter). */
-@media (hover: hover) {
-  .foot-bar .xcell:hover {
-    --d: 6px;
-  }
-}
-.foot-end {
-  font-family: var(--font-serif-display), Georgia, serif;
-  font-size: 18px;
-  letter-spacing: 0.02em;
-  white-space: nowrap;
-  margin-right: auto;
-}
-.foot-copy {
-  font-family: var(--font-sans), system-ui, sans-serif;
-  font-size: 13px;
-  color: var(--ink-mute);
-}
-.foot-source {
-  font-family: var(--font-serif-body), Georgia, serif;
-  font-size: 15px;
-  color: var(--ink-mute);
-}
-.foot-source {
-  border-bottom: 1px solid var(--rule);
-}
-.foot-source:hover {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
-}
-/* Responsive ------------------------------------------------------------- */
-
-@media (max-width: 1240px) {
-  .featured {
-    grid-template-columns: 1fr;
-    gap: 32px;
-  }
-  /* stacked: the image now spans the full face, so keep the landscape crop */
-  .featured .img-frame {
-    aspect-ratio: 4 / 3;
-  }
-  .featured .copy h3 {
-    font-size: 44px;
-  }
+.mobile-drawer {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 40;
+  width: min(82vw, 330px);
+  padding: 22px;
+  background: var(--background);
+  border-right: 3px solid var(--text);
+  transform: translateX(-105%);
+  transition: transform 200ms ease;
 }
 
-@media (max-width: 960px) {  .fp-sheet {
-    grid-template-columns: 1fr;
-  }
-  .fp-lead .xcell-face {
-    padding: 28px 20px;
-  }
-  .fp-story .xcell-face {
-    padding: 24px 20px;
-  }
-  .xcell-face.featured {
-    padding: 24px 20px;
-  }
-  .fp-lead h3 {
-    font-size: 38px;
-  }
-  .hero-intro {
-    padding: 18px 0 20px;
-    font-size: 24px;
-  }
-  .post-row {
-    grid-template-columns: 1fr;
-    gap: 6px;
-  }
-  .post-row .date,
-  .post-row .read {
-    grid-column: 1;
-  }
-  .post-row .title {
-    grid-column: 1;
-    font-size: 22px;
-  }
-  .rec-sheet {
-    grid-template-columns: 1fr;
-  }
-  .rec-sheet .xcell-face {
-    min-height: 0;
-  }
-  .rec-name {
-    font-size: 22px;
-  }
-  .section-head h2 {
-    font-size: 32px;
-  }
-  .foot {
-    padding-left: 0;
-  }
-  .foot-key-face {
-    justify-content: center;
-    text-align: center;
-    gap: 12px;
-  }
-  .foot-end {
-    margin-right: 0;
-  }
-  .profile-lede {
-    padding: 24px 0 40px;
-    font-size: 18px;
-  }
-  .profile-portrait {
-    float: none;
-    width: 100%;
-    max-width: none;
-    aspect-ratio: 16 / 10;
-    margin: 0 0 24px 0;
-  }
-  .profile-affiliations {
-    gap: 28px;
-    padding: 22px 0;
-  }
-  /* Single column: every cell (and the nested stack) spans the full grid, so
-     the sheet stacks vertically. The -2px keyline collapse still applies. */
-  .exp-cell-7,
-  .exp-cell-6,
-  .exp-cell-5,
-  .exp-side {
-    grid-column: 1 / -1;
-  }
-  .exp-lead h3 {
-    font-size: 32px;
-  }
-  .exp-photo-face h3 {
-    font-size: 26px;
-  }
-  .exp-portrait-photo {
-    min-height: 300px;
-  }
-  .exp-tile-cell .xcell-face {
-    min-height: 280px;
-  }
-  .chronology-table,
-  .chronology-table tbody,
-  .chronology-table tr,
-  .chronology-table th,
-  .chronology-table td {
-    display: block;
-    width: 100%;
-  }
-  .chronology-table th {
-    padding: 22px 16px 8px;
-    border-right: none;
-  }
-  .chronology-table td {
-    padding: 0 16px 24px;
-  }
-  .chronology-table h3 {
-    font-size: 24px;
-  }
-  .profile-tools {
-    grid-template-columns: 1fr;
-  }
-  .profile-tool {
-    padding: 22px 16px;
-    border-right: none;
-    border-bottom: 1px solid var(--rule-strong);
-  }
-  .profile-tool:last-child {
-    border-bottom: none;
-  }
-}
-
-@media (max-width: 620px) {
-  body {
-    font-size: 17px;
-  }  .hero {
-    padding: 32px 0 20px;
-  }
-  .hero-intro {
-    max-width: none;
-    padding: 14px 0 16px;
-    font-size: 20px;
-  }
-  .featured .copy h3 {
-    font-size: 36px;
-  }
-  .section {
-    padding: 44px 0;
-  }
-  .exp-tile-cell .xcell-face {
-    min-height: 240px;
-  }
-}
-
-/* Legacy aliases kept so existing pages don't break ---------------------- */
+.mobile-drawer.is-open { transform: none; }
+.mobile-drawer .sidenav-list { margin-top: 30px; }
+.mobile-drawer .sidenav-social { margin-top: 24px; }
 
 .sa-link {
   transition: all 150ms ease-out;
@@ -1487,409 +239,150 @@ img {
   text-decoration-thickness: 2px;
   position: relative;
 }
+
 .sa-link:hover,
 .sa-link:focus-visible {
   text-decoration-color: var(--accent) !important;
   transform: translateY(-1px);
 }
+
 .muted {
   color: var(--muted);
 }
+
 .accent {
   color: var(--accent);
 }
+
+.prose .anchor {
+  @apply absolute invisible no-underline;
+
+  margin-left: -1em;
+  padding-right: 0.5em;
+  width: 80%;
+  max-width: 700px;
+  cursor: pointer;
+}
+
 .sidebar {
   background-color: var(--background);
 }
-.title {
-  text-wrap: balance;
-  color: var(--accent);
-}
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
+
+.anchor:hover {
+  @apply visible;
 }
 
-/* ----- Reading prose (blog post body) ----- */
+.prose a {
+  @apply underline transition-all decoration-neutral-400 dark:decoration-neutral-600 underline-offset-2 decoration-[0.1em];
+}
+
 .prose {
-  font-family: var(--font-serif), Georgia, 'Times New Roman', serif;
-  font-size: 1.125rem;
-  line-height: 1.7;
-  color: color-mix(in srgb, var(--text) 88%, transparent);
-  hanging-punctuation: first last;
-  font-feature-settings: 'kern' 1, 'liga' 1;
+  max-width: 760px;
+  margin-inline: auto;
+  font-family: var(--font-reading);
+  font-size: clamp(1.05rem, 1.7vw, 1.2rem);
+  line-height: 1.78;
 }
-.prose p {
-  margin-bottom: 1rem;
-  text-wrap: pretty;
-}
-.prose strong {
+
+.prose h1, .prose h2, .prose h3, .prose h4 {
+  font-family: var(--font-display);
   font-weight: 600;
-  color: var(--text);
-}
-.prose em {
-  font-style: italic;
-  color: var(--text);
-}
-.prose h1,
-.prose h2,
-.prose h3,
-.prose h4,
-.prose h5,
-.prose h6 {
-  font-family: var(--font-serif-display), Georgia, serif;
-  color: var(--text);
+  line-height: 1.15;
   text-wrap: balance;
-  letter-spacing: 0.01em;
 }
-.prose h1 {
-  font-size: 1.875rem;
-  font-weight: 500;
-  line-height: 1.2;
-  margin: 2.25rem 0 0.5rem;
-}
-.prose h2 {
-  font-size: 1.5rem;
-  font-weight: 500;
-  line-height: 1.35;
-  margin: 2rem 0 1rem;
-  letter-spacing: 0.02em;
-}
-.prose h3 {
-  font-size: 1.25rem;
-  font-weight: 500;
-  line-height: 1.4;
-  margin: 1.75rem 0 0.75rem;
-  letter-spacing: 0.02em;
-}
-.prose h4 {
-  font-size: 1.1rem;
-  font-weight: 500;
-  margin: 1.5rem 0 0.5rem;
-}
-.prose h5,
-.prose h6 {
-  font-family: var(--font-serif), Georgia, serif;
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 1.5rem 0 0.5rem;
-  color: color-mix(in srgb, var(--text) 75%, transparent);
-}
-.prose .anchor {
-  position: absolute;
-  margin-left: -1em;
-  padding-right: 0.5em;
-  width: 1em;
-  cursor: pointer;
-  text-decoration: none;
-  opacity: 0;
-  transition: opacity 150ms ease-out;
-}
-.prose .anchor::after {
+
+.prose p, .prose ul, .prose ol, .prose pre, .prose blockquote { margin-block: 1.2em; }
+.prose img { margin-block: 2rem; }
+
+.prose .anchor:after {
+  @apply text-neutral-800 dark:text-neutral-700;
   content: '#';
-  color: var(--muted);
 }
-.prose h1:hover .anchor,
-.prose h2:hover .anchor,
-.prose h3:hover .anchor,
-.prose h4:hover .anchor,
-.prose h5:hover .anchor,
-.prose h6:hover .anchor {
-  opacity: 1;
+
+.prose *:hover > .anchor {
+  @apply visible;
 }
-.prose a:not(.anchor) {
-  color: var(--text);
-  text-decoration: underline;
-  text-decoration-color: color-mix(in srgb, var(--text) 25%, transparent);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 2px;
-  transition: text-decoration-color 150ms ease-out;
-}
-.prose a:not(.anchor):hover {
-  text-decoration-color: color-mix(in srgb, var(--text) 60%, transparent);
-}
-.prose code {
-  background-color: color-mix(in srgb, var(--sa-off-white) 35%, transparent);
-  padding: 0.15em 0.4em;
-  border-radius: 3px;
-  font-size: 0.875em;
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
-  color: var(--text);
-}
-.prose pre,
-.prose .code-block-pre {
-  background-color: var(--sh-background);
-  border: 1px solid color-mix(in srgb, var(--sa-black) 80%, transparent);
-  padding: 1rem 1.25rem;
-  font-size: 0.85rem;
-  line-height: 1.6;
-  overflow-x: auto;
-  border-radius: 4px;
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
-  scrollbar-width: thin;
-  scrollbar-color: color-mix(in srgb, var(--sa-white) 30%, transparent)
-    transparent;
-}
+
 .prose pre {
-  margin: 1.5rem -1rem;
-}
-@media (min-width: 640px) {
-  .prose pre {
-    margin-left: 0;
-    margin-right: 0;
-  }
-}
-.prose .code-block {
-  margin: 1.75rem -1rem;
+  @apply overflow-x-auto border border-neutral-800 py-4 px-3 text-sm rounded-md;
   background-color: var(--sh-background);
-  border: 1px solid color-mix(in srgb, var(--sa-black) 80%, transparent);
-  border-radius: 4px;
-  overflow: hidden;
 }
-@media (min-width: 640px) {
-  .prose .code-block {
-    margin-left: 0;
-    margin-right: 0;
-  }
-}
-.prose .code-block .code-block-pre {
-  margin: 0;
-  border: none;
-  border-radius: 0;
-}
-.prose .code-block-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.5rem 0.875rem;
-  background-color: color-mix(in srgb, var(--sa-white) 6%, var(--sh-background));
-  border-bottom: 1px solid color-mix(in srgb, var(--sa-white) 12%, transparent);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
-  font-size: 0.75rem;
-  color: color-mix(in srgb, var(--sa-white) 75%, transparent);
-}
-.prose .code-block-filename {
-  letter-spacing: 0.02em;
-}
-.prose .code-block-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.prose .code-block-header a.code-block-action,
-.prose .code-block-header .code-block-copy {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.2rem 0.5rem;
-  background: transparent;
-  border: 1px solid color-mix(in srgb, var(--sa-white) 18%, transparent);
-  border-radius: 3px;
-  font: inherit;
-  color: color-mix(in srgb, var(--sa-white) 70%, transparent);
-  text-decoration: none;
-  cursor: pointer;
-  transition: color 150ms, border-color 150ms, background 150ms;
-}
-.prose .code-block-header a.code-block-action:hover,
-.prose .code-block-header .code-block-copy:hover {
-  color: var(--sa-white);
-  border-color: color-mix(in srgb, var(--sa-white) 35%, transparent);
-  background: color-mix(in srgb, var(--sa-white) 5%, transparent);
-  text-decoration: none;
-}
-.prose .callout {
-  margin: 1.5rem 0;
-  padding: 0.875rem 1rem;
-  border-left: 3px solid var(--callout-accent, var(--text));
-  background-color: color-mix(
-    in srgb,
-    var(--callout-accent, var(--text)) 6%,
-    transparent
-  );
-  border-radius: 0 3px 3px 0;
-}
-.prose .callout-note {
-  --callout-accent: var(--blue);
-}
-.prose .callout-tip {
-  --callout-accent: var(--yellow);
-}
-.prose .callout-warning {
-  --callout-accent: var(--red);
-}
-.prose .callout-header {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  margin-bottom: 0.4rem;
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
-  font-size: 0.75rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--callout-accent);
-}
-.prose .callout-icon {
-  display: inline-flex;
-  align-items: center;
-}
-.prose .callout-body > :first-child {
-  margin-top: 0;
-}
-.prose .callout-body > :last-child {
-  margin-bottom: 0;
-}
-.prose .callout-body p {
-  margin: 0.4em 0;
-  font-size: 0.95em;
-}
-.prose .step {
-  margin: 2.5rem 0;
-}
-.prose .step-header {
-  display: flex;
-  align-items: baseline;
-  gap: 0.875rem;
-  margin-bottom: 0.5rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid color-mix(in srgb, var(--text) 15%, transparent);
-}
-.prose .step-num {
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  color: color-mix(in srgb, var(--text) 50%, transparent);
-  white-space: nowrap;
-}
-.prose .step-of {
-  opacity: 0.7;
-}
-.prose .step-title {
-  font-family: var(--font-serif), Georgia, serif;
-  font-size: 1.5rem;
-  font-weight: 500;
-  color: var(--text);
-  margin: 0;
-  letter-spacing: 0.02em;
-  line-height: 1.3;
-}
-.prose .step-body > :first-child {
-  margin-top: 0.75rem;
-}
+
 .dark .prose pre {
-  border-color: var(--sa-white);
+  @apply border-neutral-400;
 }
+
+.prose code {
+  @apply px-1 py-0.5;
+}
+
 .prose pre code {
-  background: none;
-  border: none;
-  padding: 0;
-  border-radius: 0;
-  font-size: inherit;
-  color: var(--sa-white);
+  @apply p-0;
+  border: initial;
+  line-height: 1.5;
 }
-.prose pre code span {
-  font-weight: 500;
+
+.prose code span {
+  @apply font-medium;
 }
-.prose blockquote {
-  border-left: 3px solid var(--text);
-  padding-left: 1rem;
-  margin: 1.25rem 0;
-  font-style: italic;
-  color: color-mix(in srgb, var(--text) 85%, transparent);
+
+.prose img {
+  /* Don't apply styles to next/image */
+  @apply m-0;
 }
-.prose blockquote p {
-  margin: 0.5em 0;
+
+.prose p {
+  @apply my-4 text-neutral-800; 
 }
-.prose blockquote p:first-child {
-  margin-top: 0;
+
+.dark .prose p {
+  @apply text-neutral-200;
 }
-.prose blockquote p:last-child {
-  margin-bottom: 0;
+
+.prose h1 {
+  @apply text-4xl font-medium tracking-tight mt-6 mb-2;
 }
-.prose ul,
-.prose ol {
-  margin: 1rem 0;
-  padding-left: 1.5rem;
+
+.prose h2 {
+  @apply text-xl font-medium tracking-tight mt-6 mb-2;
 }
+
+.prose h3 {
+  @apply text-xl font-medium tracking-tight mt-6 mb-2;
+}
+
+.prose h4 {
+  @apply text-lg font-medium tracking-tight mt-6 mb-2;
+}
+
+.prose strong {
+  @apply font-medium;
+}
+
 .prose ul {
-  list-style: disc;
+  @apply list-disc pl-6;
 }
+
 .prose ol {
-  list-style: decimal;
+  @apply list-decimal pl-6;
 }
-.prose li {
-  margin-bottom: 0.5rem;
-  padding-left: 0.25em;
-}
-.prose li > p {
-  margin: 0.35em 0;
-}
-.prose li > ul,
-.prose li > ol {
-  margin: 0.4em 0;
-}
-/* Figures are panels: paper face, ink keyline, in BOTH themes. */
-.prose figure {
-  margin: 2.25rem 0;
-  border: 1px solid var(--ink);
-  background-color: var(--paper);
-  box-shadow: 0 6px 6px -6px rgba(21, 19, 13, 0.5);
-  overflow: hidden;
-}
-.prose figure img {
-  display: block;
-  width: 100%;
-  height: auto;
-  margin: 0;
-}
-.prose figure figcaption {
-  border-top: 1px solid var(--ink);
-  background-color: var(--paper);
-  color: var(--ink);
-  padding: 0.5rem 1rem;
-  text-align: center;
-  font-size: 0.85em;
-  line-height: 1.4;
-}
-.prose hr {
-  margin: 2rem 0;
-  border: 0;
-  border-top: 1px solid color-mix(in srgb, var(--text) 15%, transparent);
-}
-.prose table {
-  display: block;
-  max-width: fit-content;
-  overflow-x: auto;
-  white-space: nowrap;
-  margin: 1.5rem 0;
-  font-size: 0.95em;
-  border: 1px solid color-mix(in srgb, var(--text) 20%, transparent);
-}
-.prose th,
-.prose td {
-  padding: 0.5rem 0.875rem;
-  border-bottom: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
-  text-align: left;
-}
-.prose th {
-  font-weight: 700;
-  background-color: color-mix(in srgb, var(--text) 5%, transparent);
+
+.prose > :first-child {
+  /* Override removing top margin, causing layout shift */
+  margin-top: 1.25em !important;
+  margin-bottom: 1.25em !important;
 }
 
 pre::-webkit-scrollbar {
   display: none;
 }
+
 pre {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
+/* Remove Safari input shadow on mobile */
 input[type='text'],
 input[type='email'] {
   -webkit-appearance: none;
@@ -1904,220 +397,293 @@ table {
   white-space: nowrap;
 }
 
-/* --- Comic-panel legacy (kept so /about, /projects don't break) --- */
+.title {
+  text-wrap: balance;
+  color: var(--accent);
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}
+
+/* --- Halftone Effect --- */
+html::before {
+  content: '';
+  position: fixed; /* Cover the viewport */
+  inset: 0;
+  /* Use two offset radial gradients for a staggered effect */
+  background-image: 
+    radial-gradient(circle, var(--dot-color) 1.5px, transparent 1.5px), /* Increased dot opacity slightly */
+    radial-gradient(circle, var(--dot-color) 1.5px, transparent 1.5px);
+  background-size: var(--dot-spacing) var(--dot-spacing); /* Dot spacing */
+  background-position: 0 0, var(--dot-spacing) var(--dot-spacing); /* Offset the second layer */
+  opacity: var(--dot-opacity); /* Keep overall opacity < 50% */
+  z-index: -1; /* Position behind content */
+  pointer-events: none; /* Allow clicks to pass through */
+}
+
+.dark html::before {
+   /* Use two offset radial gradients for dark mode */
+   background-image: 
+    radial-gradient(circle, var(--sa-white) 1.5px, transparent 1.5px), /* Use --sa-white for dots */
+    radial-gradient(circle, var(--sa-white) 1.5px, transparent 1.5px); /* Use --sa-white for dots */
+}
+
+/* comic book effect */
 .comic {
-  display: grid;
-  gap: 12px;
+  /* Removed original grid styles */
+  display: grid; /* Or flex, depending on your outer layout */
+  gap: 22px;
   margin-top: 12px;
-  box-sizing: border-box;
+  padding: 16px 0 22px 16px;
+  box-sizing: border-box; /* Keep this - it's generally good practice */
+  /* Add margin to provide space for hover effects */
+  /* Ensure content doesn't get clipped on hover */
   overflow: visible;
+  /* The height will now be determined by the grid content */
 }
-/* Panels stay paper-faced with ink keylines in BOTH themes —
-   lit objects at night, per the visual-system spec. */
+
+
+/* Remove previous grid-specific panel rules */
+/* .panel-1 to .panel-5 definitions removed */
+
+/* --- NEW Comic Panel Styles --- */
 .panel {
-  background-color: var(--paper);
-  border: solid 1px var(--ink);
-  box-shadow: 0 6px 6px -6px rgba(21, 19, 13, 0.5);
-  min-height: 200px;
-  overflow: hidden;
-  position: relative;
-  background-size: cover;
-  background-position: center;
+  background-color: var(--background-color); /* Fallback color */
+  border: solid 2px var(--text);
+  box-shadow: none;
+  /* display:inline-block; Remove, let grid/flex control display */
+  /* flex:1 1; Remove, let grid/flex control sizing */
+  min-height: 200px; /* Set minimum height, allow stretching */
+  /* margin:1vmin; Remove, use grid gap */
+  overflow:hidden;
+  position:relative;
+  background-size: cover; /* Ensure background image covers */
+  background-position: center; /* Center background image */
+  transition: transform 160ms ease;
+  /* font-family: 'Comic Sans MS', cursive; Moved to .comic parent */
 }
+
+/* Ensure panel works in dark mode */
+.dark .panel {
+  border-color: var(--text);
+  box-shadow: none;
+}
+
 .panel .text {
-  background-color: var(--paper);
-  color: var(--ink);
-  border: solid 2px var(--ink);
-  margin: 0;
-  padding: 3px 16px 6px;
+  background-color: var(--white);
+  color: var(--black);
+  border:solid 2px var(--black);
+  margin:0;
+  padding:3px 16px 6px;
   position: absolute;
   z-index: 1;
+  /* font-weight: 600; */
   font-size: clamp(0.75rem, 2vw, 1rem);
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -.01em;
 }
+
+.about-copy {
+  height: 100%;
+  display: grid;
+  align-content: center;
+  gap: 16px;
+  padding: clamp(22px, 4vw, 42px);
+  font-size: clamp(1rem, 1.7vw, 1.15rem);
+  line-height: 1.7;
+}
+
+.about-copy p { margin: 0; }
+
+.gym-badges {
+  box-shadow: 5px 5px 0 var(--sa-blue);
+}
+
+.dark .panel .text {
+  background-color: var(--white);
+  color: var(--black);
+  border-color: var(--black);
+}
+
+
 .panel .top-left {
-  left: -6px;
-  top: -2px;
+  left:-6px;
+  /* position:absolute; Already set on .text */
+  top:-2px;
 }
+
 .panel .bottom-right {
-  bottom: -2px;
-  right: -6px;
+  bottom:-2px;
+  /* position:absolute; Already set on .text */
+  right:-6px;
 }
+
 .panel .top-right {
-  right: -6px;
-  top: -2px;
+  right:-6px;
+  top:-2px;
 }
+
 .panel .bottom-left {
-  bottom: -2px;
-  left: -6px;
+  bottom:-2px;
+  /* position:absolute; Already set on .text */
+  left:-6px;
 }
+
 .panel .speech {
-  background-color: var(--paper);
-  border: solid 2px var(--ink);
-  border-radius: 4px;
-  display: inline-block;
-  margin: 0.5em;
-  padding: 0.5em 1em;
-  position: relative;
+  background-color: var(--white);
+  border:solid 2px var(--sa-black);
+  border-radius:4px;
+  display:inline-block;
+  margin:.5em;
+  padding:.5em 1em;
+  position:relative;
   z-index: 1;
-  color: var(--ink);
+  color: var(--black);
   font-family: inherit;
   font-size: clamp(0.75rem, 2vw, 1rem);
 }
+
+.dark .panel .speech {
+  background-color: var(--white);
+  /* color: var(--black); */ /* Removed previously for utility class compatibility */
+  border-color: var(--black);
+  /* NOTE: font-weight will be inherited from the light mode rule unless overridden here */
+}
+
 .panel .speech:before {
-  border: solid 12px transparent;
-  border-left: solid 12px var(--ink);
-  border-top: solid 12px var(--ink);
-  bottom: -24px;
-  content: '';
-  height: 0;
-  left: 24px;
-  position: absolute;
-  transform: skew(-15deg);
-  width: 0;
+  border:solid 12px transparent;
+  border-left:solid 12px var(--black);
+  border-top:solid 12px var(--black);
+  bottom:-24px; /* Adjust as needed */
+  content:"";
+  height:0;
+  left:24px; /* Adjust as needed */
+  position:absolute;
+  transform:skew(-15deg);
+  width:0;
 }
+
+.dark .panel .speech:before {
+  border-left-color: var(--white);
+  border-top-color: var(--white);
+}
+
 .panel .speech:after {
-  border: solid 10px transparent;
-  border-left: solid 10px var(--paper);
-  border-top: solid 10px var(--paper);
-  bottom: -19px;
-  content: '';
-  height: 0;
-  left: 27px;
-  position: absolute;
-  transform: skew(-15deg);
-  width: 0;
+  border:solid 10px transparent;
+  border-left:solid 10px var(--white); /* Use theme color */
+  border-top:solid 10px var(--white); /* Use theme color */
+  bottom:-19px; /* Adjust as needed */
+  content:"";
+  height:0;
+  left:27px; /* Adjust as needed */
+  position:absolute;
+  transform:skew(-15deg);
+  width:0;
 }
+
+.dark .panel .speech:after {
+  border-left-color: var(--white); /* Invert for dark mode */
+  border-top-color: var(--white); /* Invert for dark mode */
+}
+
+/* Remove unused panel definitions */
+/* .panel-5 to .panel-11 definitions removed */
+
+/* --- NEW Description Styles --- */
 .panel .description {
   position: absolute;
   left: 0;
   right: 0;
-  background-color: var(--paper);
-  color: var(--ink);
-  padding: 0.55rem 0.95rem 0.6rem;
+  background-color: rgba(255, 255, 255, 1.0);
+  color: var(--sa-black);
+  padding: clamp(4px, 1vw, 6px) clamp(8px, 1.5vw, 12px) clamp(8px, 1.5vw, 12px);
   margin: 0;
-  border-top: solid 2px var(--ink);
-  border-bottom: solid 2px var(--ink);
-  font-family: var(--font-serif-body), Georgia, serif;
-  font-weight: 400;
-  font-style: italic;
-  font-size: clamp(0.85rem, 1.7vw, 1rem);
-  letter-spacing: 0;
-  text-align: left;
-  line-height: 1.4;
+  border-top: solid 2px var(--sa-black);
+  border-bottom: solid 2px var(--sa-black);
+  font-family: inherit;
+  font-size: clamp(0.75rem, 2vw, 1rem);
+  text-align: justify;
   z-index: 1;
   box-sizing: border-box;
+  /* font-style: italic; */
+  /* font-weight: 600; */
+  line-height: normal;
 }
-@media (hover: hover) {
-  .panel .description {
-    opacity: 0;
-    transform: translateY(4px);
-    pointer-events: none;
-    transition: opacity 180ms ease-out, transform 180ms ease-out;
-  }
-  .panel:hover .description,
-  .panel:focus-within .description {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+
 .panel .description-top {
   top: 0;
-  border-bottom-width: 2px;
+  border-bottom-width: 2px; /* Only bottom border when at top */
   border-top-width: 0;
 }
+
 .panel .description-bottom {
   bottom: 0;
-  border-top-width: 2px;
+  border-top-width: 2px; /* Only top border when at bottom */
   border-bottom-width: 0;
 }
 
-.affiliations-strip {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  padding: 0.45rem 0.85rem;
-  background: var(--paper);
-  border-top: 2px solid var(--ink);
-  font-family: var(--font-geist-sans), Helvetica, sans-serif;
-  color: var(--ink);
-}
-.affiliations-label {
-  font-weight: 800;
-  font-style: italic;
-  font-size: 1rem;
-  letter-spacing: 0.01em;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-.affiliations-logos {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.affiliations-logos::-webkit-scrollbar {
-  display: none;
-}
-.affiliations-logo {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  background: var(--paper);
-  border: 2px solid var(--ink);
-  border-radius: 999px;
-  flex-shrink: 0;
-  transition: transform 150ms ease-out, border-color 150ms ease-out;
-}
-.affiliations-logo:hover,
-.affiliations-logo:focus-visible {
-  transform: translateY(-2px);
-  border-color: var(--accent);
-  outline: none;
-}
-.affiliations-logo img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  padding: 3px;
-  border-radius: 999px;
-}
-.affiliations-logo[data-affiliation='NSF'] img {
-  padding: 0;
-  transform: scale(1.05);
-}
-@media (min-width: 768px) {
-  .affiliations-label {
-    font-size: 1.1rem;
-  }
-  .affiliations-logo {
-    width: 40px;
-    height: 40px;
-  }
-}
+/* --- End NEW Description Styles --- */
 
+/* --- NEW Hover effect for linked panels --- */
 .panel-link-hover {
   position: relative;
   overflow: hidden;
   transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
+              box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 .panel-link-hover:hover {
-  z-index: 10;
-  transform: translate(-3px, -3px);
-  box-shadow: 6px 6px 0 var(--ink) !important;
+  border-color: var(--text);
+  box-shadow: none;
 }
+
+/* Subtle shine effect */
+.panel-link-hover:hover::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, color-mix(in srgb, var(--sa-white) 15%, transparent), transparent);
+  animation: shine 1.5s ease-in-out;
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) translateY(100%);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.6;
+  }
+  70% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateX(100%) translateY(-100%);
+    opacity: 0;
+  }
+}
+
+.hover\:shadow-glow:hover {
+  box-shadow: 0 0 8px 2px var(--accent, 0.1);
+}
+
 .panel-button {
-  border: 4px solid transparent;
+  @apply border-4 border-transparent;
 }
+
 .panel-button:hover {
   border-color: var(--accent);
 }
@@ -2126,15 +692,86 @@ table {
   .comic {
     grid-template-rows: minmax(250px, 1fr) minmax(250px, 1fr) auto auto;
   }
+  
   .panel {
     min-height: 250px;
   }
 }
+
 @media screen and (min-height: 1200px) {
   .comic {
     grid-template-rows: minmax(300px, 1fr) minmax(300px, 1fr) auto auto;
   }
+  
   .panel {
     min-height: 300px;
   }
+}
+
+@media (max-width: 767px) {
+  .site-shell {
+    width: 100%;
+    display: block;
+    padding: 0;
+  }
+
+  .site-content { padding: 0 4vw 18px; }
+  .site-footer { width: auto; padding: 18px 4vw 28px; }
+  .comic { gap: 16px; padding-left: 10px; }
+  .comic-cell { --comic-depth: 6px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .comic-cell, .comic-cell > .panel, .mobile-drawer { transition: none; }
+}
+
+@property --comic-depth {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 8px;
+}
+
+.comic-cell {
+  --comic-depth: 8px;
+  isolation: isolate;
+  transition: --comic-depth 160ms ease;
+}
+
+.comic-cell::before,
+.comic-cell::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.comic-cell::before {
+  top: calc(var(--comic-depth) * -1);
+  left: calc(100% - var(--comic-depth));
+  width: var(--comic-depth);
+  height: 100%;
+  background: var(--accent);
+  border: 2px solid var(--text);
+  transform: skewY(45deg);
+  transform-origin: 0 0;
+}
+
+.comic-cell::after {
+  top: calc(100% - var(--comic-depth));
+  left: calc(var(--comic-depth) * -1);
+  width: 100%;
+  height: var(--comic-depth);
+  background: var(--sa-blue);
+  border: 2px solid var(--text);
+  transform: skewX(45deg);
+  transform-origin: 0 0;
+}
+
+.comic-cell > .panel {
+  transform: translate(calc(var(--comic-depth) * -1), calc(var(--comic-depth) * -1));
+}
+
+@media (hover: hover) {
+  .comic-cell:has(.panel-link-hover):hover { --comic-depth: 15px; }
 }

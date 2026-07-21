@@ -1,186 +1,64 @@
-import React, { Fragment } from 'react'
+import ComicPanel from '@/components/ComicPanel'
 
-interface Publication {
-  title: string
-  authors: string[]
-  venue: string
-  year: number
-  href: string
-}
-
-const publications: Publication[] = [
+const Publications = [
   {
-    title:
-      'A Compensated Open-Loop Impedance Controller Evaluated on the Second-Generation Open-Source Leg Prosthesis',
-    authors: [
-      'T Kevin Best',
-      'Gray C Thomas',
-      'Senthur R Ayyappan',
-      'Robert D Gregg',
-      'Elliott J Rouse',
-    ],
-    venue: 'IEEE/ASME Transactions on Mechatronics',
-    year: 2025,
+    title: 'IEEE/ASME Transactions on Mechatronics, 2025',
+    description: 'A Compensated Open-Loop Impedance Controller Evaluated on the Second-Generation Open-Source Leg Prosthesis, T Kevin Best, Gray C Thomas, Senthur R Ayyappan, Robert D Gregg, Elliott J Rouse',
     href: 'https://ieeexplore.ieee.org/abstract/document/10807510',
+    imageSrc: '/publications/osl.jpg',
+    imagePosition: 'center center'
   },
   {
-    title:
-      'Quantitative Estimation of Dynamic Modulation in Impedance Controlled Remote Environment Sensing',
-    authors: [
-      'Srikar A',
-      'Vijay Kumar P',
-      'Senthur Raj',
-      'Asokan T',
-    ],
-    venue: 'IEEE Sensors Journal',
-    year: 2020,
+    title: 'IEEE Sensors Journal, 2020',
+    description: 'Quantitative Estimation of Dynamic Modulation in Impedance Controlled Remote Environment Sensing, Srikar A, Vijay Kumar P, Senthur Raj, and Asokan T.',
     href: 'https://ieeexplore.ieee.org/document/9279234',
-  },
+    imageSrc: '/about/iitm.jpg',
+    imagePosition: 'center center'
+  },    
   {
-    title:
-      'Ibex: A reconfigurable ground vehicle with adaptive terrain navigation capability',
-    authors: [
-      'Senthur Raj',
-      'Manu Aatitya R P',
-      'Jack Samuel S',
-      'J Veejay Karthik',
-      'Ezhilarasi D',
-    ],
-    venue:
-      'IEEE International Conference on Robotics and Automation (ICRA), Paris',
-    year: 2020,
+    title: 'IEEE International Conference on Robotics and Automation (ICRA), Paris, 2020',
+    description: 'Ibex: A reconfigurable ground vehicle with adaptive terrain navigation capability, Senthur Raj, Manu Aatitya R P, Jack Samuel S, J Veejay Karthik and Ezhilarasi D',
     href: 'https://ieeexplore.ieee.org/document/9196571',
+    imageSrc: '/publications/ibex.jpg',
+    imagePosition: 'center center'
   },
   {
-    title:
-      'Parameter Determination Technique for Impedance Control of Interactive Robots Using Transformation Matrices',
-    authors: [
-      'Srikar A',
-      'Senthur Raj',
-      'Vijay Kumar P',
-      'Asokan T',
-    ],
-    venue:
-      'IFAC Conference on Advances in Control and Optimization of Dynamical Systems (ACODS), Chennai',
-    year: 2020,
+    title: 'IFAC Conference on Advances in Control and Optimization of Dynamical Systems (ACODS), Chennai, 2020',
+    description: 'Parameter Determination Technique for Impedance Control of Interactive Robots Using Transformation Matrices, Srikar A., Senthur Raj, Vijay Kumar P., Asokan T.',
     href: 'https://www.sciencedirect.com/science/article/pii/S2405896320300525',
+    imageSrc: '/publications/iitm.jpg',
+    imagePosition: 'center center'
   },
   {
-    title: 'Dynamic Modulation of Human Interactive Robots using Impedance Control',
-    authors: [
-      'Srikar A',
-      'Senthur Raj',
-      'Vijay Kumar P',
-      'Asokan T',
-    ],
-    venue:
-      'International Conference on Advances in Robotics (AIR), Chennai',
-    year: 2019,
+    title: 'International Conference on Advances in Robotics (AIR), Chennai, 2019',
+    description: 'Dynamic Modulation of Human Interactive Robots using Impedance Control, Srikar A., Senthur Raj, Vijay Kumar P., Asokan T',
     href: 'https://dl.acm.org/doi/10.1145/3352593.3352597',
-  },
+    imageSrc: '/publications/air.jpg',
+    imagePosition: '0% 10%'
+  }
 ]
 
 export const metadata = {
-  title: 'Publications',
-  description: 'Peer-reviewed papers and conference proceedings.',
-}
-
-function isAuthor(name: string) {
-  return /senthur/i.test(name)
-}
-
-function groupByYear(pubs: Publication[]) {
-  const groups = new Map<number, Publication[]>()
-  for (const p of pubs) {
-    if (!groups.has(p.year)) groups.set(p.year, [])
-    groups.get(p.year)!.push(p)
+    title: 'Publications',
+    description: 'Read my publications',
   }
-  return Array.from(groups.entries()).sort(([a], [b]) => b - a)
-}
-
-function PublicationEntry({ pub }: { pub: Publication }) {
-  return (
-    <a
-      href={pub.href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="block group no-underline py-5 border-b border-current/15"
-    >
-      <div className="flex items-start justify-between gap-6">
-        <div className="min-w-0 flex-1">
-          <h3
-            className="text-base md:text-lg font-medium leading-snug text-[var(--text)] group-hover:text-[var(--accent)] transition-colors"
-            style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}
-          >
-            {pub.title}
-          </h3>
-          <p
-            className="mt-1.5 text-sm leading-relaxed text-[color:color-mix(in_srgb,var(--text)_70%,transparent)]"
-            style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}
-          >
-            {pub.authors.map((a, i) => (
-              <Fragment key={`${a}-${i}`}>
-                {isAuthor(a) ? (
-                  <span className="font-semibold text-[var(--text)]">{a}</span>
-                ) : (
-                  a
-                )}
-                {i < pub.authors.length - 1 ? ', ' : ''}
-              </Fragment>
-            ))}
-          </p>
-          <p className="mt-2 meta-line">
-            {pub.venue}
-          </p>
-        </div>
-        <span
-          aria-hidden
-          className="flex-none mt-1 text-[var(--accent)] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M7 17 17 7" />
-            <path d="M7 7h10v10" />
-          </svg>
-        </span>
-      </div>
-    </a>
-  )
-}
-
-export default function Page() {
-  const grouped = groupByYear(publications)
-
-  return (
-    <section className="max-w-5xl py-6 md:py-10">
-      <header className="mb-12">
-        <h1
-          className="type-x font-medium tracking-tight text-[var(--text)] leading-[0.95]"
-          style={{
-            fontFamily: 'var(--font-serif), Georgia, serif',
-            fontSize: 'clamp(3rem, 2rem + 4vw, 5rem)',
-          }}
-        >
-          Publications<span className="text-[var(--accent)]">.</span>
-        </h1>
-      </header>
-
-      <div className="space-y-10">
-        {grouped.map(([year, pubs]) => (
-          <section key={year}>
-            <div className="flex items-baseline gap-4 mb-2">
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-[var(--accent)]">
-                {year}
-              </h2>
-              <span className="flex-1 border-t border-current/20" />
-            </div>
-            <div>
-              {pubs.map((p, i) => (
-                <PublicationEntry key={`${p.year}-${i}`} pub={p} />
-              ))}
-            </div>
-          </section>
+  
+  export default function Page() {
+    return (
+      <div className="comic grid grid-cols-1 gap-2 h-full">
+        {Publications.map((publication, index) => (
+          <ComicPanel 
+            key={index}
+            className="h-full"
+            title={publication.title} 
+            titlePosition="top-right"
+            childrenClassName="p-6"
+            description={publication.description}
+            href={publication.href}
+            imageSrc={publication.imageSrc}
+            imagePosition={publication.imagePosition}
+          />
         ))}
       </div>
-    </section>
-  )
-}
+    )
+  }

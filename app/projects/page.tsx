@@ -1,375 +1,112 @@
-interface Repository {
-  name: string
-  description: string
-  href: string
-  stars: number
-  forks: number
-  updatedAt: string
-  language: string
-  owner: string
-  homepage?: string
-  topics?: string[]
-}
+import ComicPanel from '@/components/ComicPanel'
+import Image from 'next/image'
 
-const repositories: Repository[] = [
+const Projects = [
   {
-    name: 'onshape-robotics-toolkit',
-    description: "A python library to facilitate interaction with Onshape's REST API",
+    title: 'Open-Source Leg',
+    description: 'An end-to-end open-source powered robotic leg for prosthetics research',
+    href: 'https://opensourceleg.org/',
+    imageSrc: '/projects/osl-v2.jpg',
+    imagePosition: 'center center',
+    className: 'col-span-2 row-span-2'
+  },
+  {
+    title: 'onshape-robotics-toolkit',
+    description: 'A python library to facilitate interaction with Onshape\'s REST API and to export CAD assemblies to URDF/MJCFs',
     href: 'https://github.com/neurobionics/onshape-robotics-toolkit',
-    stars: 299,
-    forks: 33,
-    updatedAt: '2026-05-08T02:35:28Z',
-    language: 'Python',
-    owner: 'neurobionics',
-    homepage: 'https://neurobionics.github.io/onshape-robotics-toolkit/',
-    topics: ['cad', 'onshape', 'robotics', 'simulation'],
+    imageSrc: '/about/rai.jpg',
+    imagePosition: 'center center',
+    className: 'col-span-1 row-span-2'
   },
   {
-    name: 'anton',
-    description:
-      'anton is an open-source generative design framework built with Blender and Python',
+    title: 'anton',
+    description: 'An open-source generative design framework built with Python, Taichi, and Blender',
     href: 'https://github.com/senthurayyappan/anton',
-    stars: 196,
-    forks: 20,
-    updatedAt: '2026-05-06T09:02:32Z',
-    language: 'Python',
-    owner: 'senthurayyappan',
-    homepage: 'https://anton.readthedocs.io/en/latest/',
-    topics: [
-      'blender',
-      'blender-addon',
-      'blender-python',
-      'computational-design',
-      'generative-design',
-    ],
-  },
+    imageSrc: '/projects/anton.jpg',
+    imagePosition: 'center center',
+    className: 'col-span-1 row-span-1'
+  },     
   {
-    name: 'opensourceleg',
-    description:
-      'An open-source SDK for developing and testing algorithms on commonly used robotic hardware.',
-    href: 'https://github.com/neurobionics/opensourceleg',
-    stars: 105,
-    forks: 73,
-    updatedAt: '2026-05-08T03:08:25Z',
-    language: 'Python',
-    owner: 'neurobionics',
-    homepage: 'https://neurobionics.github.io/opensourceleg/',
-    topics: ['prosthetics', 'robotics', 'control-systems', 'python'],
-  },
-  {
-    name: 'robot-ci',
-    description:
-      'Effortless building, testing, and deploying customized robot operating systems at scale.',
+    title: 'robot-ci',
+    description: 'A CI/CD tool to build an up-to-date operating system/image for single board computers that can be used headless/GUI-less to control autonomous / remote robotic systems.',
     href: 'https://github.com/neurobionics/robot-ci',
-    stars: 93,
-    forks: 380,
-    updatedAt: '2026-04-27T06:30:28Z',
-    language: 'Shell',
-    owner: 'neurobionics',
-    topics: ['ci', 'cd', 'raspberry-pi', 'robotics'],
+    imageSrc: '/projects/robot-ci.jpg',
+    imagePosition: 'top center',
+    className: 'col-span-2 row-span-1'
   },
   {
-    name: 'blendmsh',
-    description:
-      'Blendmsh is a bridge between Blender 2.80+ and Gmsh, a fast and light 3D finite element mesh generator.',
-    href: 'https://github.com/senthurayyappan/blendmsh',
-    stars: 42,
-    forks: 6,
-    updatedAt: '2025-12-20T03:15:40Z',
-    language: 'Python',
-    owner: 'senthurayyappan',
-    topics: ['blender', 'gmsh', 'finite-elements'],
-  },
+    title: 'ROB311',
+    description: 'A robot with 3 wheels that can balance on top of a basketball for the inaugural Robotics Undergraduate Curriculum at Michigan Robotics.',
+    href: 'https://github.com/michiganrobotics/rob311',
+    imageSrc: '/projects/ballbot-main.jpg',
+    imagePosition: 'center center',
+    className: 'col-span-2 row-span-2'
+  },   
   {
-    name: 'import-G-code',
-    description:
-      'Imports G-code files into Blender 2.80+ as a collection of layers which can then be animated or exported.',
-    href: 'https://github.com/senthurayyappan/import-G-code',
-    stars: 42,
-    forks: 10,
-    updatedAt: '2026-05-08T10:28:38Z',
-    language: 'G-code',
-    owner: 'senthurayyappan',
-    topics: ['blender', 'gcode', 'fabrication'],
-  },
-  {
-    name: 'TMotorCANControl',
-    description: 'A python API to control AK-series TMotors over the CAN bus.',
-    href: 'https://github.com/neurobionics/TMotorCANControl',
-    stars: 50,
-    forks: 33,
-    updatedAt: '2026-05-01T07:55:30Z',
-    language: 'Python',
-    owner: 'neurobionics',
-    topics: ['motors', 'can-bus', 'robotics'],
-  },
-  {
-    name: 'Arboc',
-    description: 'An underwater hyper-redundant snake robot.',
+    title: 'arboc',
+    description: 'A garden variety hyper-redundant underwater snake robot',
     href: 'https://github.com/senthurayyappan/Arboc',
-    stars: 24,
-    forks: 12,
-    updatedAt: '2025-10-22T15:26:58Z',
-    language: 'C++',
-    owner: 'senthurayyappan',
-    topics: ['robotics', 'underwater', 'snake-robot'],
+    imageSrc: '/projects/arboc.jpg',
+    imagePosition: 'center center',
+    className: 'col-span-1 row-span-1'
   },
   {
-    name: 'pyopensim',
-    description:
-      'Portable python bindings for OpenSim with comprehensive type hints.',
-    href: 'https://github.com/neurobionics/pyopensim',
-    stars: 20,
-    forks: 5,
-    updatedAt: '2026-02-19T07:32:24Z',
-    language: 'Python',
-    owner: 'neurobionics',
-    homepage: 'https://pypi.org/project/pyopensim/',
-    topics: ['opensim', 'biomechanics', 'simulation', 'python'],
+    title: 'ibex',
+    description: 'Robot with a dynamic wheelbase and an adaptive thrust based friction optimization mechanism',
+    href: 'https://ieeexplore.ieee.org/document/9196571',
+    imageSrc: '/projects/ibex.jpg',
+    imagePosition: 'center center',
+    className: 'col-span-1 row-span-1'
   },
   {
-    name: 'oslsim',
-    description:
-      'A ROS package that provides the necessary interfaces to simulate the Open-source leg (OSL) proposed by the Neurobionics Lab at UMich',
+    title: 'oslsim',
+    description: 'A ROS package that provides the necessary interfaces to simulate the Open-source leg (OSL) in Gazebo',
     href: 'https://github.com/senthurayyappan/oslsim',
-    stars: 19,
-    forks: 6,
-    updatedAt: '2026-04-26T13:20:43Z',
-    language: 'Python',
-    owner: 'senthurayyappan',
-    topics: ['prosthetics', 'robotics', 'ros', 'gazebo'],
+    imageSrc: '/projects/oslsim.jpg',
+    imagePosition: 'center center',
+    className: 'col-span-1 row-span-1'
   },
   {
-    name: 'impedance-control-AIR19',
-    description:
-      'Dynamic modulation of human interactive robots using Impedance Control',
-    href: 'https://github.com/senthurayyappan/impedance-control-AIR19',
-    stars: 18,
-    forks: 1,
-    updatedAt: '2025-11-16T07:18:24Z',
-    language: 'MATLAB',
-    owner: 'senthurayyappan',
-    topics: ['impedance-control', 'robotics'],
+    title: 'import-G-code',
+    description: 'Imports G-code files into Blender 2.80+ as a collection of layers which can then be animated or exported',
+    href: 'https://github.com/senthurayyappan/import-G-code',
+    imageSrc: '/projects/gcode.jpg',
+    imagePosition: 'center center',
+    className: 'col-span-1 row-span-1'
   },
-  {
-    name: 'spring-design-tool',
-    description:
-      'a software tool that facilitates the design of lightweight torsion springs',
-    href: 'https://github.com/neurobionics/spring-design-tool',
-    stars: 17,
-    forks: 4,
-    updatedAt: '2026-01-16T01:01:38Z',
-    language: 'MATLAB',
-    owner: 'neurobionics',
-    topics: ['mechanical-design', 'springs', 'tooling'],
-  },
-  {
-    name: 'rob311',
-    description: 'ROB311 Codebase',
-    href: 'https://github.com/neurobionics/rob311',
-    stars: 3,
-    forks: 48,
-    updatedAt: '2026-01-03T01:54:13Z',
-    language: 'C',
-    owner: 'neurobionics',
-    topics: ['teaching', 'robotics', 'ballbot'],
-  },
-  {
-    name: 'Roguelike_platformer',
-    description:
-      'A 2D platformer developed in Unity game engine with pathfinding AI along with mobile onscreen controls and few sprite resources.',
-    href: 'https://github.com/senthurayyappan/Roguelike_platformer',
-    stars: 13,
-    forks: 1,
-    updatedAt: '2025-12-09T11:26:43Z',
-    language: 'C#',
-    owner: 'senthurayyappan',
-    topics: ['unity', 'game-dev'],
-  },
-  {
-    name: 'uw_dynamics',
-    description: 'A gazebo package to aid simulation of underwater biomimetic robots.',
-    href: 'https://github.com/senthurayyappan/uw_dynamics',
-    stars: 7,
-    forks: 1,
-    updatedAt: '2025-08-04T13:25:58Z',
-    language: 'C++',
-    owner: 'senthurayyappan',
-    topics: ['gazebo', 'robotics', 'underwater-robotics'],
-  },
-  {
-    name: 'arboc_workspace',
-    description:
-      'A ROS workspace with packages required for simulated control of a hyper redundant snake robot [Arboc].',
-    href: 'https://github.com/senthurayyappan/arboc_workspace',
-    stars: 4,
-    forks: 1,
-    updatedAt: '2022-06-19T20:54:35Z',
-    language: 'Makefile',
-    owner: 'senthurayyappan',
-    topics: ['ros', 'snake-robot'],
-  },
-  {
-    name: 'rel_imu_plugin',
-    description:
-      'A sensor plugin for gazebo to compute the orientation, relative angular velocity and relative angular acceleration of a link with respect to its parent frame.',
-    href: 'https://github.com/senthurayyappan/rel_imu_plugin',
-    stars: 4,
-    forks: 1,
-    updatedAt: '2022-01-22T11:21:12Z',
-    language: 'C++',
-    owner: 'senthurayyappan',
-    topics: ['gazebo', 'sensor-plugin'],
-  },
-  {
-    name: 'spec-shield',
-    description:
-      'spec-shield is a curvature adjustable face shield that tackles undesirable reflections and can be mounted on spectacles.',
-    href: 'https://github.com/senthurayyappan/spec-shield',
-    stars: 4,
-    forks: 0,
-    updatedAt: '2020-08-25T04:59:40Z',
-    language: 'G-code',
-    owner: 'senthurayyappan',
-    topics: ['covid-19', 'fabrication', 'product-design'],
-  },
-  {
-    name: 'residual-limb-scanner',
-    description: 'A WPF application for scanning the residual limb of an amputee.',
-    href: 'https://github.com/senthurayyappan/residual-limb-scanner',
-    stars: 2,
-    forks: 1,
-    updatedAt: '2025-03-15T01:19:13Z',
-    language: '',
-    owner: 'senthurayyappan',
-    topics: ['prosthetics', '3d-scanning', 'kinect'],
-  },
+
 ]
-
 export const metadata = {
-  title: 'Projects',
-  description: 'Top public GitHub repositories by Senthur Ayyappan.',
-}
+    title: 'Projects',
+    description: 'Look at my projects',
+  }
 
-function formatDate(date: string) {
-  return new Intl.DateTimeFormat('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  }).format(new Date(date))
-}
-
-function StarIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M12 2.5l2.9 5.9 6.6 1-4.75 4.6 1.1 6.5L12 17.4l-5.85 3.1 1.1-6.5L2.5 9.4l6.6-1z" />
-    </svg>
-  )
-}
-
-function ForkIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <circle cx="6" cy="5" r="2.5" />
-      <circle cx="18" cy="5" r="2.5" />
-      <circle cx="12" cy="19" r="2.5" />
-      <path d="M6 7.5v1a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3v-1" />
-      <path d="M12 11.5v5" />
-    </svg>
-  )
-}
-
-function RepoEntry({ repo }: { repo: Repository }) {
-  const tags = [
-    ...(repo.language ? [repo.language] : []),
-    ...(repo.topics || []).filter(
-      (t) => t.toLowerCase() !== repo.language?.toLowerCase()
-    ),
-  ].slice(0, 5)
-
-  return (
-    <a
-      href={repo.href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="block group no-underline py-5 border-b border-current/15"
-    >
-      <div className="flex items-baseline justify-between gap-6">
-        <h3
-          className="min-w-0 text-base md:text-lg font-medium leading-snug text-[var(--text)] group-hover:text-[var(--accent)] transition-colors"
-          style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}
-        >
-          {repo.name}
-        </h3>
-        <span className="flex-none flex items-center gap-3">
-          <time className="meta-line" dateTime={repo.updatedAt}>
-            {formatDate(repo.updatedAt)}
-          </time>
-          <span
-            aria-hidden
-            className="text-[var(--accent)] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M7 17 17 7" />
-              <path d="M7 7h10v10" />
-            </svg>
-          </span>
-        </span>
-      </div>
-      {repo.description && (
-        <p
-          className="mt-1.5 text-sm leading-relaxed text-[color:color-mix(in_srgb,var(--text)_70%,transparent)]"
-          style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}
-        >
-          {repo.description}
-        </p>
-      )}
-      <div className="mt-3 flex items-center justify-between gap-6">
-        <span className="flex flex-wrap gap-2">
-          {tags.map((tag) => (
-            <span
-              key={tag}
-              className="meta-line px-2 py-[2px] border border-current/25"
-            >
-              {tag}
-            </span>
+  export default function Page() {
+    return (       
+        <div className="comic grid grid-cols-2 md:grid-cols-3 gap-2 grid-rows-[minmax(200px,1fr)_minmax(200px,1fr)_auto_auto]">
+          {Projects.map((project, index) => (
+            <ComicPanel 
+              key={index}
+              title={project.title}
+              titlePosition='top-right'
+              description={project.description}
+              href={project.href}
+              imageSrc={project.imageSrc}
+              imagePosition={project.imagePosition}
+              className={project.className}
+            />
           ))}
-        </span>
-        <span className="flex-none flex items-center gap-4 meta-line">
-          <span className="inline-flex items-center gap-1.5">
-            <StarIcon />
-            {repo.stars}
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <ForkIcon />
-            {repo.forks}
-          </span>
-        </span>
-      </div>
-    </a>
-  )
-}
-
-export default function Page() {
-  return (
-    <section className="mx-auto max-w-5xl px-4 sm:px-6 py-6 md:py-10">
-      <header className="mb-12">
-        <h1
-          className="type-x font-medium tracking-tight text-[var(--text)] leading-[0.95]"
-          style={{
-            fontFamily: 'var(--font-serif), Georgia, serif',
-            fontSize: 'clamp(3rem, 2rem + 4vw, 5rem)',
-          }}
-        >
-          Projects<span className="text-[var(--accent)]">.</span>
-        </h1>
-      </header>
-
-      <div>
-        {repositories.map((repo) => (
-          <RepoEntry key={repo.name} repo={repo} />
-        ))}
-      </div>
-    </section>
-  )
-}
+          <ComicPanel 
+            className="col-span-1" 
+            childrenClassName="p-6 md:p-12"
+            imageSrc='/backgrounds/radial-lines.jpg'
+            href='https://github.com/senthurayyappan'
+          >
+            <div className='flex flex-col gap-4 items-center'>
+              <span className='text-2xl bg-white p-2 ps-4 pb-4 border-2 font-bold text-[var(--accent)]'>For more projects, check out my GitHub account :)</span>
+              <Image src='/icons/github.png' alt='GitHub' width={100} height={100} />
+            </div>
+          </ComicPanel>          
+        </div>
+    )
+  }
