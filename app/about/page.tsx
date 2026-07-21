@@ -129,9 +129,9 @@ export default function Page() {
         imageSrc='/backgrounds/radial-lines.jpg'
       >
         <div className='flex flex-col gap-2'>
-          <p className='bg-white p-1 border-2 border-black rounded-sm text-black'><span className="font-bold">Languages:</span> Python, C++, Rust (Novice), JS, TSX, Bash</p>
-          <p className='bg-white p-1 border-2 border-black rounded-sm text-black'><span className="font-bold">Simulation:</span> Gazebo, MuJoCo, V-REP (now CoppeliaSim)</p>
-          <p className='bg-white p-1 border-2 border-black rounded-sm text-black'><span className="font-bold">Design:</span> Onshape, Solidworks, Fusion360, Blender</p>
+          <p className='sketch-box bg-white p-2 text-black'><span className="font-bold">Languages:</span> Python, C++, Rust (Novice), JS, TSX, Bash</p>
+          <p className='sketch-box bg-white p-2 text-black'><span className="font-bold">Simulation:</span> Gazebo, MuJoCo, V-REP (now CoppeliaSim)</p>
+          <p className='sketch-box bg-white p-2 text-black'><span className="font-bold">Design:</span> Onshape, Solidworks, Fusion360, Blender</p>
         </div>
       </ComicPanel>
     </div>

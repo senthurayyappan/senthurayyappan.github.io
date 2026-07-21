@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { ThemeSwitch } from './theme-switch'
+import { SketchArrow } from './SketchArrow'
 import { useState } from 'react';
 import { usePathname } from 'next/navigation'
 
@@ -56,7 +57,7 @@ function NavList({ pathname, onClick }: { pathname: string; onClick?: () => void
           <li key={href}>
             <Link href={href} onClick={onClick} aria-current={active ? 'page' : undefined}>
               <span data-sketch-target>{label}</span>
-              <span className="sn-arrow" aria-hidden="true">{'->'}</span>
+              <SketchArrow className="sn-arrow" />
             </Link>
           </li>
         )

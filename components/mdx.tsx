@@ -61,7 +61,7 @@ function Pre({ children, ...props }) {
 function Blockquote({ children, ...props }) {
   return (
     <blockquote 
-      className="border-l-4 border-neutral-300 dark:border-neutral-600 pl-4 py-2 my-6 italic text-neutral-700 dark:text-neutral-300" 
+      className="sketch-rule-left pl-4 py-2 my-6 italic text-neutral-700 dark:text-neutral-300"
       {...props}
     >
       {children}
@@ -127,7 +127,7 @@ let components = {
   ol: (props) => <ol className="list-decimal pl-6 my-4 space-y-2" {...props} />,
   li: (props) => <li className="my-1" {...props} />,
   p: (props) => <p className="my-4 leading-7" {...props} />,
-  hr: () => <hr className="my-8 border-neutral-200 dark:border-neutral-700" />,
+  hr: () => <hr className="sketch-hr my-8" />,
 }
 
 export function CustomMDX(props) {

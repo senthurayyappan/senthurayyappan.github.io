@@ -103,7 +103,7 @@ export const metadata = {
             href='https://github.com/senthurayyappan'
           >
             <div className='flex flex-col gap-4 items-center'>
-              <span className='text-2xl bg-white p-2 ps-4 pb-4 border-2 font-bold text-[var(--accent)]'>For more projects, check out my GitHub account :)</span>
+              <span className='sketch-box text-2xl bg-white p-2 ps-4 pb-4 font-bold text-[var(--accent)]'>For more projects, check out my GitHub account :)</span>
               <Image src='/icons/github.png' alt='GitHub' width={100} height={100} />
             </div>
           </ComicPanel>          
