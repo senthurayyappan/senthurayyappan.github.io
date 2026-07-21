@@ -20,7 +20,6 @@
   --rule: color-mix(in srgb, var(--text) 22%, transparent);
   /* Hand-inked masks: deliberately imperfect double strokes. Keeping these as
      masks means the same linework follows the light and dark theme ink color. */
-  --sketch-frame: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='white' stroke-linecap='round' stroke-linejoin='round' vector-effect='non-scaling-stroke'%3E%3Cpath d='M.7 .9 C20 .35 39 1.05 58 .55 S85 1.1 99.2 .65 M99.15 .7 C99.65 24 99.05 43 99.45 62 S99.05 86 99.3 99.2 M99.2 99.15 C77 99.65 58 99.05 39 99.45 S13 99.05 .75 99.3 M.8 99.2 C.3 78 .95 59 .55 41 S1 14 .7 .9' stroke-width='.9'/%3E%3Cpath d='M1.05 .45 C25 1.1 43 .35 63 .95 S88 .35 98.95 1 M99.55 1 C98.9 22 99.65 40 99.05 59 S99.7 83 98.95 99 M98.95 99.55 C78 98.9 60 99.65 42 99.05 S15 99.7 1 98.95 M.45 98.95 C1.1 79 .35 61 .95 43 S.35 15 1.05 .45' stroke-width='.36' opacity='.5'/%3E%3C/g%3E%3C/svg%3E");
   --sketch-rule-h: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 5' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='white' stroke-linecap='round' vector-effect='non-scaling-stroke'%3E%3Cpath d='M0 2.7 C13 1.1 23 3.8 36 2.2 S61 3.4 74 2.1 S91 3.3 100 2.3' stroke-width='1.2'/%3E%3Cpath d='M0 3.4 C18 2.4 31 3.7 48 2.8 S77 3.8 100 2.9' stroke-width='.55' opacity='.55'/%3E%3C/g%3E%3C/svg%3E");
   --sketch-rule-v: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5 100' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='white' stroke-linecap='round' vector-effect='non-scaling-stroke'%3E%3Cpath d='M2.7 0 C1.1 13 3.8 23 2.2 36 S3.4 61 2.1 74 S3.3 91 2.3 100' stroke-width='1.2'/%3E%3Cpath d='M3.4 0 C2.4 18 3.7 31 2.8 48 S3.8 77 2.9 100' stroke-width='.55' opacity='.55'/%3E%3C/g%3E%3C/svg%3E");
 
@@ -389,8 +388,6 @@ body {
   inset: 0;
   background: currentColor;
   pointer-events: none;
-  -webkit-mask: var(--sketch-frame) center / 100% 100% no-repeat;
-  mask: var(--sketch-frame) center / 100% 100% no-repeat;
 }
 
 .sketch-box { position: relative; border: 0 !important; }
@@ -591,8 +588,27 @@ html::before {
   z-index: 5;
   background: currentColor;
   pointer-events: none;
-  -webkit-mask: var(--sketch-frame) center / 100% 100% no-repeat;
-  mask: var(--sketch-frame) center / 100% 100% no-repeat;
+}
+
+/* Build frames from four independently scaled rules. A single rectangular SVG
+   stretches its vertical strokes with the panel width, making landscape cards
+   look heavy and smudged along the sides. These edge-specific masks preserve a
+   consistent ink weight at every aspect ratio. */
+.prose pre::after,
+.sketch-box::after,
+.panel::after,
+.panel .text::after,
+.latest-post-card::after,
+.latest-post-date::before,
+.comic-menu-button::after {
+  -webkit-mask-image: var(--sketch-rule-h), var(--sketch-rule-h), var(--sketch-rule-v), var(--sketch-rule-v);
+  mask-image: var(--sketch-rule-h), var(--sketch-rule-h), var(--sketch-rule-v), var(--sketch-rule-v);
+  -webkit-mask-position: top center, bottom center, left center, right center;
+  mask-position: top center, bottom center, left center, right center;
+  -webkit-mask-size: 100% 5px, 100% 5px, 5px 100%, 5px 100%;
+  mask-size: 100% 5px, 100% 5px, 5px 100%, 5px 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
 }
 
 /* Ensure panel works in dark mode */
