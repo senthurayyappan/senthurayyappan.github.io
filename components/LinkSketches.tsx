@@ -5,7 +5,12 @@ import { useEffect } from 'react'
 
 export function LinkSketches() {
   useEffect(() => {
-    const active = new Map<HTMLAnchorElement, ReturnType<typeof annotate>>()
+    type ActiveSketch = {
+      annotation: ReturnType<typeof annotate>
+      frame: number
+    }
+
+    const active = new Map<HTMLAnchorElement, ActiveSketch>()
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     const getLink = (target: EventTarget | null) =>
@@ -30,18 +35,24 @@ export function LinkSketches() {
         iterations: 2,
         multiline: true,
         animate: !reducedMotion,
-        animationDuration: 360,
+        animationDuration: hasText ? 720 : 900,
       })
 
-      active.set(link, annotation)
-      annotation.show()
+      // Rough Notation creates the SVG when annotate() runs. Showing it on the
+      // following paint guarantees the browser presents the initial dashed
+      // stroke before transitioning it to the completed drawing.
+      const frame = window.requestAnimationFrame(() => {
+        if (active.get(link)?.annotation === annotation) annotation.show()
+      })
+      active.set(link, { annotation, frame })
     }
 
     const hide = (link: HTMLAnchorElement | null) => {
       if (!link) return
-      const annotation = active.get(link)
-      if (!annotation) return
-      annotation.remove()
+      const sketch = active.get(link)
+      if (!sketch) return
+      window.cancelAnimationFrame(sketch.frame)
+      sketch.annotation.remove()
       active.delete(link)
     }
 
@@ -70,7 +81,10 @@ export function LinkSketches() {
       document.removeEventListener('pointerout', onPointerOut)
       document.removeEventListener('focusin', onFocusIn)
       document.removeEventListener('focusout', onFocusOut)
-      active.forEach((annotation) => annotation.remove())
+      active.forEach(({ annotation, frame }) => {
+        window.cancelAnimationFrame(frame)
+        annotation.remove()
+      })
       active.clear()
     }
   }, [])

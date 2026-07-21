@@ -1,10 +1,11 @@
 'use client'
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { SketchAnnotation } from './SketchAnnotation';
 
 const RecentUpdates: React.FC = () => {
+  const [displayDate, setDisplayDate] = useState('');
   const latestPostTitle = "The Ballbot Always Wins";
   const latestPostSummary = "Origin story of the ROB311 robot that balances on top of a basketball";
   const latestPostSlug = "ballbot-always-wins";
@@ -16,6 +17,12 @@ const RecentUpdates: React.FC = () => {
   const languageUrl = "https://www.imdb.com/title/tt23649128/";
   const foodUrl = "https://www.kannammacooks.com/tamilnadu-thalappakatti-biriyani/";
   const songUrl = "https://youtu.be/E69KvVkemeM";
+
+  useEffect(() => {
+    setDisplayDate(new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/New_York',
+    }).format(new Date()));
+  }, []);
 
   return (
     <div className="h-full w-full p-3 sm:p-6 overflow-y-auto flex flex-col gap-4 sm:gap-6 justify-between">
@@ -93,7 +100,7 @@ const RecentUpdates: React.FC = () => {
 
       {/* Data Timestamp */}
       <div className="flex justify-end">
-        <span className="text-xs opacity-50 font-medium">{new Date().toLocaleDateString()}</span>
+        <span className="min-w-20 text-right text-xs opacity-50 font-medium">{displayDate}</span>
       </div>
     </div>
   );

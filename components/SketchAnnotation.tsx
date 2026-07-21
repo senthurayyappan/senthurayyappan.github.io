@@ -36,8 +36,11 @@ export function SketchAnnotation({
       animationDuration: 650,
     })
 
-    annotation.show()
-    return () => annotation.remove()
+    const frame = window.requestAnimationFrame(() => annotation.show())
+    return () => {
+      window.cancelAnimationFrame(frame)
+      annotation.remove()
+    }
   }, [color, padding, type])
 
   return (
