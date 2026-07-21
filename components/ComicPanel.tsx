@@ -58,35 +58,15 @@ const ComicPanel: React.FC<ComicPanelProps> = ({
         className={`panel ${href ? 'panel-link-hover' : ''} h-full w-full`}
       >
         {imageSrc && (
-          <>
-            <Image
-              src={imageSrc}
-              alt=""
-              fill
-              className="panel-art pointer-events-none"
-              style={{ objectPosition: imagePosition }}
-              priority={priority}
-              sizes="(max-width: 767px) 92vw, (max-width: 1200px) 50vw, 720px"
-            />
-            <Image
-              src={imageSrc}
-              alt=""
-              aria-hidden="true"
-              fill
-              className="panel-contour panel-contour-coarse pointer-events-none"
-              style={{ objectPosition: imagePosition }}
-              sizes="(max-width: 767px) 92vw, (max-width: 1200px) 50vw, 720px"
-            />
-            <Image
-              src={imageSrc}
-              alt=""
-              aria-hidden="true"
-              fill
-              className="panel-contour panel-contour-fine pointer-events-none"
-              style={{ objectPosition: imagePosition }}
-              sizes="(max-width: 767px) 92vw, (max-width: 1200px) 50vw, 720px"
-            />
-          </>
+          <Image
+            src={imageSrc}
+            alt=""
+            fill
+            className="panel-art pointer-events-none"
+            style={{ objectPosition: imagePosition }}
+            priority={priority}
+            sizes="(max-width: 767px) 92vw, (max-width: 1200px) 50vw, 720px"
+          />
         )}
 
         {/* Render title/caption - Add z-index to ensure they are above the link overlay */}
@@ -96,7 +76,7 @@ const ComicPanel: React.FC<ComicPanelProps> = ({
         {description && <div className={`${descriptionClass} relative z-10`}>{description}</div>}
 
         {/* Children Wrapper */}
-        <div className={`relative z-[2] ${childrenClassName} h-full overflow-auto`}>
+        <div className={`relative z-0 ${childrenClassName} h-full overflow-auto`}>
           {children}
         </div>
 
