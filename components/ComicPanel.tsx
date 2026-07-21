@@ -67,7 +67,7 @@ const ComicPanel: React.FC<ComicPanelProps> = ({
   return (
     // 1. Outermost div: Always present, receives grid layout classes.
     // Added relative positioning to act as a container for the absolute link.
-    <div className={`${className} relative`}>
+    <div className={`${className} comic-cell relative`}>
       {/* 2. Inner div: Handles visual styling (panel class, background) */}
       {/* Conditionally add the panel-link-hover class if href is present */}
       <div
@@ -114,4 +114,4 @@ const ComicPanel: React.FC<ComicPanelProps> = ({
   );
 };
 
-export default ComicPanel; 
+export default ComicPanel;

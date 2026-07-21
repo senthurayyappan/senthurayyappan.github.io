@@ -95,7 +95,7 @@ export default function Blog({ params }) {
       {/* Article Content */}
       <div className="prose prose-lg dark:prose-invert max-w-none">
         <div className="flex items-center justify-between gap-4 mb-8">
-          <span className="text-2xl md:text-4xl font-bold tracking-tight leading-tight m-0">
+          <span className="text-2xl md:text-4xl font-semibold tracking-tight leading-tight m-0">
             {post.metadata.title}
           </span>
         </div>

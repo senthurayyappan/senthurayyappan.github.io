@@ -9,12 +9,12 @@ const RecentUpdates: React.FC = () => {
   const latestPostSlug = "ballbot-always-wins";
 
   // Quick edit section - update these frequently
-  const currentLanguage = "Rust";
-  const currentFood = "Chicken 65 Biriyani";
-  const currentSong = "Cccoolie Powerhouse";
-  const languageUrl = "https://doc.rust-lang.org/book/";
-  const foodUrl = "https://www.banglarrannaghor.com/post/simple-chicken-65-biryani";
-  const songUrl = "https://music.youtube.com/watch?v=Rm_gznXaaKY&si=37x4ldJgZGv9hDqb";
+  const currentLanguage = "The Studio";
+  const currentFood = "Dindigul Biriyani";
+  const currentSong = "Osai Kekkudho";
+  const languageUrl = "https://www.imdb.com/title/tt23649128/";
+  const foodUrl = "https://www.kannammacooks.com/tamilnadu-thalappakatti-biriyani/";
+  const songUrl = "https://youtu.be/E69KvVkemeM";
 
   return (
     <div className="h-full w-full p-3 sm:p-6 overflow-y-auto flex flex-col gap-4 sm:gap-6 justify-between">
@@ -25,12 +25,12 @@ const RecentUpdates: React.FC = () => {
       >
 
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-4 gap-1 sm:gap-0">
-            <span className="text-xs font-bold uppercase tracking-wider muted">Latest Post</span>
+            <span className="text-xs font-medium tracking-tight muted">Latest post</span>
             <span className="text-xs font-medium muted">April 26, 2025</span>
           </div>
 
           <div className="space-y-3">
-            <h2 className="w-full text-2xl sm:text-4xl font-bold tracking-tight title">
+            <h2 className="w-full text-2xl sm:text-4xl font-medium tracking-tight title">
               {latestPostTitle}
             </h2>
 
@@ -43,9 +43,12 @@ const RecentUpdates: React.FC = () => {
       {/* Writing Section */}
       <div className="flex-1">
         <div className="">
-          <p className="w-full leading-relaxed text-base sm:text-lg text-justify font-medium">
-            Gearing up to start my PhD this Winter and navigating the transition from leading the development of the Open-Source Leg project full-time 
-            to focusing on my research interests in the realm of rehab robotics and computational design :)
+          <p className="w-full leading-relaxed text-base sm:text-lg font-normal">
+            Hello there! I&rsquo;m a PhD student in Robotics at the University of
+            Michigan, working with Prof. Elliott Rouse in the Neurobionics Lab.
+            My research focuses on robot codesign: how a robot&rsquo;s mechanical
+            design and control policy can co-evolve inside simulation instead
+            of being engineered one after the other.
           </p>
         </div>
       </div>
@@ -53,7 +56,7 @@ const RecentUpdates: React.FC = () => {
       {/* Typography Style Words */}
       <div className="flex items-center">
         <div className="flex flex-col items-start justify-center text-xl sm:text-3xl">
-          <span className="text-xs font-bold uppercase tracking-wider mb-2 sm:mb-4 opacity-50">Recommendations</span>
+          <span className="text-xs font-medium tracking-tight mb-2 sm:mb-4 opacity-60">Recommendations</span>
           <Link
             href={languageUrl}
             className="sa-link block"
@@ -61,7 +64,7 @@ const RecentUpdates: React.FC = () => {
             rel="noopener noreferrer"
           >
             <div className="text-left">
-              <span className="text-[var(--sa-blue)] uppercase tracking-wider leading-none font-extrabold">{currentLanguage}</span>
+              <span className="text-[var(--sa-blue)] tracking-tight leading-tight font-medium">{currentLanguage}</span>
             </div>
           </Link>
 
@@ -72,7 +75,7 @@ const RecentUpdates: React.FC = () => {
             rel="noopener noreferrer"
           >
             <div className="text-left">
-              <span className="text-[var(--sa-green)] uppercase tracking-wider leading-none font-extrabold">{currentFood}</span>
+              <span className="text-[var(--sa-green)] tracking-tight leading-tight font-medium">{currentFood}</span>
             </div>
           </Link>
 
@@ -83,7 +86,7 @@ const RecentUpdates: React.FC = () => {
             rel="noopener noreferrer"
           >
             <div className="text-left">
-              <span className="text-[var(--sa-red)] uppercase tracking-wider leading-none font-extrabold">{currentSong}</span>
+              <span className="text-[var(--sa-red)] tracking-tight leading-tight font-medium">{currentSong}</span>
             </div>
           </Link>
         </div>

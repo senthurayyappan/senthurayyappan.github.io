@@ -51,8 +51,7 @@ export default function Page() {
           titlePosition="bottom-right"
           childrenClassName="pt-12 px-8"
           imagePosition="0% 40%"
-          description='I am a Robotics Research Engineer at the University of Michigan, Department of Robotics, where I lead 
-            the Open-Source Leg project and build tools & libraries for the Neurobionics lab.'
+          description='Before starting my PhD, I led the Open-Source Leg hardware and software ecosystem—now used by more than 25 research groups worldwide.'
           priority={true}
         >
         </ComicPanel>

@@ -11,13 +11,13 @@ export default function Page() {
   return (
     <div className="comic grid grid-cols-2 md:grid-cols-3 gap-2 grid-rows-[minmax(200px,1fr)_minmax(200px,1fr)_auto_auto]">
       {/* Header Panel */}    
-      <ComicPanel description="Senthur Ayyappan, Research Engineer @ Neurobionics Lab, U-M" className='col-span-2 row-span-2' titlePosition='bottom-right' imageSrc='/about/sa-header.jpg'>
-        <div className='bg-white p-2 border-2 border-black rounded-sm text-black' style={{position: 'absolute', bottom: '12%', left: '5%', display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: '90%'}}>
-          <p className='font-bold pb-2'>Gym Badges</p>
+      <ComicPanel description="Senthur Ayyappan, PhD Student @ Neurobionics Lab, U-M" className='col-span-2 row-span-2' titlePosition='bottom-right' imageSrc='/about/sa-header.jpg'>
+        <div className='gym-badges bg-white p-2 border-2 border-black rounded-sm text-black' style={{position: 'absolute', bottom: '12%', left: '5%', display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: '90%'}}>
+          <p className='font-medium pb-2'>Gym Badges</p>
           
           <div className="grid grid-cols-6 grid-rows-1 gap-2 pb-1">
             <Link href="https://www.nitt.edu/" target="_blank" className="rounded-full panel-button">
-              <Image src="/nitt.png" alt="LinkedIn" width={48} height={48} className='p-1 w-10 h-10 sm:w-12 sm:h-12'/>
+              <Image src="/nitt.png" alt="NIT Trichy" width={48} height={48} className='p-1 w-10 h-10 sm:w-12 sm:h-12'/>
             </Link>
             <Link href="https://www.iitm.ac.in/" target="_blank" className="rounded-full panel-button">
               <Image src="/iitm.png" alt="IIT Madras" width={48} height={48} className='p-1 w-10 h-10 sm:w-12 sm:h-12'/>
@@ -38,7 +38,7 @@ export default function Page() {
         </div>
       </ComicPanel>
 
-      <ComicPanel 
+      <ComicPanel
         className="col-span-2 md:col-span-1 row-span-2 h-full" 
         title="Project Lead @ Open-Source Leg"
         imageSrc='/about/sa-main.jpg'
@@ -46,6 +46,26 @@ export default function Page() {
         href='https://www.opensourceleg.org/'
         description='An end-to-end open-source platform that makes prosthetics research more accessible.'
       >
+      </ComicPanel>
+
+      <ComicPanel className="col-span-2 md:col-span-3">
+        <div className="about-copy">
+          <p>
+            I&rsquo;m currently a PhD student in Robotics at the University of
+            Michigan, working with Professor Elliott Rouse in the Neurobionics
+            Lab. My research focuses on robot codesign: how a robot&rsquo;s
+            mechanical design and control policy can co-evolve inside simulation
+            instead of being engineered one after the other.
+          </p>
+          <p>
+            Before starting the PhD, I spent 2021 to 2025 leading the
+            Open-Source Leg ecosystem, developing its version 2.0 hardware and
+            the software stack used by more than 25 research groups worldwide.
+            My work has moved between hardware, simulation, and control—from
+            powered prostheses and exoskeletons to ballbots and parametric CAD
+            tools for robot simulation.
+          </p>
+        </div>
       </ComicPanel>
 
       <ComicPanel 
@@ -104,7 +124,7 @@ export default function Page() {
       
       <ComicPanel className="col-span-1" imageSrc="/projects/ballbot-main.jpg" title="Projects" titlePosition='bottom-right' href="/projects" newTab={false}/>
 
-      <ComicPanel className='row-span-1' imageSrc="sa-publications.jpg" href="/publications" newTab={false}>
+      <ComicPanel className='row-span-1' imageSrc="/sa-publications.jpg" href="/publications" newTab={false}>
           <p className="speech" style={{ position: 'absolute', top: '5%', right: '5%' }}>
             Publications
           </p>

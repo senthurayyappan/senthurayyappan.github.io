@@ -45,11 +45,11 @@ export const metadata = {
   
   export default function Page() {
     return (
-      <div className="comic grid grid-cols-2 gap-2 h-full">
+      <div className="comic grid grid-cols-1 gap-2 h-full">
         {Publications.map((publication, index) => (
           <ComicPanel 
             key={index}
-            className="col-span-1 h-full" 
+            className="h-full"
             title={publication.title} 
             titlePosition="top-right"
             childrenClassName="p-6"

@@ -16,10 +16,10 @@ export const metadata: Metadata = {
     default: 'Senthur Ayyappan',
     template: '%s | Senthur Ayyappan',
   },
-  description: 'Robotics Engineer: developing open-source tools that (mostly) work',
+  description: 'PhD student at the Neurobionics Lab, U-M Robotics, working on robot codesign across mechanics, simulation, and control.',
   openGraph: {
-    title: 'Senthur Ayyappan | Robotics Engineer',
-    description: 'Robotics Engineer: developing open-source tools that (mostly) work',
+    title: 'Senthur Ayyappan | PhD Student, Michigan Robotics',
+    description: 'PhD student at the Neurobionics Lab, U-M Robotics, working on robot codesign across mechanics, simulation, and control.',
     url: baseUrl,
     siteName: 'Senthur Ayyappan',
     locale: 'en_US',
@@ -58,22 +58,13 @@ export default function RootLayout({
       )}
       suppressHydrationWarning
     >
-      <body 
-        className="antialiased mx-auto flex flex-col min-h-full"
-        style={{ maxWidth: "min(90vw, 120rem)" }}
-      >
+      <body className="antialiased min-h-full">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <main className="w-full flex flex-col flex-grow md:px-4 lg:px-10 xl:px-20 2xl:px-32 min-h-[calc(100vh-2rem)]">
-            <div className="sticky top-0 z-50 bg-[var(--background)] pt-2 pb-2 border-b">
-              <Navbar />
-            </div>
-            <div className="flex-1 overflow-y-auto scrollbar-hide">
-                {children}
-            </div>
-            <div className="pb-4 pt-4 md:pb-6 md:pt-6">
-              <Footer />
-            </div>
+          <main className="site-shell">
+            <Navbar />
+            <div className="site-content">{children}</div>
           </main>
+          <div className="site-footer"><Footer /></div>
           <Analytics />
           <SpeedInsights />
           <PerformanceMonitor />
