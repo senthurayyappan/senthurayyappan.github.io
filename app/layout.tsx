@@ -10,6 +10,7 @@ import { baseUrl } from './sitemap'
 import { ThemeProvider } from 'next-themes'
 import PerformanceMonitor from '@/components/PerformanceMonitor'
 import { LinkSketches } from '@/components/LinkSketches'
+import { ImageContourFilters } from '@/components/ImageContourFilters'
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -61,6 +62,7 @@ export default function RootLayout({
     >
       <body className="antialiased min-h-full">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ImageContourFilters />
           <LinkSketches />
           <main className="site-shell">
             <Navbar />

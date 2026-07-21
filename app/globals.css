@@ -719,6 +719,65 @@ html::before {
   image-rendering: auto;
 }
 
+/* The base artwork above never gets filtered. Contours are drawn on two
+   disposable copies so Chromium cannot leave the dithered source composited
+   or corrupted after a hover repaint. */
+.image-contour-filter-defs {
+  position: fixed;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.panel-contour {
+  --contour-opacity: .65;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  clip-path: polygon(0 0, 0 0, 0 22%, 0 22%, 0 48%, 0 48%, 0 74%, 0 74%, 0 100%, 0 100%);
+  mix-blend-mode: difference;
+}
+
+.panel-contour-coarse {
+  --contour-opacity: .72;
+  filter: url("#panel-contour-coarse");
+}
+
+.panel-contour-fine {
+  --contour-opacity: .46;
+  filter: url("#panel-contour-fine");
+}
+
+.comic-cell:hover .panel-contour-coarse,
+.comic-cell:focus-within .panel-contour-coarse {
+  animation: panel-contour-draw 680ms cubic-bezier(.22, .72, .24, 1) forwards;
+}
+
+.comic-cell:hover .panel-contour-fine,
+.comic-cell:focus-within .panel-contour-fine {
+  animation: panel-contour-draw 820ms 70ms cubic-bezier(.22, .72, .24, 1) forwards;
+}
+
+@keyframes panel-contour-draw {
+  0% {
+    opacity: 0;
+    clip-path: polygon(0 0, 0 0, 0 22%, 0 22%, 0 48%, 0 48%, 0 74%, 0 74%, 0 100%, 0 100%);
+  }
+  42% {
+    opacity: var(--contour-opacity);
+    clip-path: polygon(0 0, 47% 0, 53% 22%, 44% 22%, 50% 48%, 46% 48%, 54% 74%, 45% 74%, 50% 100%, 0 100%);
+  }
+  100% {
+    opacity: var(--contour-opacity);
+    clip-path: polygon(0 0, 100% 0, 100% 22%, 100% 22%, 100% 48%, 100% 48%, 100% 74%, 100% 74%, 100% 100%, 0 100%);
+  }
+}
+
 .about-copy {
   height: 100%;
   display: grid;
@@ -1044,6 +1103,12 @@ html::before {
 
 @media (prefers-reduced-motion: reduce) {
   .comic-cell, .comic-cell > .panel, .latest-post-cell, .latest-post-card, .blog-tag-cell, .blog-tags button, .article-pagination-cell, .article-pagination-card, .mobile-drawer { transition: none; }
+  .comic-cell:hover .panel-contour,
+  .comic-cell:focus-within .panel-contour {
+    animation: none;
+    opacity: var(--contour-opacity);
+    clip-path: none;
+  }
 }
 
 @property --comic-depth {

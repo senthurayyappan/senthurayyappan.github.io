@@ -42,9 +42,9 @@ function RecommendationIcon({ kind }: { kind: RecommendationIconKind }) {
 
 const RecentUpdates: React.FC = () => {
   const [displayDate, setDisplayDate] = useState('');
-  const latestPostTitle = "Designing a Robot That Can Change Its Mind";
-  const latestPostSummary = "A field note on treating morphology, control, and simulation as one continuous design conversation.";
-  const latestPostSlug = "designing-a-robot-that-can-change";
+  const latestPostTitle = "The Ballbot Always Wins";
+  const latestPostSummary = "The origin story of ROB311, a robot that balances on top of a basketball.";
+  const latestPostSlug = "ballbot-always-wins";
 
   // Quick edit section - update these frequently
   const currentLanguage = "The Studio";
@@ -78,7 +78,7 @@ const RecentUpdates: React.FC = () => {
               {latestPostSummary}
             </p>
           </div>
-          <span className="latest-post-date">July 20, 2026</span>
+          <span className="latest-post-date">April 26, 2025</span>
         </Link>
       </div>
 
