@@ -1,42 +1,92 @@
-# Portfolio Blog Starter
+# Senthur Ayyappan Portfolio
 
-This is a porfolio site template complete with a blog. Includes:
+This repository contains the source for my personal website and blog. I am keeping it public as a reference for academics, roboticists, and researchers who want something more personal than a generic template: a place to show projects and publications, but also a place to write longer notes, build logs, essays, and half-formed thoughts.
 
-- MDX and Markdown support
-- Optimized for SEO (sitemap, robots, JSON-LD schema)
-- RSS Feed
-- Dynamic OG images
-- Syntax highlighting
-- Tailwind v4
-- Vercel Speed Insights / Web Analytics
-- Geist font
+The site uses a comic-book-inspired layout with readable article pages, MDX blog posts, project/publication panels, RSS, and a small optional likes feature. The visual system is mostly CSS: rough panel borders, hand-drawn link annotations, extruded hover states, and dithered image treatment.
 
-## Demo
+If you use this as a starting point, I would recommend changing the visual language to fit your own taste and work. The comic-panel style fits this site because I like it; it does not need to become the official uniform of every robotics PhD on the internet, haha.
 
-https://portfolio-blog-starter.vercel.app
+## Stack
 
-## How to Use
+- Next.js App Router
+- React and TypeScript
+- MDX for blog posts
+- CSS-first styling with custom comic-panel and sketch effects
+- RSS feed, sitemap, robots file, and article metadata
+- Optional lightweight likes API through `NEXT_PUBLIC_LIKES_API_URL`
 
-You can choose from one of the following two methods to use this repository:
+## Project structure
 
-### One-Click Deploy
+```text
+app/
+  about/
+  blog/
+    posts/          MDX blog posts
+    [slug]/         individual blog pages
+  projects/
+  publications/
+  globals.css       site-wide visual system
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=vercel-examples):
+components/
+  BlogExplorer.tsx      blog listing, search, tags, and like counts
+  ArticleLikeButton.tsx article like button
+  ComicPanel.tsx        reusable panel wrapper
+  LinkSketches.tsx      hand-drawn hover annotations
+  nav.tsx               sidebar and mobile navigation
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/examples/tree/main/solutions/blog&project-name=blog&repository-name=blog)
-
-### Clone and Deploy
-
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [pnpm](https://pnpm.io/installation) to bootstrap the example:
-
-```bash
-pnpm create next-app --example https://github.com/vercel/examples/tree/main/solutions/blog blog
+public/
+  images, logos, icons, and static assets
 ```
 
-Then, run Next.js in development mode:
+## Running locally
+
+Install dependencies:
 
 ```bash
-pnpm dev
+npm install
 ```
 
-Deploy it to the cloud with [Vercel](https://vercel.com/templates) ([Documentation](https://nextjs.org/docs/app/building-your-application/deploying)).
+Start the development server:
+
+```bash
+npm run dev
+```
+
+Build the production version:
+
+```bash
+npm run build
+```
+
+Start the production server locally:
+
+```bash
+npm run start
+```
+
+## Writing blog posts
+
+Blog posts live in `app/blog/posts` as `.mdx` files. Each post uses frontmatter for metadata:
+
+```mdx
+---
+title: My Post Title
+publishedAt: 2026-01-01
+summary: A short description of the post.
+image: /projects/example.jpg
+imagePosition: center center
+tags: robotics, design
+---
+
+Post content goes here.
+```
+
+The site automatically reads the post metadata for the blog index, individual article pages, RSS feed, sitemap, and structured article data.
+
+The blog supports an optional like count per post. The static site can render the button and count, but the actual persistence requires a small backend: a VPS, a serverless function, Supabase, or any other API that can store and return likes per post.
+
+Set `NEXT_PUBLIC_LIKES_API_URL` to point the frontend at that service. Without it, the site still builds and runs, but likes are only treated as a local/browser-side interaction.
+
+## License
+
+This repository is public as a reference for the website implementation. The code can be used as inspiration, but the writing, images, logos, and personal branding are specific to this site.
