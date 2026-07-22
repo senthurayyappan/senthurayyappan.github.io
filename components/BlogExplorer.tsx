@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 import type { Metadata } from '@/app/blog/utils'
 import ComicPanel from './ComicPanel'
+import { BlogLikeCount } from './BlogLikeCount'
 
 export type BlogIndexPost = {
   slug: string
@@ -36,7 +37,7 @@ export function BlogExplorer({ posts }: { posts: BlogIndexPost[] }) {
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             aria-label="Search posts"
-            placeholder="Try “controls” or “design”"
+            placeholder='Try "controls" or "design"'
           />
         </label>
         <div className="blog-tags" aria-label="Filter by topic">
@@ -69,14 +70,17 @@ export function BlogExplorer({ posts }: { posts: BlogIndexPost[] }) {
                 <div className="blog-panel-caption">
                   <p>{post.metadata.summary}</p>
                   <div className="blog-panel-details">
-                    <span className="blog-panel-dateline">
-                      <time dateTime={post.metadata.publishedAt}>{post.formattedDate}</time>
-                      <span aria-hidden="true">·</span>
-                      <span>{post.metadata.readingTime} min read</span>
-                    </span>
-                    <span className="blog-panel-tags" aria-label="Topics">
-                      {(post.metadata.tags || []).map((tag) => <span key={tag}>{tag}</span>)}
-                    </span>
+                    <div className="blog-panel-meta-copy">
+                      <span className="blog-panel-dateline">
+                        <time dateTime={post.metadata.publishedAt}>{post.formattedDate}</time>
+                        <span aria-hidden="true">·</span>
+                        <span>{post.metadata.readingTime} min read</span>
+                      </span>
+                      <span className="blog-panel-tags" aria-label="Topics">
+                        {(post.metadata.tags || []).map((tag) => <span key={tag}>{tag}</span>)}
+                      </span>
+                    </div>
+                    <BlogLikeCount slug={post.slug} />
                   </div>
                 </div>
               }

@@ -7,11 +7,10 @@ export function LinkSketches() {
   useEffect(() => {
     type ActiveSketch = {
       annotation: ReturnType<typeof annotate>
-      frame: number
+      frames: number[]
     }
 
     const active = new Map<HTMLAnchorElement, ActiveSketch>()
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     const getLink = (target: EventTarget | null) =>
       target instanceof Element ? target.closest<HTMLAnchorElement>('a[href]') : null
@@ -34,26 +33,44 @@ export function LinkSketches() {
         strokeWidth: 2.2,
         iterations: 2,
         multiline: true,
-        animate: !reducedMotion,
+        animate: true,
         animationDuration: hasText ? 720 : 900,
       })
 
-      // Rough Notation creates the SVG when annotate() runs. Showing it on the
-      // following paint guarantees the browser presents the initial dashed
-      // stroke before transitioning it to the completed drawing.
-      const frame = window.requestAnimationFrame(() => {
-        if (active.get(link)?.annotation === annotation) annotation.show()
-      })
-      active.set(link, { annotation, frame })
+      // Rough Notation inserts an SVG during annotate() and then applies a
+      // stroke-dash animation during show(). Waiting for two paints keeps
+      // Chromium from collapsing those steps into an already-finished stroke.
+      const frames: number[] = []
+      frames.push(window.requestAnimationFrame(() => {
+        frames.push(window.requestAnimationFrame(() => {
+          if (active.get(link)?.annotation !== annotation) return
+          target.getBoundingClientRect()
+          annotation.show()
+        }))
+      }))
+      active.set(link, { annotation, frames })
+    }
+
+    const cancelFrames = (sketch: ActiveSketch) => {
+      sketch.frames.forEach((frame) => window.cancelAnimationFrame(frame))
+      sketch.frames.length = 0
     }
 
     const hide = (link: HTMLAnchorElement | null) => {
       if (!link) return
       const sketch = active.get(link)
       if (!sketch) return
-      window.cancelAnimationFrame(sketch.frame)
+      cancelFrames(sketch)
       sketch.annotation.remove()
       active.delete(link)
+    }
+
+    const removeAll = () => {
+      active.forEach((sketch) => {
+        cancelFrames(sketch)
+        sketch.annotation.remove()
+      })
+      active.clear()
     }
 
     const onPointerOver = (event: PointerEvent) => {
@@ -81,11 +98,7 @@ export function LinkSketches() {
       document.removeEventListener('pointerout', onPointerOut)
       document.removeEventListener('focusin', onFocusIn)
       document.removeEventListener('focusout', onFocusOut)
-      active.forEach(({ annotation, frame }) => {
-        window.cancelAnimationFrame(frame)
-        annotation.remove()
-      })
-      active.clear()
+      removeAll()
     }
   }, [])
 

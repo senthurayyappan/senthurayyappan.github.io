@@ -18,6 +18,10 @@
   --sa-blue: #007d7e;
   --sa-green: var(--sa-blue);
   --rule: color-mix(in srgb, var(--text) 22%, transparent);
+  --extrude-duration: 180ms;
+  --extrude-ease: cubic-bezier(.2, .8, .2, 1);
+  --panel-extrude-depth: 8px;
+  --panel-extrude-depth-hover: 15px;
   /* Hand-inked masks: deliberately imperfect double strokes. Keeping these as
      masks means the same linework follows the light and dark theme ink color. */
   --sketch-rule-h: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 5' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='white' stroke-linecap='round' vector-effect='non-scaling-stroke'%3E%3Cpath d='M0 2.7 C13 1.1 23 3.8 36 2.2 S61 3.4 74 2.1 S91 3.3 100 2.3' stroke-width='1.2'/%3E%3Cpath d='M0 3.4 C18 2.4 31 3.7 48 2.8 S77 3.8 100 2.9' stroke-width='.55' opacity='.55'/%3E%3C/g%3E%3C/svg%3E");
@@ -163,7 +167,7 @@ body {
 .sidenav-mark img {
   display: block;
   width: 100%;
-  max-width: 220px;
+  max-width: 192px;
   height: auto;
   margin: 0 auto;
 }
@@ -926,10 +930,10 @@ html::before {
 }
 
 .latest-post-cell {
-  --post-depth: 5px;
+  --post-depth: var(--panel-extrude-depth);
   position: relative;
-  margin: 5px 0 0 5px;
-  transition: --post-depth 160ms ease;
+  margin: var(--panel-extrude-depth) 0 0 var(--panel-extrude-depth);
+  transition: --post-depth var(--extrude-duration) var(--extrude-ease);
 }
 
 .latest-post-cell::before,
@@ -974,7 +978,7 @@ html::before {
   color: var(--text);
   background: var(--background);
   border: 0;
-  transition: top 160ms ease, left 160ms ease;
+  transition: color var(--extrude-duration) var(--extrude-ease);
 }
 
 .latest-post-date {
@@ -994,7 +998,7 @@ html::before {
 
 @media (hover: hover) {
   .latest-post-cell:hover,
-  .latest-post-cell:focus-within { --post-depth: 10px; }
+  .latest-post-cell:focus-within { --post-depth: var(--panel-extrude-depth-hover); }
 }
 
 .hover\:shadow-glow:hover {
@@ -1043,7 +1047,7 @@ html::before {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .comic-cell, .comic-cell > .panel, .latest-post-cell, .latest-post-card, .blog-tag-cell, .blog-tags button, .article-pagination-cell, .article-pagination-card, .mobile-drawer { transition: none; }
+  .comic-cell, .comic-cell > .panel, .latest-post-cell, .latest-post-card, .blog-tag-cell, .blog-tags button, .article-like-cell, .article-like-button, .article-pagination-cell, .article-pagination-card, .mobile-drawer { transition: none; }
 }
 
 @property --comic-depth {
@@ -1055,12 +1059,30 @@ html::before {
 @property --post-depth {
   syntax: '<length>';
   inherits: true;
+  initial-value: 8px;
+}
+
+@property --like-depth {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 5px;
+}
+
+@property --tag-depth {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 2px;
+}
+
+@property --pagination-depth {
+  syntax: '<length>';
+  inherits: true;
   initial-value: 5px;
 }
 
 .comic-cell {
-  --comic-depth: 8px;
-  transition: --comic-depth 160ms ease;
+  --comic-depth: var(--panel-extrude-depth);
+  transition: --comic-depth var(--extrude-duration) var(--extrude-ease);
 }
 
 .comic-cell::before,
@@ -1098,12 +1120,11 @@ html::before {
   z-index: 1;
   top: calc(var(--comic-depth) * -1);
   left: calc(var(--comic-depth) * -1);
-  transition: top 160ms ease, left 160ms ease;
 }
 
 @media (hover: hover) {
   .comic-cell-link:hover,
-  .comic-cell-link:focus-within { --comic-depth: 15px; }
+  .comic-cell-link:focus-within { --comic-depth: var(--panel-extrude-depth-hover); }
 }
 
 .sketch-annotation {
@@ -1117,18 +1138,6 @@ html::before {
 /* Blog index */
 .blog-index {
   --blog-line: color-mix(in srgb, var(--text) 28%, transparent);
-}
-
-@property --tag-depth {
-  syntax: '<length>';
-  inherits: true;
-  initial-value: 2px;
-}
-
-@property --pagination-depth {
-  syntax: '<length>';
-  inherits: true;
-  initial-value: 5px;
 }
 
 .blog-page-heading {
@@ -1234,7 +1243,7 @@ html::before {
   position: relative;
   display: inline-block;
   margin: 2px 0 0 2px;
-  transition: --tag-depth 150ms ease;
+  transition: --tag-depth var(--extrude-duration) var(--extrude-ease);
 }
 
 .blog-tag-cell::before,
@@ -1281,7 +1290,7 @@ html::before {
   background: var(--background);
   font: 500 .78rem/1.2 var(--font-reading);
   cursor: pointer;
-  transition: color 150ms ease, background 150ms ease, transform 150ms ease;
+  transition: color var(--extrude-duration) var(--extrude-ease), background var(--extrude-duration) var(--extrude-ease), transform var(--extrude-duration) var(--extrude-ease);
 }
 
 .blog-tags button {
@@ -1291,7 +1300,7 @@ html::before {
   left: calc(var(--tag-depth) * -1);
   color: var(--text);
   background: transparent;
-  transition: color 150ms ease, background 150ms ease, top 150ms ease, left 150ms ease;
+  transition: color var(--extrude-duration) var(--extrude-ease), background var(--extrude-duration) var(--extrude-ease);
 }
 .blog-empty button { border: 1.5px solid var(--text); }
 
@@ -1440,11 +1449,11 @@ html::before {
 
 .blog-panel-details {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 7px;
-  padding: 9px 12px 10px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: stretch;
+  gap: 8px 12px;
+  padding: 9px 10px 10px 12px;
 }
 
 .blog-panel-details::before {
@@ -1460,12 +1469,46 @@ html::before {
   mask: var(--sketch-rule-h) center / 100% 100% no-repeat;
 }
 
+.blog-panel-meta-copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 6px;
+}
+
 .blog-panel-dateline {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   color: color-mix(in srgb, var(--sa-black) 68%, transparent);
   white-space: nowrap;
+}
+
+.blog-like-count {
+  display: inline-flex;
+  min-width: 2.9rem;
+  align-items: center;
+  align-self: stretch;
+  justify-content: center;
+  gap: 5px;
+  color: var(--sa-black);
+  font-family: var(--font-reading);
+  font-weight: 700;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.blog-like-count > span {
+  color: var(--sa-red);
+  font-size: 1.35rem;
+  line-height: .85;
+}
+
+.blog-like-count strong {
+  color: var(--sa-blue);
+  font-size: .92rem;
 }
 
 .blog-panel-tags { display: inline-flex; min-height: 18px; flex-wrap: wrap; gap: 5px; }
@@ -1581,8 +1624,9 @@ html::before {
 .article-engagement {
   position: relative;
   display: flex;
+  width: min(calc(850px + clamp(28px, 4vw, 42px)), calc(100vw - 2rem));
   justify-content: center;
-  margin: 3.4rem 0 .4rem;
+  margin: 3.4rem auto .4rem;
   padding-top: 2.1rem;
 }
 
@@ -1600,12 +1644,53 @@ html::before {
   mask: var(--sketch-rule-h) center / 100% 100% no-repeat;
 }
 
-.article-like-button {
-  --like-depth: 4px;
+.article-like-cell {
+  --like-depth: 5px;
   position: relative;
+  display: inline-block;
+  margin: 5px 0 0 5px;
+  transition: color var(--extrude-duration) var(--extrude-ease), --like-depth var(--extrude-duration) var(--extrude-ease);
+}
+
+.article-like-cell::before,
+.article-like-cell::after {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.article-like-cell::before {
+  top: calc(var(--like-depth) * -1);
+  left: calc(100% - var(--like-depth));
+  width: var(--like-depth);
+  height: 100%;
+  background: var(--accent);
+  border: 1.5px solid var(--text);
+  transform: skewY(45deg);
+  transform-origin: 0 0;
+}
+
+.article-like-cell::after {
+  top: calc(100% - var(--like-depth));
+  left: calc(var(--like-depth) * -1);
+  width: 100%;
+  height: var(--like-depth);
+  background: var(--sa-blue);
+  border: 1.5px solid var(--text);
+  transform: skewX(45deg);
+  transform-origin: 0 0;
+}
+
+.article-like-button {
+  position: relative;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  top: calc(var(--like-depth) * -1);
+  left: calc(var(--like-depth) * -1);
   min-height: 39px;
   padding: 8px 12px;
   color: var(--text);
@@ -1615,13 +1700,13 @@ html::before {
   font-family: var(--font-reading);
   font-size: .78rem;
   font-weight: 600;
-  transition: color 160ms ease, transform 160ms ease;
+  transition: color var(--extrude-duration) var(--extrude-ease);
 }
 
-.article-like-button::after {
-  content: '';
+.article-like-button__face {
   position: absolute;
   inset: 0;
+  z-index: 0;
   background: currentColor;
   pointer-events: none;
   -webkit-mask-image: var(--tag-rule-h), var(--tag-rule-h), var(--tag-rule-v), var(--tag-rule-v);
@@ -1634,23 +1719,16 @@ html::before {
   mask-repeat: no-repeat;
 }
 
-.article-like-button > * { position: relative; z-index: 1; }
-.article-like-button > span:first-child { color: var(--sa-red); font-size: 1.3rem; line-height: .8; }
+.article-like-button > :not(.article-like-button__face) { position: relative; z-index: 1; }
+.article-like-button__icon { color: var(--sa-red); font-size: 1.3rem; line-height: .8; }
 .article-like-button strong { min-width: 1.2em; color: var(--sa-blue); font-size: .8rem; }
 .article-like-button.is-liked { color: var(--sa-blue); }
 .article-like-button:disabled { cursor: wait; opacity: .7; }
 @media (hover: hover) {
-  .article-like-button:not(:disabled):hover { color: var(--sa-blue); transform: translate(-3px, -3px); }
-  .article-like-button:not(:disabled):hover::before {
-    content: '';
-    position: absolute;
-    z-index: -1;
-    top: 4px;
-    left: 4px;
-    width: 100%;
-    height: 100%;
-    background: var(--sa-yellow);
-  }
+  .article-like-cell:hover,
+  .article-like-cell:focus-within { --like-depth: 10px; }
+  .article-like-cell:hover .article-like-button,
+  .article-like-cell:focus-within .article-like-button { color: var(--sa-blue); }
 }
 
 .article-heading { position: relative; scroll-margin-top: 42px; }
@@ -1752,7 +1830,7 @@ html::before {
   min-width: 0;
   height: 100%;
   margin: 5px 0 0 5px;
-  transition: --pagination-depth 160ms ease;
+  transition: --pagination-depth var(--extrude-duration) var(--extrude-ease);
 }
 
 .article-pagination-cell::before,
@@ -1801,7 +1879,7 @@ html::before {
   color: var(--text);
   background: var(--background);
   text-decoration: none;
-  transition: color 160ms ease, top 160ms ease, left 160ms ease;
+  transition: color var(--extrude-duration) var(--extrude-ease);
 }
 .article-pagination-card::after {
   content: '';
@@ -1834,6 +1912,7 @@ html::before {
 
 @media (max-width: 900px) {
   .article-layout { grid-template-columns: minmax(0, 1fr); }
+  .article-engagement { width: 100%; }
   .article-toc { display: none; }
 }
 
