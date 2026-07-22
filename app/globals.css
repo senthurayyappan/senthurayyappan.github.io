@@ -1578,6 +1578,81 @@ html::before {
 .article-prose strong { font-weight: 650; }
 .article-prose li { padding-left: .25em; }
 
+.article-engagement {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin: 3.4rem 0 .4rem;
+  padding-top: 2.1rem;
+}
+
+.article-engagement::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 15%;
+  left: 15%;
+  height: 5px;
+  color: var(--text);
+  background: currentColor;
+  opacity: .35;
+  -webkit-mask: var(--sketch-rule-h) center / 100% 100% no-repeat;
+  mask: var(--sketch-rule-h) center / 100% 100% no-repeat;
+}
+
+.article-like-button {
+  --like-depth: 4px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 39px;
+  padding: 8px 12px;
+  color: var(--text);
+  background: var(--background);
+  border: 0;
+  cursor: pointer;
+  font-family: var(--font-reading);
+  font-size: .78rem;
+  font-weight: 600;
+  transition: color 160ms ease, transform 160ms ease;
+}
+
+.article-like-button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  pointer-events: none;
+  -webkit-mask-image: var(--tag-rule-h), var(--tag-rule-h), var(--tag-rule-v), var(--tag-rule-v);
+  mask-image: var(--tag-rule-h), var(--tag-rule-h), var(--tag-rule-v), var(--tag-rule-v);
+  -webkit-mask-position: top center, bottom center, left center, right center;
+  mask-position: top center, bottom center, left center, right center;
+  -webkit-mask-size: 100% 4px, 100% 4px, 4px 100%, 4px 100%;
+  mask-size: 100% 4px, 100% 4px, 4px 100%, 4px 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.article-like-button > * { position: relative; z-index: 1; }
+.article-like-button > span:first-child { color: var(--sa-red); font-size: 1.3rem; line-height: .8; }
+.article-like-button strong { min-width: 1.2em; color: var(--sa-blue); font-size: .8rem; }
+.article-like-button.is-liked { color: var(--sa-blue); }
+.article-like-button:disabled { cursor: wait; opacity: .7; }
+@media (hover: hover) {
+  .article-like-button:not(:disabled):hover { color: var(--sa-blue); transform: translate(-3px, -3px); }
+  .article-like-button:not(:disabled):hover::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    top: 4px;
+    left: 4px;
+    width: 100%;
+    height: 100%;
+    background: var(--sa-yellow);
+  }
+}
+
 .article-heading { position: relative; scroll-margin-top: 42px; }
 .article-heading--2 { margin-top: 2.2em !important; font-size: clamp(1.65rem, 3vw, 2.15rem) !important; }
 .article-heading--3 { margin-top: 1.9em !important; font-size: clamp(1.25rem, 2vw, 1.5rem) !important; }

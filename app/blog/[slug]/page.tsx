@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { CustomMDX } from '@/components/mdx'
 import { ReadingProgress } from '@/components/ReadingProgress'
 import { SketchArrow } from '@/components/SketchArrow'
+import { ArticleLikeButton } from '@/components/ArticleLikeButton'
 import { formatDate, getBlogPosts, getTableOfContents } from 'app/blog/utils'
 import { baseUrl } from 'app/sitemap'
 
@@ -100,6 +101,9 @@ export default function Blog({ params }) {
       <div className="article-layout">
         <div className="prose article-prose" data-article-body>
           <CustomMDX source={post.content} />
+          <div className="article-engagement">
+            <ArticleLikeButton slug={post.slug} />
+          </div>
         </div>
 
         {tableOfContents.length > 0 && (

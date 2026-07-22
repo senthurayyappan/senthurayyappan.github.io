@@ -75,6 +75,10 @@ jobs:
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Build with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
+        env:
+          # Keep likes hidden until the VPS API is live. Set this repository secret
+          # to https://api.senthurayyappan.com when the service is deployed.
+          NEXT_PUBLIC_LIKES_API_URL: ${{ secrets.LIKES_API_URL }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
