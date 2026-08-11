@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import React from 'react';
+import { SAPanel } from './SAPanel';
 
 interface ComicPanelProps {
   /** Optional: URL for the background image */
@@ -49,14 +50,11 @@ const ComicPanel: React.FC<ComicPanelProps> = ({
   const descriptionClass = `description description-${descriptionPosition}`;
 
   return (
-    // 1. Outermost div: Always present, receives grid layout classes.
-    // Added relative positioning to act as a container for the absolute link.
-    <div className={`${className} comic-cell ${href ? 'comic-cell-link' : ''} relative`}>
-      {/* 2. Inner div: Handles visual styling (panel class, background) */}
-      {/* Conditionally add the panel-link-hover class if href is present */}
-      <div
-        className={`panel ${href ? 'panel-link-hover' : ''} h-full w-full`}
-      >
+    <SAPanel
+      className={`${className} comic-cell relative`}
+      surfaceClassName={`panel ${href ? 'panel-link-hover' : ''} h-full w-full`}
+      interactive={Boolean(href)}
+    >
         {imageSrc && (
           <Image
             src={imageSrc}
@@ -92,8 +90,7 @@ const ComicPanel: React.FC<ComicPanelProps> = ({
             ></a>
           </Link>
         )}
-      </div>
-    </div>
+    </SAPanel>
   );
 };
 

@@ -32,11 +32,24 @@ components/
   ArticleLikeButton.tsx article like button
   ComicPanel.tsx        reusable panel wrapper
   LinkSketches.tsx      hand-drawn hover annotations
+  SAButton.tsx          shared button adapter
+  SAPanel.tsx           shared panel adapter
   nav.tsx               sidebar and mobile navigation
+
+styles/
+  sa-ui.css             framework-neutral SA component styles
 
 public/
   images, logos, icons, and static assets
 ```
+
+## Shared UI components
+
+Use `SAButton` for a text button, an icon button, or a mixed button. Give each icon-only button an `aria-label`.
+
+Use `SAPanel` for the shared panel surface and extrusion. Set `interactive` only when the complete panel is interactive.
+
+`styles/sa-ui.css` is the canonical visual contract. The artifacts server keeps an exact vendored copy for its self-contained deployment.
 
 ## Running locally
 

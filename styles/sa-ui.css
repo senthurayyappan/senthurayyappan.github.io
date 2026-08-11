@@ -1,0 +1,244 @@
+@property --sa-depth {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 2px;
+}
+
+@property --sa-panel-depth {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 8px;
+}
+
+.sa-control {
+  --sa-depth: var(--sa-depth-rest, 2px);
+  --sa-edge-width: 1px;
+  --sa-button-border-width: 0px;
+  --sa-button-rule-h: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 5' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='white' stroke-linecap='round' vector-effect='non-scaling-stroke'%3E%3Cpath d='M0 2.63 C13 1.57 23 3.37 36 2.3 S61 3.1 74 2.23 S91 3.03 100 2.37' stroke-width='1.2'/%3E%3Cpath d='M0 3.27 C18 2.6 31 3.47 48 2.87 S77 3.53 100 2.93' stroke-width='.55' opacity='.55'/%3E%3C/g%3E%3C/svg%3E");
+  --sa-button-rule-v: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5 100' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='white' stroke-linecap='round' vector-effect='non-scaling-stroke'%3E%3Cpath d='M2.63 0 C1.57 13 3.37 23 2.3 36 S3.1 61 2.23 74 S3.03 91 2.37 100' stroke-width='1.2'/%3E%3Cpath d='M3.27 0 C2.6 18 3.47 31 2.87 48 S3.53 77 2.93 100' stroke-width='.55' opacity='.55'/%3E%3C/g%3E%3C/svg%3E");
+  position: relative;
+  display: inline-flex;
+  margin: var(--sa-depth-rest, 2px) 0 0 var(--sa-depth-rest, 2px);
+  isolation: isolate;
+  transition: --sa-depth var(--extrude-duration, 180ms) var(--extrude-ease, cubic-bezier(.2, .8, .2, 1));
+}
+
+.sa-control::before,
+.sa-control::after,
+.sa-panel-cell::before,
+.sa-panel-cell::after {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.sa-control::before {
+  top: calc(var(--sa-depth) * -1);
+  left: calc(100% - var(--sa-depth));
+  width: var(--sa-depth);
+  height: 100%;
+  background: var(--sa-side-color, var(--sa-yellow, #f9c90a));
+  border: var(--sa-edge-width, 1px) solid var(--sa-edge-color, var(--sa-black, #15130d));
+  transform: skewY(45deg);
+  transform-origin: 0 0;
+}
+
+.sa-control::after {
+  top: calc(100% - var(--sa-depth));
+  left: calc(var(--sa-depth) * -1);
+  width: 100%;
+  height: var(--sa-depth);
+  background: var(--sa-bottom-color, var(--sa-blue, #007d7e));
+  border: var(--sa-edge-width, 1px) solid var(--sa-edge-color, var(--sa-black, #15130d));
+  transform: skewX(45deg);
+  transform-origin: 0 0;
+}
+
+.sa-button {
+  position: relative;
+  z-index: 1;
+  top: calc(var(--sa-depth) * -1);
+  left: calc(var(--sa-depth) * -1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sa-button-gap, 7px);
+  min-height: var(--sa-button-height, 32px);
+  padding: var(--sa-button-padding, 6px 10px);
+  border: var(--sa-button-border-width, 1px) solid var(--sa-button-border-color, color-mix(in srgb, var(--text, var(--sa-black, #15130d)) 48%, transparent));
+  border-radius: 0;
+  color: var(--sa-button-color, var(--text, var(--sa-black, #15130d)));
+  background: var(--sa-button-background, var(--background, var(--sa-white, #f6f4ee)));
+  font: inherit;
+  cursor: pointer;
+  transition: color var(--extrude-duration, 180ms) var(--extrude-ease, cubic-bezier(.2, .8, .2, 1)), background var(--extrude-duration, 180ms) var(--extrude-ease, cubic-bezier(.2, .8, .2, 1));
+}
+
+.sa-button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: currentColor;
+  opacity: .92;
+  pointer-events: none;
+  -webkit-mask-image: var(--sa-button-rule-h, var(--sketch-rule-h)), var(--sa-button-rule-h, var(--sketch-rule-h)), var(--sa-button-rule-v, var(--sketch-rule-v)), var(--sa-button-rule-v, var(--sketch-rule-v));
+  mask-image: var(--sa-button-rule-h, var(--sketch-rule-h)), var(--sa-button-rule-h, var(--sketch-rule-h)), var(--sa-button-rule-v, var(--sketch-rule-v)), var(--sa-button-rule-v, var(--sketch-rule-v));
+  -webkit-mask-position: top center, bottom center, left center, right center;
+  mask-position: top center, bottom center, left center, right center;
+  -webkit-mask-size: 100% 4px, 100% 4px, 4px 100%, 4px 100%;
+  mask-size: 100% 4px, 100% 4px, 4px 100%, 4px 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.sa-panel:not(.sa-panel--docked)::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  color: inherit;
+  background: currentColor;
+  pointer-events: none;
+  -webkit-mask-image: var(--sketch-rule-h), var(--sketch-rule-h), var(--sketch-rule-v), var(--sketch-rule-v);
+  mask-image: var(--sketch-rule-h), var(--sketch-rule-h), var(--sketch-rule-v), var(--sketch-rule-v);
+  -webkit-mask-position: top center, bottom center, left center, right center;
+  mask-position: top center, bottom center, left center, right center;
+  -webkit-mask-size: 100% 5px, 100% 5px, 5px 100%, 5px 100%;
+  mask-size: 100% 5px, 100% 5px, 5px 100%, 5px 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.sa-button__icon {
+  display: inline-grid;
+  place-items: center;
+  line-height: 1;
+}
+
+.sa-button:disabled {
+  cursor: not-allowed;
+  opacity: .55;
+}
+
+.sa-select {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  color: var(--text, var(--sa-black, #15130d));
+}
+
+.sa-select::after {
+  content: '';
+  position: absolute;
+  right: 11px;
+  width: 7px;
+  height: 7px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  pointer-events: none;
+  transform: translateY(-2px) rotate(45deg);
+}
+
+.sa-select__field {
+  width: 100%;
+  min-width: 0;
+  min-height: 36px;
+  appearance: none;
+  padding: 6px 32px 6px 10px;
+  border: 1px solid color-mix(in srgb, var(--text, var(--sa-black, #15130d)) 42%, transparent);
+  border-radius: 0;
+  outline: none;
+  color: inherit;
+  background: var(--background, var(--sa-white, #f6f4ee));
+  font: inherit;
+  transition: border-color var(--extrude-duration, 180ms) var(--extrude-ease, cubic-bezier(.2, .8, .2, 1)), box-shadow var(--extrude-duration, 180ms) var(--extrude-ease, cubic-bezier(.2, .8, .2, 1));
+}
+
+.sa-select:focus-within .sa-select__field {
+  border-color: var(--sa-blue, #007d7e);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--sa-blue, #007d7e) 24%, transparent);
+}
+
+.sa-select__field:focus-visible {
+  outline: none;
+}
+
+.sa-select__field:disabled {
+  cursor: not-allowed;
+  opacity: .55;
+}
+
+.sa-control:focus-within {
+  --sa-depth: var(--sa-depth-hover, 6px);
+}
+
+@media (hover: hover) {
+  .sa-control:not(:has(.sa-button:disabled)):hover {
+    --sa-depth: var(--sa-depth-hover, 6px);
+  }
+}
+
+.sa-panel-cell {
+  --sa-panel-depth: var(--sa-panel-depth-rest, 8px);
+  position: relative;
+  margin: var(--sa-panel-depth-rest, 8px) 0 0 var(--sa-panel-depth-rest, 8px);
+  transition: --sa-panel-depth var(--extrude-duration, 180ms) var(--extrude-ease, cubic-bezier(.2, .8, .2, 1));
+}
+
+.sa-panel-cell::before {
+  top: calc(var(--sa-panel-depth) * -1);
+  left: calc(100% - var(--sa-panel-depth));
+  width: var(--sa-panel-depth);
+  height: 100%;
+  background: var(--sa-side-color, var(--accent, var(--sa-yellow, #f9c90a)));
+  border: var(--sa-panel-edge-width, 2px) solid var(--sa-edge-color, var(--text, var(--sa-black, #15130d)));
+  transform: skewY(45deg);
+  transform-origin: 0 0;
+}
+
+.sa-panel-cell::after {
+  top: calc(100% - var(--sa-panel-depth));
+  left: calc(var(--sa-panel-depth) * -1);
+  width: 100%;
+  height: var(--sa-panel-depth);
+  background: var(--sa-bottom-color, var(--sa-blue, #007d7e));
+  border: var(--sa-panel-edge-width, 2px) solid var(--sa-edge-color, var(--text, var(--sa-black, #15130d)));
+  transform: skewX(45deg);
+  transform-origin: 0 0;
+}
+
+.sa-panel {
+  position: relative;
+  z-index: 1;
+  top: calc(var(--sa-panel-depth) * -1);
+  left: calc(var(--sa-panel-depth) * -1);
+  color: var(--text, var(--sa-black, #15130d));
+  background: var(--sa-panel-background, var(--background, var(--sa-white, #f6f4ee)));
+}
+
+@media (hover: hover) {
+  .sa-panel-cell--interactive:hover,
+  .sa-panel-cell--interactive:focus-within {
+    --sa-panel-depth: var(--sa-panel-depth-hover, 15px);
+  }
+}
+
+.sa-panel--docked {
+  top: auto;
+  left: auto;
+  background: var(--sa-panel-background, var(--surface, var(--sa-white, #f6f4ee)));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sa-control,
+  .sa-button,
+  .sa-select__field,
+  .sa-panel-cell,
+  .sa-panel {
+    transition: none;
+  }
+}

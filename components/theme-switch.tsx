@@ -2,6 +2,7 @@
 
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
+import { SAButton } from './SAButton'
 
 function SunIcon() {
   return (
@@ -63,13 +64,12 @@ export function ThemeSwitch() {
   }
 
   return (
-    <button
+    <SAButton
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      className="flex items-center justify-center p-1"
+      cellClassName="site-theme-control"
+      className="site-theme-button"
       aria-label="Toggle Dark Mode"
-      style={{ cursor: 'pointer' }}
-    >
-      {resolvedTheme === 'dark' ? <SunIcon /> : <MoonIcon />}
-    </button>
+      icon={resolvedTheme === 'dark' ? <SunIcon /> : <MoonIcon />}
+    />
   )
-} 
+}
