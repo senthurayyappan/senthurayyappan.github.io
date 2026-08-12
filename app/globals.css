@@ -262,6 +262,18 @@ body {
 .sidenav-social a:hover { color: var(--accent); transform: translateY(-1px); }
 .sidenav-social svg { display: block; }
 
+.site-theme-control {
+  --sa-depth-hover: 5px;
+}
+
+.site-theme-button {
+  --sa-button-height: 28px;
+  --sa-button-padding: 2px;
+  width: 28px;
+}
+
+.site-theme-button svg { display: block; width: 22px; height: 22px; }
+
 .mobile-masthead {
   position: sticky;
   top: 0;
@@ -654,7 +666,6 @@ html::before {
   /* font-family: 'Comic Sans MS', cursive; Moved to .comic parent */
 }
 
-.panel::after,
 .panel .text::after,
 .latest-post-card::after,
 .latest-post-date::before,
@@ -673,7 +684,6 @@ html::before {
    consistent ink weight at every aspect ratio. */
 .prose pre::after,
 .sketch-box::after,
-.panel::after,
 .panel .text::after,
 .latest-post-card::after,
 .latest-post-date::before,
@@ -1043,17 +1053,11 @@ html::before {
   .site-content { padding: 0 4vw 18px; }
   .site-footer { width: auto; padding: 18px 4vw 28px; }
   .comic { gap: 16px; padding-left: 10px; }
-  .comic-cell { --comic-depth: 6px; }
+  .comic-cell { --sa-panel-depth-rest: 6px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .comic-cell, .comic-cell > .panel, .latest-post-cell, .latest-post-card, .blog-tag-cell, .blog-tags button, .article-like-cell, .article-like-button, .article-pagination-cell, .article-pagination-card, .mobile-drawer { transition: none; }
-}
-
-@property --comic-depth {
-  syntax: '<length>';
-  inherits: true;
-  initial-value: 8px;
+  .latest-post-cell, .latest-post-card, .blog-tags button, .article-like-cell, .article-like-button, .article-pagination-cell, .article-pagination-card, .mobile-drawer { transition: none; }
 }
 
 @property --post-depth {
@@ -1068,63 +1072,10 @@ html::before {
   initial-value: 5px;
 }
 
-@property --tag-depth {
-  syntax: '<length>';
-  inherits: true;
-  initial-value: 2px;
-}
-
 @property --pagination-depth {
   syntax: '<length>';
   inherits: true;
   initial-value: 5px;
-}
-
-.comic-cell {
-  --comic-depth: var(--panel-extrude-depth);
-  transition: --comic-depth var(--extrude-duration) var(--extrude-ease);
-}
-
-.comic-cell::before,
-.comic-cell::after {
-  content: '';
-  position: absolute;
-  z-index: 0;
-  box-sizing: border-box;
-  pointer-events: none;
-}
-
-.comic-cell::before {
-  top: calc(var(--comic-depth) * -1);
-  left: calc(100% - var(--comic-depth));
-  width: var(--comic-depth);
-  height: 100%;
-  background: var(--accent);
-  border: 2px solid var(--text);
-  transform: skewY(45deg);
-  transform-origin: 0 0;
-}
-
-.comic-cell::after {
-  top: calc(100% - var(--comic-depth));
-  left: calc(var(--comic-depth) * -1);
-  width: 100%;
-  height: var(--comic-depth);
-  background: var(--sa-blue);
-  border: 2px solid var(--text);
-  transform: skewX(45deg);
-  transform-origin: 0 0;
-}
-
-.comic-cell > .panel {
-  z-index: 1;
-  top: calc(var(--comic-depth) * -1);
-  left: calc(var(--comic-depth) * -1);
-}
-
-@media (hover: hover) {
-  .comic-cell-link:hover,
-  .comic-cell-link:focus-within { --comic-depth: var(--panel-extrude-depth-hover); }
 }
 
 .sketch-annotation {
@@ -1239,47 +1190,7 @@ html::before {
 
 .blog-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
 .blog-tag-cell {
-  --tag-depth: 2px;
-  position: relative;
-  display: inline-block;
-  margin: 2px 0 0 2px;
-  transition: --tag-depth var(--extrude-duration) var(--extrude-ease);
-}
-
-.blog-tag-cell::before,
-.blog-tag-cell::after {
-  content: '';
-  position: absolute;
-  z-index: 0;
-  box-sizing: border-box;
-  pointer-events: none;
-}
-
-.blog-tag-cell::before {
-  top: calc(var(--tag-depth) * -1);
-  left: calc(100% - var(--tag-depth));
-  width: var(--tag-depth);
-  height: 100%;
-  background: var(--accent);
-  border: 1px solid var(--sa-black);
-  transform: skewY(45deg);
-  transform-origin: 0 0;
-}
-
-.blog-tag-cell::after {
-  top: calc(100% - var(--tag-depth));
-  left: calc(var(--tag-depth) * -1);
-  width: 100%;
-  height: var(--tag-depth);
-  background: var(--sa-blue);
-  border: 1px solid var(--sa-black);
-  transform: skewX(45deg);
-  transform-origin: 0 0;
-}
-
-@media (hover: hover) {
-  .blog-tag-cell:hover,
-  .blog-tag-cell:focus-within { --tag-depth: 6px; }
+  --sa-side-color: var(--accent);
 }
 
 .blog-tags button,
@@ -1294,10 +1205,6 @@ html::before {
 }
 
 .blog-tags button {
-  position: relative;
-  z-index: 1;
-  top: calc(var(--tag-depth) * -1);
-  left: calc(var(--tag-depth) * -1);
   color: var(--text);
   background: transparent;
   transition: color var(--extrude-duration) var(--extrude-ease), background var(--extrude-duration) var(--extrude-ease);

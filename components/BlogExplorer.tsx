@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react'
 import type { Metadata } from '@/app/blog/utils'
 import ComicPanel from './ComicPanel'
 import { BlogLikeCount } from './BlogLikeCount'
+import { SAButton } from './SAButton'
 
 export type BlogIndexPost = {
   slug: string
@@ -42,16 +43,16 @@ export function BlogExplorer({ posts }: { posts: BlogIndexPost[] }) {
         </label>
         <div className="blog-tags" aria-label="Filter by topic">
           {tags.map((tag) => (
-            <span className="blog-tag-cell" key={tag}>
-              <button
-                type="button"
-                className={activeTag === tag ? 'is-active' : ''}
-                aria-pressed={activeTag === tag}
-                onClick={() => setActiveTag(tag)}
-              >
-                {tag}
-              </button>
-            </span>
+            <SAButton
+              key={tag}
+              cellClassName="blog-tag-cell"
+              type="button"
+              className={activeTag === tag ? 'is-active' : ''}
+              aria-pressed={activeTag === tag}
+              onClick={() => setActiveTag(tag)}
+            >
+              {tag}
+            </SAButton>
           ))}
         </div>
       </section>
