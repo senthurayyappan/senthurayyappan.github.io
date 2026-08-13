@@ -13,4 +13,13 @@ const cssBuild = {
 await Promise.all([
   build({ ...cssBuild, entryPoints: ['src/index.css'], outfile: 'dist/sa-ui.css' }),
   build({ ...cssBuild, entryPoints: ['src/fonts.css'], outfile: 'dist/sa-ui-fonts.css' }),
+  build({
+    entryPoints: ['src/enhance.ts'],
+    outfile: 'dist/sa-ui.js',
+    bundle: true,
+    format: 'esm',
+    platform: 'browser',
+    target: ['es2020'],
+    logLevel: 'info',
+  }),
 ])

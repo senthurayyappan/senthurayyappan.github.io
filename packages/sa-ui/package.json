@@ -15,12 +15,20 @@
     "./base.css": "./src/base.css",
     "./layouts.css": "./src/layouts.css",
     "./effects.css": "./src/effects.css",
+    "./enhance": "./dist/sa-ui.js",
+    "./react": "./react/index.ts",
     "./components/*.css": "./src/components/*.css",
     "./patterns/*.css": "./src/patterns/*.css"
   },
   "scripts": {
     "build": "node build.mjs",
     "test": "npm run build && node --test tests/*.test.mjs"
+  },
+  "dependencies": {
+    "rough-notation": "^0.5.1"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0"
   },
   "devDependencies": {
     "esbuild": "^0.28.2"
