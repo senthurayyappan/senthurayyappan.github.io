@@ -69,18 +69,16 @@ export function BlogExplorer({ posts }: { posts: BlogIndexPost[] }) {
               titlePosition="top-right"
               description={
                 <div className="blog-panel-caption">
+                  <span className="blog-panel-image-tags" aria-label="Topics">
+                    {(post.metadata.tags || []).map((tag) => <span className="sa-tag" data-sa-tone="blue" key={tag}>{tag}</span>)}
+                  </span>
                   <p>{post.metadata.summary}</p>
                   <div className="blog-panel-details">
-                    <div className="blog-panel-meta-copy">
-                      <span className="blog-panel-dateline">
-                        <time dateTime={post.metadata.publishedAt}>{post.formattedDate}</time>
-                        <span aria-hidden="true">·</span>
-                        <span>{post.metadata.readingTime} min read</span>
-                      </span>
-                      <span className="blog-panel-tags" aria-label="Topics">
-                        {(post.metadata.tags || []).map((tag) => <span className="sa-tag" data-sa-tone="blue" key={tag}>{tag}</span>)}
-                      </span>
-                    </div>
+                    <span className="blog-panel-dateline">
+                      <time dateTime={post.metadata.publishedAt}>{post.formattedDate}</time>
+                      <span aria-hidden="true">·</span>
+                      <span>{post.metadata.readingTime} min read</span>
+                    </span>
                     <BlogLikeCount slug={post.slug} />
                   </div>
                 </div>

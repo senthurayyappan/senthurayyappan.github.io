@@ -22,7 +22,7 @@ fi
 
 install -d -m 0755 "$app_dir"
 # cp -a is intentionally non-destructive: it updates application files but keeps
-# the generated .env and the Docker volume containing existing like totals.
+# the generated .env and the Docker volume containing engagement records.
 cp -a "$source_dir/." "$app_dir/"
 cd "$app_dir"
 

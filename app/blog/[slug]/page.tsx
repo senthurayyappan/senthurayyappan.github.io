@@ -101,9 +101,6 @@ export default function Blog({ params }) {
       <div className="article-layout">
         <div className="prose article-prose" data-article-body>
           <CustomMDX source={post.content} />
-          <div className="article-engagement">
-            <ArticleLikeButton slug={post.slug} />
-          </div>
         </div>
 
         {tableOfContents.length > 0 && (
@@ -118,6 +115,10 @@ export default function Blog({ params }) {
             </ol>
           </aside>
         )}
+      </div>
+
+      <div className="article-engagement">
+        <ArticleLikeButton slug={post.slug} />
       </div>
 
       {(newerPost || olderPost) && (
