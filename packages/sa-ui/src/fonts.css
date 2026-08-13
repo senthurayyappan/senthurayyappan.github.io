@@ -1,0 +1,11 @@
+@font-face {
+  font-family: 'Senthur Handwriting';
+  src: url('../assets/senthur-handwriting.woff') format('woff');
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}
+
+@layer sa.tokens {
+  :where(.sa-root) { --sa-font-handwriting: 'Senthur Handwriting', cursive; }
+}

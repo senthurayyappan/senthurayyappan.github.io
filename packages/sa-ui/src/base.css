@@ -1,0 +1,13 @@
+@layer sa.base {
+  :where(.sa-root) {
+    color: var(--sa-text);
+    background: var(--sa-surface);
+  }
+
+  :where(.sa-root, .sa-root *) { box-sizing: border-box; }
+
+  :where(.sa-root) ::selection {
+    color: var(--sa-black);
+    background: var(--sa-yellow);
+  }
+}

@@ -1,8 +1,12 @@
 {
+  "name": "senthurayyappan.github.io",
   "private": true,
+  "workspaces": ["packages/*"],
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "npm run build:ui && next dev",
+    "build:ui": "npm run build --workspace @senthur/sa-ui",
+    "test:ui": "npm test --workspace @senthur/sa-ui",
+    "build": "npm run build:ui && next build",
     "start": "next start",
     "typecheck": "tsc --noEmit"
   },
