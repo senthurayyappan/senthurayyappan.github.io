@@ -85,7 +85,7 @@ const RecentUpdates: React.FC = () => {
       {/* Writing Section */}
       <div className="flex-1">
         <div className="">
-          <p className="w-full leading-relaxed text-base sm:text-lg font-normal">
+          <p className="landing-intro w-full leading-relaxed text-base sm:text-lg font-normal">
             Hello there! I&rsquo;m a PhD student in Robotics at the University of
             Michigan, working with Prof. Elliott Rouse in the Neurobionics Lab.
             My research focuses on robot codesign: how a robot&rsquo;s

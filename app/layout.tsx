@@ -44,6 +44,7 @@ export const metadata: Metadata = {
 }
 
 const cx = (...classes) => classes.filter(Boolean).join(' ')
+const fontPreferenceScript = "const a=matchMedia('(prefers-reduced-motion: reduce)').matches||matchMedia('(forced-colors: active)').matches;let p=null;try{p=localStorage.getItem('sa-font-preference')}catch{}if(p==='full'||(p!=='selective'&&!a))document.documentElement.classList.add('font-handwritten')"
 
 export default function RootLayout({
   children,
@@ -60,6 +61,9 @@ export default function RootLayout({
       )}
       suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: fontPreferenceScript }} />
+      </head>
       <body className="antialiased min-h-full">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <LinkSketches />

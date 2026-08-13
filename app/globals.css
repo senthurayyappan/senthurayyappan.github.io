@@ -1,7 +1,16 @@
 @import 'tailwindcss';
 
+@font-face {
+  font-family: 'Senthur Handwriting';
+  src: url('/fonts/senthur-handwriting.woff') format('woff');
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}
+
 :root {
-  --font-display: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-handwriting: 'Senthur Handwriting', cursive;
+  --font-display: var(--font-handwriting);
   --font-reading: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --dot-spacing: 4px;
   --dot-opacity: 0.01;
@@ -82,9 +91,26 @@ body {
   color: var(--text);
   overflow-x: clip;
   margin: 0;
-  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--font-reading);
   font-size: 16px;
   line-height: 1.6;
+}
+
+.font-handwritten {
+  --font-reading: var(--font-handwriting);
+}
+
+.font-handwritten body {
+  font-synthesis: none;
+  font-variant-ligatures: common-ligatures contextual;
+  letter-spacing: .08em;
+  word-spacing: .16em;
+}
+
+.font-handwritten :where(code, pre, kbd, samp) {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  letter-spacing: normal;
+  word-spacing: normal;
 }
 
 * { box-sizing: border-box; }
@@ -225,7 +251,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 17px;
+  gap: 10px;
   padding-top: 18px;
   border-top: 0;
 }
@@ -252,34 +278,71 @@ body {
 
 .sidenav-social::before { top: 0; bottom: auto; }
 
-.sidenav-social a {
+.sidenav-social a,
+.site-icon-button {
   display: grid;
   place-items: center;
   color: color-mix(in srgb, var(--text) 58%, transparent);
   transition: color 180ms ease, transform 180ms ease;
 }
 
-.sidenav-social a:hover { color: var(--accent); transform: translateY(-1px); }
+.sidenav-social a:hover,
+.site-icon-button:hover,
+.site-icon-button[aria-pressed='true'] {
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
 .sidenav-social svg { display: block; }
 
-.site-theme-control {
-  --sa-depth-hover: 5px;
+.site-preferences {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 
-.site-theme-button {
-  --sa-button-height: 28px;
-  --sa-button-padding: 2px;
-  width: 28px;
+.site-icon-button {
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
 }
 
-.site-theme-button svg { display: block; width: 22px; height: 22px; }
+.site-icon-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.site-font-icon {
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  font-size: .85rem;
+  font-synthesis: none;
+  line-height: 1;
+  word-spacing: normal;
+}
+
+.site-font-button[aria-pressed='true'] .site-font-icon {
+  font-family: var(--font-handwriting);
+}
+
+.site-font-placeholder {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+
+.site-theme-button svg { display: block; width: 19px; height: 19px; }
 
 .mobile-masthead {
   position: sticky;
   top: 0;
   z-index: 25;
   display: none;
-  grid-template-columns: 40px minmax(0, 1fr) 40px;
+  grid-template-columns: 76px minmax(0, 1fr) 76px;
   align-items: center;
   justify-items: center;
   padding: 10px 4vw;
@@ -295,10 +358,11 @@ body {
   pointer-events: none;
 }
 
-.mobile-masthead-theme {
-  display: grid;
-  place-items: center;
+.mobile-masthead-preferences {
+  justify-self: start;
 }
+
+.mobile-masthead-menu { justify-self: end; }
 
 .mobile-masthead-logo {
   position: relative;
@@ -1843,4 +1907,30 @@ html::before {
   .article-pagination__newer { grid-column: 1; text-align: left; }
   .article-pagination__newer .article-pagination-card > span { justify-content: flex-start; }
   .article-byline > * + *::before { display: none; }
+}
+
+/* Use the personal handwriting for short display text. Keep long text in Geist. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.sidenav-list,
+.panel .text,
+.panel .speech,
+.landing-intro,
+.recommendation-link,
+.latest-post-date,
+.blog-tags button,
+.blog-empty button,
+.blog-read-link,
+.article-like-button,
+.article-pagination-card,
+.site-footer .sa-link {
+  font-family: var(--font-display);
+  font-synthesis: none;
+  font-variant-ligatures: common-ligatures contextual;
+  letter-spacing: .08em;
+  word-spacing: .16em;
 }
