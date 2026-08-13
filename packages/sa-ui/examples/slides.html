@@ -9,6 +9,12 @@
     <style>
       body { padding: clamp(1rem, 4vw, 4rem); }
       .demo-panel { padding: clamp(1rem, 3cqi, 3rem); }
+      @media (max-width: 48rem) {
+        .sa-slide[data-sa-layout='split'] {
+          aspect-ratio: auto;
+          overflow: visible;
+        }
+      }
     </style>
   </head>
   <body>
