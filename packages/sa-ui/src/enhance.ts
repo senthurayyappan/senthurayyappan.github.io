@@ -128,7 +128,9 @@ export function enhance(root: EnhanceRoot = document): () => void {
   }
   const onFocusOut = (event: FocusEvent) => {
     const element = getInteractionTarget(event.target)
-    if (element) remove(element)
+    if (!element) return
+    if (event.relatedTarget instanceof Node && element.contains(event.relatedTarget)) return
+    remove(element)
   }
 
   root.addEventListener('pointerover', onPointerOver)
