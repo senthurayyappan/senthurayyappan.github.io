@@ -2,7 +2,6 @@
 
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
-import { SAButton } from './SAButton'
 
 function SunIcon() {
   return (
@@ -11,8 +10,8 @@ function SunIcon() {
       viewBox="0 0 24 24"
       width="24"
       height="24"
-      stroke="var(--sa-yellow)"
-      fill="var(--sa-yellow)"
+      stroke="currentColor"
+      fill="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -38,8 +37,8 @@ function MoonIcon() {
       viewBox="0 0 24 24"
       width="24"
       height="24"
-      stroke="var(--sa-black)"
-      fill="var(--sa-black)"
+      stroke="currentColor"
+      fill="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -64,12 +63,14 @@ export function ThemeSwitch() {
   }
 
   return (
-    <SAButton
-      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      cellClassName="site-theme-control"
-      className="site-theme-button"
+    <button
+      type="button"
+      onClick={() => setTheme((resolvedTheme ?? theme) === 'dark' ? 'light' : 'dark')}
+      className="site-icon-button site-theme-button"
       aria-label="Toggle Dark Mode"
-      icon={resolvedTheme === 'dark' ? <SunIcon /> : <MoonIcon />}
-    />
+      title="Toggle Dark Mode"
+    >
+      {resolvedTheme === 'dark' ? <SunIcon /> : <MoonIcon />}
+    </button>
   )
 }

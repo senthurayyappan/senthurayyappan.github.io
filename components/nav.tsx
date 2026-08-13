@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
+import { FontSwitch } from './font-switch'
 import { ThemeSwitch } from './theme-switch'
 import { SketchArrow } from './SketchArrow'
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -92,6 +93,15 @@ function SocialRow() {
       <a href="https://www.linkedin.com/in/imsenthur/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><LinkedInIcon /></a>
       <a href="mailto:senthur@umich.edu" aria-label="Email"><MailIcon /></a>
       <a href="/rss" aria-label="RSS"><RssIcon /></a>
+      <PreferenceControls />
+    </div>
+  )
+}
+
+function PreferenceControls() {
+  return (
+    <div className="site-preferences">
+      <FontSwitch />
       <ThemeSwitch />
     </div>
   )
@@ -137,8 +147,8 @@ export function Navbar() {
       </aside>
 
       <div className="md:hidden mobile-masthead">
-        <div className="mobile-masthead-control mobile-masthead-theme">
-          <ThemeSwitch />
+        <div className="mobile-masthead-control mobile-masthead-preferences">
+          <PreferenceControls />
         </div>
         <Link href="/" onClick={() => setSidebarOpen(false)} className="mobile-masthead-logo" data-sketch="off">
           <Image src="/logo/800.png" alt="SA" fill sizes="112px" unoptimized priority />
