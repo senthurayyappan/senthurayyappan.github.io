@@ -10,7 +10,8 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: currentColor;
+    background: var(--sa-callout-frame-color, currentColor);
+    opacity: var(--sa-callout-frame-opacity, 1);
     pointer-events: none;
     -webkit-mask-image: var(--sketch-rule-h), var(--sketch-rule-h), var(--sketch-rule-v), var(--sketch-rule-v);
     mask-image: var(--sketch-rule-h), var(--sketch-rule-h), var(--sketch-rule-v), var(--sketch-rule-v);

@@ -429,7 +429,8 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: currentColor;
+    background: var(--sa-tag-frame-color, currentColor);
+    opacity: var(--sa-tag-frame-opacity, 1);
     pointer-events: none;
     -webkit-mask-image:
       var(--sketch-rule-h),
@@ -490,7 +491,8 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: currentColor;
+    background: var(--sa-callout-frame-color, currentColor);
+    opacity: var(--sa-callout-frame-opacity, 1);
     pointer-events: none;
     -webkit-mask-image:
       var(--sketch-rule-h),
