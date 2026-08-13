@@ -78,7 +78,7 @@ export function BlogExplorer({ posts }: { posts: BlogIndexPost[] }) {
                         <span>{post.metadata.readingTime} min read</span>
                       </span>
                       <span className="blog-panel-tags" aria-label="Topics">
-                        {(post.metadata.tags || []).map((tag) => <span key={tag}>{tag}</span>)}
+                        {(post.metadata.tags || []).map((tag) => <span className="sa-tag" data-sa-tone="blue" key={tag}>{tag}</span>)}
                       </span>
                     </div>
                     <BlogLikeCount slug={post.slug} />

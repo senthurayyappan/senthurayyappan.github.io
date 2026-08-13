@@ -75,7 +75,7 @@ export default function Blog({ params }) {
         <p className="article-dek">{post.metadata.summary}</p>
         <div className="article-meta-row">
           <div className="article-tags">
-            {(post.metadata.tags || []).map((tag) => <span key={tag}>{tag}</span>)}
+            {(post.metadata.tags || []).map((tag) => <span className="sa-tag" data-sa-tone="blue" key={tag}>{tag}</span>)}
           </div>
           <div className="article-meta-timing">
             <time dateTime={post.metadata.publishedAt}>{formatDate(post.metadata.publishedAt)}</time>

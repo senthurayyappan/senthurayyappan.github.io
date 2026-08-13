@@ -58,7 +58,7 @@ function FloatImage({
 
 function Callout({ title = 'Field note', tone = 'yellow', children }) {
   return (
-    <aside className={`article-callout article-callout--${tone}`}>
+    <aside className="sa-callout article-callout" data-sa-tone={tone}>
       <span className="article-callout__label">{title}</span>
       <div>{children}</div>
     </aside>
@@ -124,7 +124,7 @@ const components = {
   li: (props) => <li {...props} />,
   p: (props) => <p {...props} />,
   table: (props) => <div className="article-table-wrap"><table {...props} /></div>,
-  hr: () => <hr className="sketch-hr" />,
+  hr: () => <hr className="sa-rule" data-sa-axis="horizontal" />,
 }
 
 export function CustomMDX(props) {
