@@ -123,16 +123,16 @@ export default function Blog({ params }) {
       {(newerPost || olderPost) && (
         <nav className="article-pagination" aria-label="More posts">
           {olderPost ? (
-            <div className="article-pagination-cell article-pagination__older">
-              <Link href={`/blog/${olderPost.slug}`} className="article-pagination-card" data-sketch="off">
+            <div className="sa-extrude article-pagination-cell article-pagination__older" data-sa-extrude="interactive">
+              <Link href={`/blog/${olderPost.slug}`} className="sa-extrude__face article-pagination-card" data-sketch="off">
                 <span><SketchArrow className="article-pagination-arrow article-pagination-arrow--back" /> Older post</span>
                 <strong>{olderPost.metadata.title}</strong>
               </Link>
             </div>
           ) : null}
           {newerPost && (
-            <div className="article-pagination-cell article-pagination__newer">
-              <Link href={`/blog/${newerPost.slug}`} className="article-pagination-card" data-sketch="off">
+            <div className="sa-extrude article-pagination-cell article-pagination__newer" data-sa-extrude="interactive">
+              <Link href={`/blog/${newerPost.slug}`} className="sa-extrude__face article-pagination-card" data-sketch="off">
                 <span>Newer post <SketchArrow className="article-pagination-arrow" /></span>
                 <strong>{newerPost.metadata.title}</strong>
               </Link>

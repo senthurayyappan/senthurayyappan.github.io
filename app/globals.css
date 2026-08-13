@@ -923,48 +923,14 @@ html::before {
 }
 
 .latest-post-cell {
-  --post-depth: var(--panel-extrude-depth);
-  position: relative;
-  margin: var(--panel-extrude-depth) 0 0 var(--panel-extrude-depth);
-  transition: --post-depth var(--extrude-duration) var(--extrude-ease);
-}
-
-.latest-post-cell::before,
-.latest-post-cell::after {
-  content: '';
-  position: absolute;
-  z-index: 0;
-  box-sizing: border-box;
-  pointer-events: none;
-}
-
-.latest-post-cell::before {
-  top: calc(var(--post-depth) * -1);
-  left: calc(100% - var(--post-depth));
-  width: var(--post-depth);
-  height: 100%;
-  background: var(--sa-yellow);
-  border: 1.5px solid var(--text);
-  transform: skewY(45deg);
-  transform-origin: 0 0;
-}
-
-.latest-post-cell::after {
-  top: calc(100% - var(--post-depth));
-  left: calc(var(--post-depth) * -1);
-  width: 100%;
-  height: var(--post-depth);
-  background: var(--sa-blue);
-  border: 1.5px solid var(--text);
-  transform: skewX(45deg);
-  transform-origin: 0 0;
+  --sa-extrude-depth-rest: var(--sa-panel-depth-rest);
+  --sa-extrude-depth-hover: var(--sa-panel-depth-hover);
+  --sa-extrude-side: var(--sa-yellow);
+  --sa-extrude-bottom: var(--sa-blue);
+  --sa-extrude-edge-width: 1.5px;
 }
 
 .latest-post-card {
-  position: relative;
-  z-index: 1;
-  top: calc(var(--post-depth) * -1);
-  left: calc(var(--post-depth) * -1);
   display: block;
   min-height: 190px;
   padding: clamp(16px, 2.4vw, 24px) clamp(16px, 2.4vw, 24px) 48px;
@@ -988,11 +954,6 @@ html::before {
 }
 
 .latest-post-date::before { color: var(--sa-black); }
-
-@media (hover: hover) {
-  .latest-post-cell:hover,
-  .latest-post-cell:focus-within { --post-depth: var(--panel-extrude-depth-hover); }
-}
 
 .hover\:shadow-glow:hover {
   box-shadow: 0 0 8px 2px var(--accent, 0.1);
@@ -1041,24 +1002,6 @@ html::before {
 
 @media (prefers-reduced-motion: reduce) {
   .latest-post-cell, .latest-post-card, .blog-tags button, .article-like-cell, .article-like-button, .article-pagination-cell, .article-pagination-card, .mobile-drawer { transition: none; }
-}
-
-@property --post-depth {
-  syntax: '<length>';
-  inherits: true;
-  initial-value: 8px;
-}
-
-@property --like-depth {
-  syntax: '<length>';
-  inherits: true;
-  initial-value: 5px;
-}
-
-@property --pagination-depth {
-  syntax: '<length>';
-  inherits: true;
-  initial-value: 5px;
 }
 
 .sketch-annotation {
@@ -1535,52 +1478,18 @@ html::before {
 }
 
 .article-like-cell {
-  --like-depth: 5px;
-  position: relative;
+  --sa-extrude-depth-rest: 5px;
+  --sa-extrude-depth-hover: 10px;
+  --sa-extrude-side: var(--sa-accent);
+  --sa-extrude-bottom: var(--sa-blue);
+  --sa-extrude-edge-width: 1.5px;
   display: inline-block;
-  margin: 5px 0 0 5px;
-  transition: color var(--extrude-duration) var(--extrude-ease), --like-depth var(--extrude-duration) var(--extrude-ease);
-}
-
-.article-like-cell::before,
-.article-like-cell::after {
-  content: '';
-  position: absolute;
-  z-index: 0;
-  box-sizing: border-box;
-  pointer-events: none;
-}
-
-.article-like-cell::before {
-  top: calc(var(--like-depth) * -1);
-  left: calc(100% - var(--like-depth));
-  width: var(--like-depth);
-  height: 100%;
-  background: var(--accent);
-  border: 1.5px solid var(--text);
-  transform: skewY(45deg);
-  transform-origin: 0 0;
-}
-
-.article-like-cell::after {
-  top: calc(100% - var(--like-depth));
-  left: calc(var(--like-depth) * -1);
-  width: 100%;
-  height: var(--like-depth);
-  background: var(--sa-blue);
-  border: 1.5px solid var(--text);
-  transform: skewX(45deg);
-  transform-origin: 0 0;
 }
 
 .article-like-button {
-  position: relative;
-  z-index: 1;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  top: calc(var(--like-depth) * -1);
-  left: calc(var(--like-depth) * -1);
   min-height: 39px;
   padding: 8px 12px;
   color: var(--text);
@@ -1615,8 +1524,6 @@ html::before {
 .article-like-button.is-liked { color: var(--sa-blue); }
 .article-like-button:disabled { cursor: wait; opacity: .7; }
 @media (hover: hover) {
-  .article-like-cell:hover,
-  .article-like-cell:focus-within { --like-depth: 10px; }
   .article-like-cell:hover .article-like-button,
   .article-like-cell:focus-within .article-like-button { color: var(--sa-blue); }
 }
@@ -1715,50 +1622,16 @@ html::before {
 .article-pagination { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 26px; margin-top: 64px; padding-top: 34px; }
 .article-pagination::before { top: 0; }
 .article-pagination-cell {
-  --pagination-depth: 5px;
-  position: relative;
+  --sa-extrude-depth-rest: 5px;
+  --sa-extrude-depth-hover: 11px;
+  --sa-extrude-side: var(--sa-accent);
+  --sa-extrude-bottom: var(--sa-blue);
+  --sa-extrude-edge-width: 1.5px;
   min-width: 0;
   height: 100%;
-  margin: 5px 0 0 5px;
-  transition: --pagination-depth var(--extrude-duration) var(--extrude-ease);
-}
-
-.article-pagination-cell::before,
-.article-pagination-cell::after {
-  content: '';
-  position: absolute;
-  z-index: 0;
-  box-sizing: border-box;
-  pointer-events: none;
-}
-
-.article-pagination-cell::before {
-  top: calc(var(--pagination-depth) * -1);
-  left: calc(100% - var(--pagination-depth));
-  width: var(--pagination-depth);
-  height: 100%;
-  background: var(--accent);
-  border: 1.5px solid var(--text);
-  transform: skewY(45deg);
-  transform-origin: 0 0;
-}
-
-.article-pagination-cell::after {
-  top: calc(100% - var(--pagination-depth));
-  left: calc(var(--pagination-depth) * -1);
-  width: 100%;
-  height: var(--pagination-depth);
-  background: var(--sa-blue);
-  border: 1.5px solid var(--text);
-  transform: skewX(45deg);
-  transform-origin: 0 0;
 }
 
 .article-pagination-card {
-  position: relative;
-  z-index: 1;
-  top: calc(var(--pagination-depth) * -1);
-  left: calc(var(--pagination-depth) * -1);
   display: grid;
   min-width: 0;
   height: 100%;
@@ -1788,8 +1661,6 @@ html::before {
   mask-repeat: no-repeat;
 }
 @media (hover: hover) {
-  .article-pagination-cell:hover,
-  .article-pagination-cell:focus-within { --pagination-depth: 11px; }
   .article-pagination-cell:hover .article-pagination-card,
   .article-pagination-cell:focus-within .article-pagination-card { color: var(--accent); }
 }

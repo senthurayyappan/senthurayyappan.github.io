@@ -63,10 +63,10 @@ const RecentUpdates: React.FC = () => {
   return (
     <div className="h-full w-full p-3 sm:p-6 overflow-y-auto flex flex-col gap-4 sm:gap-6 justify-between">
       {/* Latest Blog Post Section */}
-      <div className="latest-post-cell md:mb-2 lg:mb-4">
+      <div className="sa-extrude latest-post-cell md:mb-2 lg:mb-4" data-sa-extrude="interactive">
         <Link
           href={`/blog/${latestPostSlug}`}
-          className="latest-post-card"
+          className="sa-extrude__face latest-post-card"
           data-sketch="off"
         >
           <div className="space-y-3">
