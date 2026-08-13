@@ -22,3 +22,11 @@ test('build emits core and optional font CSS', async () => {
   assert.match(fonts, /font-family:\s*['\"]Senthur Handwriting['\"]/)
   await stat(new URL('dist/fonts/senthur-handwriting.woff', packageRoot))
 })
+
+test('public compatibility font matches the package font', async () => {
+  const [packageFont, compatibilityFont] = await Promise.all([
+    readFile(new URL('assets/senthur-handwriting.woff', packageRoot)),
+    readFile(new URL('../../public/fonts/senthur-handwriting.woff', packageRoot)),
+  ])
+  assert.deepEqual(compatibilityFont, packageFont)
+})
