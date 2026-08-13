@@ -76,7 +76,9 @@ function NavList({ pathname, onClick }: { pathname: string; onClick?: () => void
         return (
           <li key={href}>
             <Link href={href} onClick={onClick} aria-current={active ? 'page' : undefined}>
-              <span data-sketch-target>{label}</span>
+              <span className="sa-mark" data-sa-mark="underline" data-sa-trigger="interaction">
+                {label}
+              </span>
               <SketchArrow className="sn-arrow" />
             </Link>
           </li>
@@ -89,10 +91,10 @@ function NavList({ pathname, onClick }: { pathname: string; onClick?: () => void
 function SocialRow() {
   return (
     <div className="sidenav-social" aria-label="Elsewhere">
-      <a href="https://github.com/senthurayyappan" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><GitHubIcon /></a>
-      <a href="https://www.linkedin.com/in/imsenthur/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><LinkedInIcon /></a>
-      <a href="mailto:senthur@umich.edu" aria-label="Email"><MailIcon /></a>
-      <a href="/rss" aria-label="RSS"><RssIcon /></a>
+      <a className="sa-mark" data-sa-mark="circle" data-sa-trigger="interaction" href="https://github.com/senthurayyappan" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><GitHubIcon /></a>
+      <a className="sa-mark" data-sa-mark="circle" data-sa-trigger="interaction" href="https://www.linkedin.com/in/imsenthur/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><LinkedInIcon /></a>
+      <a className="sa-mark" data-sa-mark="circle" data-sa-trigger="interaction" href="mailto:senthur@umich.edu" aria-label="Email"><MailIcon /></a>
+      <a className="sa-mark" data-sa-mark="circle" data-sa-trigger="interaction" href="/rss" aria-label="RSS"><RssIcon /></a>
       <PreferenceControls />
     </div>
   )

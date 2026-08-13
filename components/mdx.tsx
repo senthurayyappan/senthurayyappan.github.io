@@ -9,14 +9,14 @@ function CustomLink(props) {
   const href = props.href || ''
 
   if (href.startsWith('/')) {
-    return <Link href={href} className="sa-link" {...props}>{props.children}</Link>
+    return <Link href={href} className="sa-link sa-mark" data-sa-mark="underline" data-sa-trigger="interaction" {...props}>{props.children}</Link>
   }
 
   if (href.startsWith('#')) {
-    return <a className="sa-link" {...props} />
+    return <a className="sa-link sa-mark" data-sa-mark="underline" data-sa-trigger="interaction" {...props} />
   }
 
-  return <a target="_blank" rel="noopener noreferrer" className="sa-link" {...props} />
+  return <a target="_blank" rel="noopener noreferrer" className="sa-link sa-mark" data-sa-mark="underline" data-sa-trigger="interaction" {...props} />
 }
 
 type ArticleImageProps = Omit<ImageProps, 'width' | 'height'> & {

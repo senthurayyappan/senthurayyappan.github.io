@@ -1,42 +1,9 @@
 @import 'tailwindcss';
 
-@font-face {
-  font-family: 'Senthur Handwriting';
-  src: url('/fonts/senthur-handwriting.woff') format('woff');
-  font-display: swap;
-  font-style: normal;
-  font-weight: 400;
-}
-
 :root {
-  --font-handwriting: 'Senthur Handwriting', cursive;
-  --font-display: var(--font-handwriting);
-  --font-reading: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --dot-spacing: 4px;
   --dot-opacity: 0.01;
   --dot-color: var(--sa-black);
-
-  /* The five fixed colours in the SA mark. */
-  --white: #f6f4ee;
-  --black: #15130d;
-  --sa-black: #15130d;
-  --sa-white: #f6f4ee;
-  --sa-off-white: #e8e4da;
-  --sa-yellow: #f9c90a;
-  --sa-red: #ef2841;
-  --sa-blue: #007d7e;
-  --sa-green: var(--sa-blue);
-  --rule: color-mix(in srgb, var(--text) 22%, transparent);
-  --extrude-duration: 180ms;
-  --extrude-ease: cubic-bezier(.2, .8, .2, 1);
-  --panel-extrude-depth: 8px;
-  --panel-extrude-depth-hover: 15px;
-  /* Hand-inked masks: deliberately imperfect double strokes. Keeping these as
-     masks means the same linework follows the light and dark theme ink color. */
-  --sketch-rule-h: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 5' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='white' stroke-linecap='round' vector-effect='non-scaling-stroke'%3E%3Cpath d='M0 2.7 C13 1.1 23 3.8 36 2.2 S61 3.4 74 2.1 S91 3.3 100 2.3' stroke-width='1.2'/%3E%3Cpath d='M0 3.4 C18 2.4 31 3.7 48 2.8 S77 3.8 100 2.9' stroke-width='.55' opacity='.55'/%3E%3C/g%3E%3C/svg%3E");
-  --sketch-rule-v: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5 100' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='white' stroke-linecap='round' vector-effect='non-scaling-stroke'%3E%3Cpath d='M2.7 0 C1.1 13 3.8 23 2.2 36 S3.4 61 2.1 74 S3.3 91 2.3 100' stroke-width='1.2'/%3E%3Cpath d='M3.4 0 C2.4 18 3.7 31 2.8 48 S3.8 77 2.9 100' stroke-width='.55' opacity='.55'/%3E%3C/g%3E%3C/svg%3E");
-  --tag-rule-h: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 4' preserveAspectRatio='none'%3E%3Cpath d='M0 2.1 C18 1.6 34 2.35 52 1.9 S84 2.3 100 2' fill='none' stroke='white' stroke-width='1.05' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
-  --tag-rule-v: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 100' preserveAspectRatio='none'%3E%3Cpath d='M2.1 0 C1.6 18 2.35 34 1.9 52 S2.3 84 2 100' fill='none' stroke='white' stroke-width='1.05' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
 
   /* --- Light Mode Syntax Highlighting Vars --- */
   --sh-class: #4c97f8;        /* Example: Brighter blue */
@@ -50,17 +17,7 @@
   --sh-entity: #f59e0b;      /* Example: Amber */
   --sh-background: var(--sa-black);
 
-  --background: var(--sa-white);
   --muted: var(--sa-blue);
-  --accent: var(--sa-red);
-  --text: var(--sa-black);
-}
-
-html {
-  min-width: 320px;
-  background-color: var(--background);
-  overflow-x: clip;
-  scrollbar-gutter: stable;
 }
 
 /* --- Dark Mode Overrides --- */
@@ -79,45 +36,7 @@ html {
   --sh-entity: #f59e0b;      /* Example: Amber */
   --sh-background: var(--sa-black);
 
-  /* --- Other Dark Mode Vars --- */
-  --background: var(--sa-black);
   --muted: var(--sa-blue);
-  --accent: var(--sa-yellow);
-  --text: var(--sa-white);
-}
-
-body {
-  background-color: transparent;
-  color: var(--text);
-  overflow-x: clip;
-  margin: 0;
-  font-family: var(--font-reading);
-  font-size: 16px;
-  line-height: 1.6;
-}
-
-.font-handwritten {
-  --font-reading: var(--font-handwriting);
-}
-
-.font-handwritten body {
-  font-synthesis: none;
-  font-variant-ligatures: common-ligatures contextual;
-  letter-spacing: .08em;
-  word-spacing: .16em;
-}
-
-.font-handwritten :where(code, pre, kbd, samp) {
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
-  letter-spacing: normal;
-  word-spacing: normal;
-}
-
-* { box-sizing: border-box; }
-
-::selection {
-  background: var(--sa-yellow);
-  color: var(--sa-black);
 }
 
 .site-shell {
@@ -768,8 +687,8 @@ html::before {
 }
 
 .panel .text {
-  background-color: var(--white);
-  color: var(--black);
+  background-color: var(--sa-white);
+  color: var(--sa-black);
   border: 0;
   margin:0;
   padding:3px 16px 6px;
@@ -782,7 +701,7 @@ html::before {
   letter-spacing: -.01em;
 }
 
-.panel .text::after { color: var(--black); }
+.panel .text::after { color: var(--sa-black); }
 
 /* Keep the dithered artwork free of filters and transforms. Both create new
    composited surfaces in Chromium and can leave high-frequency dots corrupted
@@ -874,7 +793,7 @@ html::before {
 }
 
 .panel .speech {
-  background-color: var(--white);
+  background-color: var(--sa-white);
   border:solid 2px var(--sa-black);
   border-radius:4px;
   display:inline-block;
@@ -882,22 +801,22 @@ html::before {
   padding:.5em 1em;
   position:relative;
   z-index: 1;
-  color: var(--black);
+  color: var(--sa-black);
   font-family: inherit;
   font-size: clamp(0.75rem, 2vw, 1rem);
 }
 
 .dark .panel .speech {
-  background-color: var(--white);
-  /* color: var(--black); */ /* Removed previously for utility class compatibility */
-  border-color: var(--black);
+  background-color: var(--sa-white);
+  /* color: var(--sa-black); */ /* Removed previously for utility class compatibility */
+  border-color: var(--sa-black);
   /* NOTE: font-weight will be inherited from the light mode rule unless overridden here */
 }
 
 .panel .speech:before {
   border:solid 12px transparent;
-  border-left:solid 12px var(--black);
-  border-top:solid 12px var(--black);
+  border-left:solid 12px var(--sa-black);
+  border-top:solid 12px var(--sa-black);
   bottom:-24px; /* Adjust as needed */
   content:"";
   height:0;
@@ -908,14 +827,14 @@ html::before {
 }
 
 .dark .panel .speech:before {
-  border-left-color: var(--white);
-  border-top-color: var(--white);
+  border-left-color: var(--sa-white);
+  border-top-color: var(--sa-white);
 }
 
 .panel .speech:after {
   border:solid 10px transparent;
-  border-left:solid 10px var(--white); /* Use theme color */
-  border-top:solid 10px var(--white); /* Use theme color */
+  border-left:solid 10px var(--sa-white); /* Use theme color */
+  border-top:solid 10px var(--sa-white); /* Use theme color */
   bottom:-19px; /* Adjust as needed */
   content:"";
   height:0;
@@ -926,8 +845,8 @@ html::before {
 }
 
 .dark .panel .speech:after {
-  border-left-color: var(--white); /* Invert for dark mode */
-  border-top-color: var(--white); /* Invert for dark mode */
+  border-left-color: var(--sa-white); /* Invert for dark mode */
+  border-top-color: var(--sa-white); /* Invert for dark mode */
 }
 
 /* Remove unused panel definitions */

@@ -5,6 +5,7 @@
   "type": "module",
   "files": [
     "dist",
+    "enhance.ts",
     "react",
     "src"
   ],

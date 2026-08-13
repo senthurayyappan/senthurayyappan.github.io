@@ -43,7 +43,7 @@ export default function Footer() {
             href="/rss"
           >
             <SketchArrow direction="up-right" className="footer-sketch-arrow" />
-            <p data-sketch-target className="ml-2 h-7 sa-link">rss</p>
+            <p className="ml-2 h-7 sa-link sa-mark" data-sa-mark="underline" data-sa-trigger="interaction">rss</p>
           </a>
         </li>
         <li>
@@ -54,7 +54,7 @@ export default function Footer() {
             href="https://github.com/senthurayyappan/senthurayyappan.github.io"
           >
             <SketchArrow direction="up-right" className="footer-sketch-arrow" />
-            <p data-sketch-target className="ml-2 h-7 sa-link">source</p>
+            <p className="ml-2 h-7 sa-link sa-mark" data-sa-mark="underline" data-sa-trigger="interaction">source</p>
           </a>
         </li>
       </ul>

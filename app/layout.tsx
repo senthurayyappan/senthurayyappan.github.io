@@ -1,4 +1,5 @@
-import '../styles/sa-ui.css'
+import '@senthur/sa-ui/styles.css'
+import '@senthur/sa-ui/fonts.css'
 import './globals.css'
 import type { Metadata } from 'next'
 import { GeistSans } from 'geist/font/sans'
@@ -57,7 +58,8 @@ export default function RootLayout({
       className={cx(
         GeistSans.variable,
         GeistMono.variable,
-        "h-full"
+        'h-full',
+        'sa-root',
       )}
       suppressHydrationWarning
     >

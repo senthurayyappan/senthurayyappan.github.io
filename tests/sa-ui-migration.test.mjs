@@ -1,0 +1,28 @@
+import assert from 'node:assert/strict'
+import { readFile, stat } from 'node:fs/promises'
+import test from 'node:test'
+
+test('portfolio consumes package CSS without duplicate foundations', async () => {
+  const layout = await readFile(new URL('../app/layout.tsx', import.meta.url), 'utf8')
+  const globals = await readFile(new URL('../app/globals.css', import.meta.url), 'utf8')
+
+  assert.match(layout, /@senthur\/sa-ui\/styles\.css/)
+  assert.match(layout, /@senthur\/sa-ui\/fonts\.css/)
+  assert.match(layout, /sa-root/)
+  assert.doesNotMatch(globals, /@font-face/)
+  assert.doesNotMatch(globals, /--sa-black:\s*#15130d/)
+  assert.doesNotMatch(globals, /--sketch-rule-h:/)
+})
+
+test('package enhancer has a TypeScript source entry', async () => {
+  const enhancer = await readFile(new URL('../packages/sa-ui/enhance.ts', import.meta.url), 'utf8')
+
+  assert.match(enhancer, /export\s*\{\s*enhance\s*\}/)
+})
+
+test('portfolio does not retain the temporary public font', async () => {
+  await assert.rejects(
+    stat(new URL('../public/fonts/senthur-handwriting.woff', import.meta.url)),
+    { code: 'ENOENT' },
+  )
+})

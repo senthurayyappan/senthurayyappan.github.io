@@ -50,6 +50,18 @@
   :where(.sa-root) {
     color: var(--sa-text);
     background: var(--sa-surface);
+    min-width: 320px;
+    overflow-x: clip;
+    scrollbar-gutter: stable;
+  }
+  :where(.sa-root) body {
+    color: var(--text);
+    background-color: transparent;
+    overflow-x: clip;
+    margin: 0;
+    font-family: var(--font-reading);
+    font-size: 16px;
+    line-height: 1.6;
   }
   :where(.sa-root, .sa-root *) {
     box-sizing: border-box;
