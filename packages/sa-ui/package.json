@@ -12,7 +12,9 @@
     "./styles.css": "./dist/sa-ui.css",
     "./fonts.css": "./dist/sa-ui-fonts.css",
     "./tokens.css": "./src/tokens.css",
-    "./base.css": "./src/base.css"
+    "./base.css": "./src/base.css",
+    "./layouts.css": "./src/layouts.css",
+    "./patterns/*.css": "./src/patterns/*.css"
   },
   "scripts": {
     "build": "node build.mjs",

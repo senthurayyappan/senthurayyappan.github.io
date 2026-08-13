@@ -1,0 +1,8 @@
+@layer sa.patterns {
+  .sa-panel-grid {
+    container-type: inline-size;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--sa-panel-grid-min, 18rem)), 1fr));
+    gap: var(--sa-panel-grid-gap, 1rem);
+  }
+}
