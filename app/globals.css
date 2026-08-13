@@ -749,9 +749,6 @@ html::before {
   max-width: none;
 }
 
-.footer-handwriting { font-family: var(--font-handwriting); }
-
-
 .panel .top-left {
   left:-6px;
   /* position:absolute; Already set on .text */
@@ -1670,6 +1667,7 @@ h6,
 .blog-read-link,
 .article-like-button,
 .article-pagination-card,
+.footer-handwriting,
 .site-footer .sa-link {
   font-family: var(--font-display);
   font-synthesis: none;

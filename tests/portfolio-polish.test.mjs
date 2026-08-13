@@ -64,5 +64,8 @@ test('portfolio polish CSS keeps the required visual contracts', async () => {
   assert.doesNotMatch(globals, /\.dark \.panel \.text\s*\{/)
   assert.match(globals, /\.sidenav::after\s*\{[^}]*bottom:\s*-56px/s)
   assert.doesNotMatch(globals, /\.comic-menu-button\s*\{[^}]*box-shadow/s)
-  assert.match(globals, /\.footer-handwriting\s*\{[^}]*font-family:\s*var\(--font-handwriting\)/s)
+  assert.match(
+    globals,
+    /\.footer-handwriting,\s*\.site-footer \.sa-link\s*\{[^}]*font-family:\s*var\(--font-display\)[^}]*font-synthesis:\s*none[^}]*font-variant-ligatures:\s*common-ligatures contextual[^}]*letter-spacing:\s*\.08em[^}]*word-spacing:\s*\.16em/s,
+  )
 })
