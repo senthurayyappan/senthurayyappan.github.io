@@ -14,6 +14,8 @@
     "./tokens.css": "./src/tokens.css",
     "./base.css": "./src/base.css",
     "./layouts.css": "./src/layouts.css",
+    "./effects.css": "./src/effects.css",
+    "./components/*.css": "./src/components/*.css",
     "./patterns/*.css": "./src/patterns/*.css"
   },
   "scripts": {

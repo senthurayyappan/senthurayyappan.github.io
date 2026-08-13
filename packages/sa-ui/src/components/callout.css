@@ -1,0 +1,24 @@
+@layer sa.components {
+  .sa-callout {
+    position: relative;
+    padding: var(--sa-callout-padding, 1rem 1.2rem);
+    color: var(--sa-callout-text, var(--sa-tone-text, var(--sa-black)));
+    background: var(--sa-callout-surface, var(--sa-tone-surface, var(--sa-yellow)));
+  }
+
+  .sa-callout::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: currentColor;
+    pointer-events: none;
+    -webkit-mask-image: var(--sketch-rule-h), var(--sketch-rule-h), var(--sketch-rule-v), var(--sketch-rule-v);
+    mask-image: var(--sketch-rule-h), var(--sketch-rule-h), var(--sketch-rule-v), var(--sketch-rule-v);
+    -webkit-mask-position: top center, bottom center, left center, right center;
+    mask-position: top center, bottom center, left center, right center;
+    -webkit-mask-size: 100% 5px, 100% 5px, 5px 100%, 5px 100%;
+    mask-size: 100% 5px, 100% 5px, 5px 100%, 5px 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+}

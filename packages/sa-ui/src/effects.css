@@ -1,0 +1,105 @@
+@property --sa-extrude-current-depth {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 8px;
+}
+
+@layer sa.effects {
+  .sa-extrude,
+  .sa-panel-cell,
+  .sa-control {
+    --sa-extrude-current-depth: var(--sa-extrude-depth-rest, 8px);
+    position: relative;
+    margin: var(--sa-extrude-depth-rest, 8px) 0 0 var(--sa-extrude-depth-rest, 8px);
+    isolation: isolate;
+    transition: --sa-extrude-current-depth var(--sa-motion-normal) var(--sa-ease-extrude);
+  }
+
+  .sa-extrude::before,
+  .sa-extrude::after,
+  .sa-panel-cell::before,
+  .sa-panel-cell::after,
+  .sa-control::before,
+  .sa-control::after {
+    content: '';
+    position: absolute;
+    z-index: 0;
+    box-sizing: border-box;
+    pointer-events: none;
+  }
+
+  .sa-extrude::before,
+  .sa-panel-cell::before,
+  .sa-control::before {
+    top: calc(var(--sa-extrude-current-depth) * -1);
+    left: calc(100% - var(--sa-extrude-current-depth));
+    width: var(--sa-extrude-current-depth);
+    height: 100%;
+    background: var(--sa-extrude-side, var(--sa-accent));
+    border: var(--sa-extrude-edge-width, 1.5px) solid var(--sa-extrude-edge, var(--sa-text));
+    transform: skewY(45deg);
+    transform-origin: 0 0;
+  }
+
+  .sa-extrude::after,
+  .sa-panel-cell::after,
+  .sa-control::after {
+    top: calc(100% - var(--sa-extrude-current-depth));
+    left: calc(var(--sa-extrude-current-depth) * -1);
+    width: 100%;
+    height: var(--sa-extrude-current-depth);
+    background: var(--sa-extrude-bottom, var(--sa-blue));
+    border: var(--sa-extrude-edge-width, 1.5px) solid var(--sa-extrude-edge, var(--sa-text));
+    transform: skewX(45deg);
+    transform-origin: 0 0;
+  }
+
+  .sa-extrude__face,
+  .sa-panel,
+  .sa-button {
+    position: relative;
+    z-index: 1;
+    top: var(--sa-extrude-face-top, calc(var(--sa-extrude-current-depth) * -1));
+    left: var(--sa-extrude-face-left, calc(var(--sa-extrude-current-depth) * -1));
+  }
+
+  @media (hover: hover) {
+    .sa-extrude[data-sa-extrude='interactive']:hover,
+    .sa-extrude[data-sa-extrude='interactive']:focus-within,
+    .sa-panel-cell[data-sa-extrude='interactive']:hover,
+    .sa-panel-cell[data-sa-extrude='interactive']:focus-within,
+    .sa-panel-cell--interactive:hover,
+    .sa-panel-cell--interactive:focus-within {
+      --sa-extrude-current-depth: var(--sa-extrude-depth-hover, 15px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sa-extrude,
+    .sa-panel-cell,
+    .sa-control,
+    .sa-extrude__face,
+    .sa-panel,
+    .sa-button {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .sa-extrude::before,
+    .sa-extrude::after,
+    .sa-panel-cell::before,
+    .sa-panel-cell::after,
+    .sa-control::before,
+    .sa-control::after {
+      background: Canvas;
+      border-color: CanvasText;
+    }
+
+    .sa-extrude__face,
+    .sa-panel,
+    .sa-button {
+      outline: 1px solid CanvasText;
+    }
+  }
+}

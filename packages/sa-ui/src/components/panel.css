@@ -1,0 +1,39 @@
+@layer sa.components {
+  .sa-panel-cell {
+    --sa-extrude-depth-rest: var(--sa-panel-depth-rest, 8px);
+    --sa-extrude-depth-hover: var(--sa-panel-depth-hover, 15px);
+    --sa-extrude-side: var(--sa-side-color, var(--sa-accent));
+    --sa-extrude-bottom: var(--sa-bottom-color, var(--sa-blue));
+    --sa-extrude-edge-width: var(--sa-panel-edge-width, 2px);
+    --sa-extrude-edge: var(--sa-edge-color, var(--text, var(--sa-black)));
+  }
+
+  .sa-panel {
+    color: var(--text, var(--sa-black));
+    background: var(--sa-panel-background, var(--background, var(--sa-white)));
+  }
+
+  .sa-panel:not(.sa-panel--docked)::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    color: inherit;
+    background: currentColor;
+    pointer-events: none;
+    -webkit-mask-image: var(--sketch-rule-h), var(--sketch-rule-h), var(--sketch-rule-v), var(--sketch-rule-v);
+    mask-image: var(--sketch-rule-h), var(--sketch-rule-h), var(--sketch-rule-v), var(--sketch-rule-v);
+    -webkit-mask-position: top center, bottom center, left center, right center;
+    mask-position: top center, bottom center, left center, right center;
+    -webkit-mask-size: 100% 5px, 100% 5px, 5px 100%, 5px 100%;
+    mask-size: 100% 5px, 100% 5px, 5px 100%, 5px 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+
+  .sa-panel--docked {
+    --sa-extrude-face-top: auto;
+    --sa-extrude-face-left: auto;
+    background: var(--sa-panel-background, var(--surface, var(--sa-white)));
+  }
+}

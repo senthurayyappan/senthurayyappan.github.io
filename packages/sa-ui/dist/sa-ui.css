@@ -102,6 +102,476 @@
   }
 }
 
+/* src/effects.css */
+@property --sa-extrude-current-depth { syntax: "<length>"; inherits: true; initial-value: 8px; }
+@layer sa.effects {
+  .sa-extrude,
+  .sa-panel-cell,
+  .sa-control {
+    --sa-extrude-current-depth: var(--sa-extrude-depth-rest, 8px);
+    position: relative;
+    margin: var(--sa-extrude-depth-rest, 8px) 0 0 var(--sa-extrude-depth-rest, 8px);
+    isolation: isolate;
+    transition: --sa-extrude-current-depth var(--sa-motion-normal) var(--sa-ease-extrude);
+  }
+  .sa-extrude::before,
+  .sa-extrude::after,
+  .sa-panel-cell::before,
+  .sa-panel-cell::after,
+  .sa-control::before,
+  .sa-control::after {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    box-sizing: border-box;
+    pointer-events: none;
+  }
+  .sa-extrude::before,
+  .sa-panel-cell::before,
+  .sa-control::before {
+    top: calc(var(--sa-extrude-current-depth) * -1);
+    left: calc(100% - var(--sa-extrude-current-depth));
+    width: var(--sa-extrude-current-depth);
+    height: 100%;
+    background: var(--sa-extrude-side, var(--sa-accent));
+    border: var(--sa-extrude-edge-width, 1.5px) solid var(--sa-extrude-edge, var(--sa-text));
+    transform: skewY(45deg);
+    transform-origin: 0 0;
+  }
+  .sa-extrude::after,
+  .sa-panel-cell::after,
+  .sa-control::after {
+    top: calc(100% - var(--sa-extrude-current-depth));
+    left: calc(var(--sa-extrude-current-depth) * -1);
+    width: 100%;
+    height: var(--sa-extrude-current-depth);
+    background: var(--sa-extrude-bottom, var(--sa-blue));
+    border: var(--sa-extrude-edge-width, 1.5px) solid var(--sa-extrude-edge, var(--sa-text));
+    transform: skewX(45deg);
+    transform-origin: 0 0;
+  }
+  .sa-extrude__face,
+  .sa-panel,
+  .sa-button {
+    position: relative;
+    z-index: 1;
+    top: var(--sa-extrude-face-top, calc(var(--sa-extrude-current-depth) * -1));
+    left: var(--sa-extrude-face-left, calc(var(--sa-extrude-current-depth) * -1));
+  }
+  @media (hover: hover) {
+    .sa-extrude[data-sa-extrude=interactive]:hover,
+    .sa-extrude[data-sa-extrude=interactive]:focus-within,
+    .sa-panel-cell[data-sa-extrude=interactive]:hover,
+    .sa-panel-cell[data-sa-extrude=interactive]:focus-within,
+    .sa-panel-cell--interactive:hover,
+    .sa-panel-cell--interactive:focus-within {
+      --sa-extrude-current-depth: var(--sa-extrude-depth-hover, 15px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sa-extrude,
+    .sa-panel-cell,
+    .sa-control,
+    .sa-extrude__face,
+    .sa-panel,
+    .sa-button {
+      transition: none;
+    }
+  }
+  @media (forced-colors: active) {
+    .sa-extrude::before,
+    .sa-extrude::after,
+    .sa-panel-cell::before,
+    .sa-panel-cell::after,
+    .sa-control::before,
+    .sa-control::after {
+      background: Canvas;
+      border-color: CanvasText;
+    }
+    .sa-extrude__face,
+    .sa-panel,
+    .sa-button {
+      outline: 1px solid CanvasText;
+    }
+  }
+}
+
+/* src/components/button.css */
+@layer sa.components {
+  .sa-control {
+    --sa-extrude-depth-rest: var(--sa-depth-rest, 2px);
+    --sa-extrude-depth-hover: var(--sa-depth-hover, 6px);
+    --sa-extrude-side: var(--sa-side-color, var(--sa-yellow));
+    --sa-extrude-bottom: var(--sa-bottom-color, var(--sa-blue));
+    --sa-extrude-edge-width: var(--sa-edge-width, 1px);
+    --sa-extrude-edge: var(--sa-edge-color, var(--sa-black));
+    --sa-button-border-width: 0px;
+    --sa-button-rule-h: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 5' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='white' stroke-linecap='round' vector-effect='non-scaling-stroke'%3E%3Cpath d='M0 2.63 C13 1.57 23 3.37 36 2.3 S61 3.1 74 2.23 S91 3.03 100 2.37' stroke-width='1.2'/%3E%3Cpath d='M0 3.27 C18 2.6 31 3.47 48 2.87 S77 3.53 100 2.93' stroke-width='.55' opacity='.55'/%3E%3C/g%3E%3C/svg%3E");
+    --sa-button-rule-v: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5 100' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='white' stroke-linecap='round' vector-effect='non-scaling-stroke'%3E%3Cpath d='M2.63 0 C1.57 13 3.37 23 2.3 36 S3.1 61 2.23 74 S3.03 91 2.37 100' stroke-width='1.2'/%3E%3Cpath d='M3.27 0 C2.6 18 3.47 31 2.87 48 S3.53 77 3.53 100 2.93' stroke-width='.55' opacity='.55'/%3E%3C/g%3E%3C/svg%3E");
+    display: inline-flex;
+  }
+  .sa-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sa-button-gap, 7px);
+    min-height: var(--sa-button-height, 32px);
+    padding: var(--sa-button-padding, 6px 10px);
+    border: var(--sa-button-border-width, 1px) solid var(--sa-button-border-color, color-mix(in srgb, var(--text, var(--sa-black)) 48%, transparent));
+    border-radius: 0;
+    color: var(--sa-button-color, var(--text, var(--sa-black)));
+    background: var(--sa-button-background, var(--background, var(--sa-white)));
+    font: inherit;
+    cursor: pointer;
+    transition: color var(--sa-motion-normal) var(--sa-ease-extrude), background var(--sa-motion-normal) var(--sa-ease-extrude);
+  }
+  .sa-button::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: currentColor;
+    opacity: .92;
+    pointer-events: none;
+    -webkit-mask-image:
+      var(--sa-button-rule-h, var(--sketch-rule-h)),
+      var(--sa-button-rule-h, var(--sketch-rule-h)),
+      var(--sa-button-rule-v, var(--sketch-rule-v)),
+      var(--sa-button-rule-v, var(--sketch-rule-v));
+    mask-image:
+      var(--sa-button-rule-h, var(--sketch-rule-h)),
+      var(--sa-button-rule-h, var(--sketch-rule-h)),
+      var(--sa-button-rule-v, var(--sketch-rule-v)),
+      var(--sa-button-rule-v, var(--sketch-rule-v));
+    -webkit-mask-position:
+      top center,
+      bottom center,
+      left center,
+      right center;
+    mask-position:
+      top center,
+      bottom center,
+      left center,
+      right center;
+    -webkit-mask-size:
+      100% 4px,
+      100% 4px,
+      4px 100%,
+      4px 100%;
+    mask-size:
+      100% 4px,
+      100% 4px,
+      4px 100%,
+      4px 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+  .sa-button__icon {
+    display: inline-grid;
+    place-items: center;
+    line-height: 1;
+  }
+  .sa-button:disabled {
+    cursor: not-allowed;
+    opacity: .55;
+  }
+  .sa-control:has(+ [popover]:popover-open) {
+    --sa-extrude-current-depth: var(--sa-extrude-depth-hover);
+  }
+  .sa-select {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+    color: var(--text, var(--sa-black));
+  }
+  .sa-select::after {
+    content: "";
+    position: absolute;
+    right: 11px;
+    width: 7px;
+    height: 7px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    pointer-events: none;
+    transform: translateY(-2px) rotate(45deg);
+  }
+  .sa-select__field {
+    width: 100%;
+    min-width: 0;
+    min-height: 36px;
+    appearance: none;
+    padding: 6px 32px 6px 10px;
+    border: 1px solid color-mix(in srgb, var(--text, var(--sa-black)) 42%, transparent);
+    border-radius: 0;
+    outline: none;
+    color: inherit;
+    background: var(--background, var(--sa-white));
+    font: inherit;
+    transition: border-color var(--sa-motion-normal) var(--sa-ease-extrude), box-shadow var(--sa-motion-normal) var(--sa-ease-extrude);
+  }
+  .sa-select:focus-within .sa-select__field {
+    border-color: var(--sa-blue);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--sa-blue) 24%, transparent);
+  }
+  .sa-select__field:focus-visible {
+    outline: none;
+  }
+  .sa-select__field:disabled {
+    cursor: not-allowed;
+    opacity: .55;
+  }
+  @media (hover: hover) {
+    .sa-control:not(:has(.sa-button:disabled)):hover {
+      --sa-extrude-current-depth: var(--sa-extrude-depth-hover);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sa-select__field {
+      transition: none;
+    }
+  }
+}
+
+/* src/components/panel.css */
+@layer sa.components {
+  .sa-panel-cell {
+    --sa-extrude-depth-rest: var(--sa-panel-depth-rest, 8px);
+    --sa-extrude-depth-hover: var(--sa-panel-depth-hover, 15px);
+    --sa-extrude-side: var(--sa-side-color, var(--sa-accent));
+    --sa-extrude-bottom: var(--sa-bottom-color, var(--sa-blue));
+    --sa-extrude-edge-width: var(--sa-panel-edge-width, 2px);
+    --sa-extrude-edge: var(--sa-edge-color, var(--text, var(--sa-black)));
+  }
+  .sa-panel {
+    color: var(--text, var(--sa-black));
+    background: var(--sa-panel-background, var(--background, var(--sa-white)));
+  }
+  .sa-panel:not(.sa-panel--docked)::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    color: inherit;
+    background: currentColor;
+    pointer-events: none;
+    -webkit-mask-image:
+      var(--sketch-rule-h),
+      var(--sketch-rule-h),
+      var(--sketch-rule-v),
+      var(--sketch-rule-v);
+    mask-image:
+      var(--sketch-rule-h),
+      var(--sketch-rule-h),
+      var(--sketch-rule-v),
+      var(--sketch-rule-v);
+    -webkit-mask-position:
+      top center,
+      bottom center,
+      left center,
+      right center;
+    mask-position:
+      top center,
+      bottom center,
+      left center,
+      right center;
+    -webkit-mask-size:
+      100% 5px,
+      100% 5px,
+      5px 100%,
+      5px 100%;
+    mask-size:
+      100% 5px,
+      100% 5px,
+      5px 100%,
+      5px 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+  .sa-panel--docked {
+    --sa-extrude-face-top: auto;
+    --sa-extrude-face-left: auto;
+    background: var(--sa-panel-background, var(--surface, var(--sa-white)));
+  }
+}
+
+/* src/components/tag.css */
+@layer sa.components {
+  .sa-tag {
+    position: relative;
+    display: inline-flex;
+    padding: var(--sa-tag-padding, .2rem .45rem);
+    color: var(--sa-tag-text, var(--sa-tone-text, var(--sa-white)));
+    background: var(--sa-tag-surface, var(--sa-tone-surface, var(--sa-blue)));
+    font: inherit;
+  }
+  .sa-tag::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: currentColor;
+    pointer-events: none;
+    -webkit-mask-image:
+      var(--sketch-rule-h),
+      var(--sketch-rule-h),
+      var(--sketch-rule-v),
+      var(--sketch-rule-v);
+    mask-image:
+      var(--sketch-rule-h),
+      var(--sketch-rule-h),
+      var(--sketch-rule-v),
+      var(--sketch-rule-v);
+    -webkit-mask-position:
+      top center,
+      bottom center,
+      left center,
+      right center;
+    mask-position:
+      top center,
+      bottom center,
+      left center,
+      right center;
+    -webkit-mask-size:
+      100% 4px,
+      100% 4px,
+      4px 100%,
+      4px 100%;
+    mask-size:
+      100% 4px,
+      100% 4px,
+      4px 100%,
+      4px 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+  .sa-tag[data-sa-tone=yellow],
+  .sa-callout[data-sa-tone=yellow] {
+    --sa-tone-surface: var(--sa-yellow);
+    --sa-tone-text: var(--sa-black);
+  }
+  .sa-tag[data-sa-tone=blue],
+  .sa-callout[data-sa-tone=blue] {
+    --sa-tone-surface: var(--sa-blue);
+    --sa-tone-text: var(--sa-white);
+  }
+  .sa-tag[data-sa-tone=red],
+  .sa-callout[data-sa-tone=red] {
+    --sa-tone-surface: var(--sa-red);
+    --sa-tone-text: var(--sa-white);
+  }
+}
+
+/* src/components/callout.css */
+@layer sa.components {
+  .sa-callout {
+    position: relative;
+    padding: var(--sa-callout-padding, 1rem 1.2rem);
+    color: var(--sa-callout-text, var(--sa-tone-text, var(--sa-black)));
+    background: var(--sa-callout-surface, var(--sa-tone-surface, var(--sa-yellow)));
+  }
+  .sa-callout::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: currentColor;
+    pointer-events: none;
+    -webkit-mask-image:
+      var(--sketch-rule-h),
+      var(--sketch-rule-h),
+      var(--sketch-rule-v),
+      var(--sketch-rule-v);
+    mask-image:
+      var(--sketch-rule-h),
+      var(--sketch-rule-h),
+      var(--sketch-rule-v),
+      var(--sketch-rule-v);
+    -webkit-mask-position:
+      top center,
+      bottom center,
+      left center,
+      right center;
+    mask-position:
+      top center,
+      bottom center,
+      left center,
+      right center;
+    -webkit-mask-size:
+      100% 5px,
+      100% 5px,
+      5px 100%,
+      5px 100%;
+    mask-size:
+      100% 5px,
+      100% 5px,
+      5px 100%,
+      5px 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+}
+
+/* src/components/rule.css */
+@layer sa.components {
+  .sa-rule {
+    border: 0;
+    color: currentColor;
+    background: currentColor;
+    opacity: var(--sa-rule-opacity, .3);
+  }
+  .sa-rule[data-sa-axis=horizontal] {
+    width: 100%;
+    height: 5px;
+    -webkit-mask: var(--sketch-rule-h) center / 100% 100% no-repeat;
+    mask: var(--sketch-rule-h) center / 100% 100% no-repeat;
+  }
+  .sa-rule[data-sa-axis=vertical] {
+    width: 5px;
+    height: 100%;
+    -webkit-mask: var(--sketch-rule-v) center / 100% 100% no-repeat;
+    mask: var(--sketch-rule-v) center / 100% 100% no-repeat;
+  }
+  .sa-mark {
+    position: relative;
+    z-index: 0;
+    display: inline;
+    --sa-mark-color: var(--sa-accent);
+  }
+  .sa-mark::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    color: var(--sa-mark-color);
+    pointer-events: none;
+  }
+  .sa-mark[data-sa-mark=underline]::after {
+    right: 0;
+    bottom: -.15em;
+    left: 0;
+    height: .35em;
+    background: currentColor;
+    -webkit-mask: var(--sketch-rule-h) center / 100% 100% no-repeat;
+    mask: var(--sketch-rule-h) center / 100% 100% no-repeat;
+  }
+  .sa-mark[data-sa-mark=circle]::after {
+    inset: -.2em -.35em;
+    border: .12em solid currentColor;
+    border-radius: 50%;
+    transform: rotate(-3deg);
+  }
+  .sa-mark[data-sa-mark=highlight]::after {
+    right: -.08em;
+    bottom: .02em;
+    left: -.08em;
+    height: .72em;
+    background: currentColor;
+    opacity: .32;
+    transform: rotate(-1deg);
+  }
+  .sa-mark[data-sa-enhanced=true]::after {
+    display: none;
+  }
+}
+
 /* src/patterns/panel-grid.css */
 @layer sa.patterns {
   .sa-panel-grid {

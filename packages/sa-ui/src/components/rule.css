@@ -1,0 +1,66 @@
+@layer sa.components {
+  .sa-rule {
+    border: 0;
+    color: currentColor;
+    background: currentColor;
+    opacity: var(--sa-rule-opacity, .3);
+  }
+
+  .sa-rule[data-sa-axis='horizontal'] {
+    width: 100%;
+    height: 5px;
+    -webkit-mask: var(--sketch-rule-h) center / 100% 100% no-repeat;
+    mask: var(--sketch-rule-h) center / 100% 100% no-repeat;
+  }
+
+  .sa-rule[data-sa-axis='vertical'] {
+    width: 5px;
+    height: 100%;
+    -webkit-mask: var(--sketch-rule-v) center / 100% 100% no-repeat;
+    mask: var(--sketch-rule-v) center / 100% 100% no-repeat;
+  }
+
+  .sa-mark {
+    position: relative;
+    z-index: 0;
+    display: inline;
+    --sa-mark-color: var(--sa-accent);
+  }
+
+  .sa-mark::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    color: var(--sa-mark-color);
+    pointer-events: none;
+  }
+
+  .sa-mark[data-sa-mark='underline']::after {
+    right: 0;
+    bottom: -.15em;
+    left: 0;
+    height: .35em;
+    background: currentColor;
+    -webkit-mask: var(--sketch-rule-h) center / 100% 100% no-repeat;
+    mask: var(--sketch-rule-h) center / 100% 100% no-repeat;
+  }
+
+  .sa-mark[data-sa-mark='circle']::after {
+    inset: -.2em -.35em;
+    border: .12em solid currentColor;
+    border-radius: 50%;
+    transform: rotate(-3deg);
+  }
+
+  .sa-mark[data-sa-mark='highlight']::after {
+    right: -.08em;
+    bottom: .02em;
+    left: -.08em;
+    height: .72em;
+    background: currentColor;
+    opacity: .32;
+    transform: rotate(-1deg);
+  }
+
+  .sa-mark[data-sa-enhanced='true']::after { display: none; }
+}
