@@ -1,0 +1,40 @@
+@layer sa.components {
+  .sa-callout {
+    position: relative;
+    padding: var(--sa-callout-padding, 1rem 1.2rem);
+    color: var(--sa-callout-text, var(--sa-tone-text, var(--sa-black)));
+    background: var(--sa-callout-surface, var(--sa-tone-surface, var(--sa-yellow)));
+  }
+
+  .sa-callout::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--sa-callout-frame-color, currentColor);
+    opacity: var(--sa-callout-frame-opacity, 1);
+    pointer-events: none;
+    -webkit-mask-image: var(--sketch-rule-h), var(--sketch-rule-h), var(--sketch-rule-v), var(--sketch-rule-v);
+    mask-image: var(--sketch-rule-h), var(--sketch-rule-h), var(--sketch-rule-v), var(--sketch-rule-v);
+    -webkit-mask-position: top center, bottom center, left center, right center;
+    mask-position: top center, bottom center, left center, right center;
+    -webkit-mask-size: 100% 5px, 100% 5px, 5px 100%, 5px 100%;
+    mask-size: 100% 5px, 100% 5px, 5px 100%, 5px 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+
+  .sa-callout[data-sa-tone='yellow'] {
+    --sa-tone-surface: var(--sa-yellow);
+    --sa-tone-text: var(--sa-yellow-text);
+  }
+
+  .sa-callout[data-sa-tone='blue'] {
+    --sa-tone-surface: var(--sa-blue);
+    --sa-tone-text: var(--sa-blue-text);
+  }
+
+  .sa-callout[data-sa-tone='red'] {
+    --sa-tone-surface: var(--sa-red);
+    --sa-tone-text: var(--sa-red-text);
+  }
+}

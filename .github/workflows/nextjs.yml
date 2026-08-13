@@ -74,7 +74,10 @@ jobs:
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Build with Next.js
-        run: ${{ steps.detect-package-manager.outputs.runner }} next build
+        run: |
+          npm run test:ui
+          npm run build
+          git diff --exit-code -- packages/sa-ui/dist
         env:
           # Keep likes hidden until the VPS API is live. Set this repository secret
           # to https://api.senthurayyappan.com when the service is deployed.

@@ -1,0 +1,74 @@
+<!doctype html>
+<html class="sa-root" data-sa-theme="light" lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SA UI slide example</title>
+    <link rel="stylesheet" href="../dist/sa-ui.css">
+    <link rel="stylesheet" href="../dist/sa-ui-fonts.css">
+    <style>
+      body { padding: clamp(1rem, 4vw, 4rem); }
+      .demo-panel { padding: clamp(1rem, 3cqi, 3rem); }
+      @media (max-width: 48rem) {
+        .sa-slide[data-sa-layout='split'] {
+          aspect-ratio: auto;
+          overflow: visible;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="sa-stack" style="--sa-stack-gap: 3rem">
+      <section class="sa-slide" data-sa-layout="title" aria-labelledby="title-slide">
+        <div class="sa-slide__content sa-stack" style="--sa-stack-gap: 1.5rem">
+          <p class="sa-tag" data-sa-tone="yellow">Plain HTML</p>
+          <h1 id="title-slide">One <span class="sa-mark" data-sa-mark="underline" data-sa-trigger="immediate">shared visual system</span></h1>
+          <p>Load the committed CSS and JavaScript files. No application build step is required.</p>
+          <p>
+            <span class="sa-control">
+              <button class="sa-button" id="theme-button" type="button" aria-pressed="false">Use dark theme</button>
+            </span>
+          </p>
+        </div>
+      </section>
+
+      <section class="sa-slide" data-sa-layout="split" aria-labelledby="split-slide">
+        <div class="sa-slide__content">
+          <div class="sa-stack" style="--sa-stack-gap: 1.25rem">
+            <p class="sa-tag" data-sa-tone="blue">Split slide</p>
+            <h2 id="split-slide">Show the <a class="sa-mark" data-sa-mark="circle" data-sa-trigger="interaction" href="#package">package contract</a>.</h2>
+            <p id="package">Pointer hover and keyboard focus show the interaction mark.</p>
+          </div>
+          <div class="sa-grid" style="--sa-grid-min: 14rem">
+            <div class="sa-panel-cell" data-sa-extrude="interactive">
+              <section class="sa-panel demo-panel" aria-label="CSS bundle">
+                <h3>Core CSS</h3>
+                <p>Use layouts, panels, and controls.</p>
+              </section>
+            </div>
+            <div class="sa-panel-cell" data-sa-extrude="interactive">
+              <section class="sa-panel demo-panel" aria-label="Enhancer bundle">
+                <h3>Enhancer</h3>
+                <p>Use optional sketch animation.</p>
+              </section>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script type="module">
+      import { enhance } from '../dist/sa-ui.js'
+
+      const root = document.documentElement
+      const themeButton = document.querySelector('#theme-button')
+      enhance(document)
+      themeButton.addEventListener('click', () => {
+        const dark = root.dataset.saTheme !== 'dark'
+        root.dataset.saTheme = dark ? 'dark' : 'light'
+        themeButton.ariaPressed = String(dark)
+        themeButton.textContent = dark ? 'Use light theme' : 'Use dark theme'
+      })
+    </script>
+  </body>
+</html>

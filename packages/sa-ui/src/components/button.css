@@ -1,0 +1,131 @@
+@layer sa.components {
+  .sa-control {
+    --sa-extrude-depth-rest: var(--sa-depth-rest, 2px);
+    --sa-extrude-depth-hover: var(--sa-depth-hover, 6px);
+    --sa-extrude-side: var(--sa-side-color, var(--sa-yellow));
+    --sa-extrude-bottom: var(--sa-bottom-color, var(--sa-blue));
+    --sa-extrude-edge-width: var(--sa-edge-width, 1px);
+    --sa-extrude-edge: var(--sa-edge-color, var(--sa-black));
+    --sa-button-border-width: 0px;
+    --sa-button-rule-h: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 5' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='white' stroke-linecap='round' vector-effect='non-scaling-stroke'%3E%3Cpath d='M0 2.63 C13 1.57 23 3.37 36 2.3 S61 3.1 74 2.23 S91 3.03 100 2.37' stroke-width='1.2'/%3E%3Cpath d='M0 3.27 C18 2.6 31 3.47 48 2.87 S77 3.53 100 2.93' stroke-width='.55' opacity='.55'/%3E%3C/g%3E%3C/svg%3E");
+    --sa-button-rule-v: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5 100' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='white' stroke-linecap='round' vector-effect='non-scaling-stroke'%3E%3Cpath d='M2.63 0 C1.57 13 3.37 23 2.3 36 S3.1 61 2.23 74 S3.03 91 2.37 100' stroke-width='1.2'/%3E%3Cpath d='M3.27 0 C2.6 18 3.47 31 2.87 48 S3.53 77 2.93 100' stroke-width='.55' opacity='.55'/%3E%3C/g%3E%3C/svg%3E");
+    display: inline-flex;
+  }
+
+  .sa-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sa-button-gap, 7px);
+    min-height: var(--sa-button-height, 32px);
+    padding: var(--sa-button-padding, 6px 10px);
+    border: var(--sa-button-border-width, 1px) solid var(--sa-button-border-color, color-mix(in srgb, var(--text, var(--sa-black)) 48%, transparent));
+    border-radius: 0;
+    color: var(--sa-button-color, var(--text, var(--sa-black)));
+    background: var(--sa-button-background, var(--background, var(--sa-white)));
+    font: inherit;
+    cursor: pointer;
+    transition: color var(--sa-motion-normal) var(--sa-ease-extrude), background var(--sa-motion-normal) var(--sa-ease-extrude);
+  }
+
+  .sa-button::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: currentColor;
+    opacity: .92;
+    pointer-events: none;
+    -webkit-mask-image: var(--sa-button-rule-h, var(--sketch-rule-h)), var(--sa-button-rule-h, var(--sketch-rule-h)), var(--sa-button-rule-v, var(--sketch-rule-v)), var(--sa-button-rule-v, var(--sketch-rule-v));
+    mask-image: var(--sa-button-rule-h, var(--sketch-rule-h)), var(--sa-button-rule-h, var(--sketch-rule-h)), var(--sa-button-rule-v, var(--sketch-rule-v)), var(--sa-button-rule-v, var(--sketch-rule-v));
+    -webkit-mask-position: top center, bottom center, left center, right center;
+    mask-position: top center, bottom center, left center, right center;
+    -webkit-mask-size: 100% 4px, 100% 4px, 4px 100%, 4px 100%;
+    mask-size: 100% 4px, 100% 4px, 4px 100%, 4px 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+
+  .sa-button__icon {
+    display: inline-grid;
+    place-items: center;
+    line-height: 1;
+  }
+
+  .sa-button:disabled {
+    cursor: not-allowed;
+    opacity: .55;
+  }
+
+  .sa-control:has(+ [popover]:popover-open) {
+    --sa-extrude-current-depth: var(--sa-extrude-depth-hover);
+  }
+
+  .sa-select {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+    color: var(--text, var(--sa-black));
+  }
+
+  .sa-select::after {
+    content: '';
+    position: absolute;
+    right: 11px;
+    width: 7px;
+    height: 7px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    pointer-events: none;
+    transform: translateY(-2px) rotate(45deg);
+  }
+
+  .sa-select__field {
+    width: 100%;
+    min-width: 0;
+    min-height: 36px;
+    appearance: none;
+    padding: 6px 32px 6px 10px;
+    border: 1px solid color-mix(in srgb, var(--text, var(--sa-black)) 42%, transparent);
+    border-radius: 0;
+    outline: none;
+    color: inherit;
+    background: var(--background, var(--sa-white));
+    font: inherit;
+    transition: border-color var(--sa-motion-normal) var(--sa-ease-extrude), box-shadow var(--sa-motion-normal) var(--sa-ease-extrude);
+  }
+
+  .sa-select:focus-within .sa-select__field {
+    border-color: var(--sa-blue);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--sa-blue) 24%, transparent);
+  }
+
+  .sa-select__field:focus-visible { outline: none; }
+
+  .sa-select__field:disabled {
+    cursor: not-allowed;
+    opacity: .55;
+  }
+
+  .sa-control:has(.sa-button:not(:disabled):focus-visible) {
+    --sa-extrude-current-depth: var(--sa-extrude-depth-hover);
+  }
+
+  @media (hover: hover) {
+    .sa-control:not(:has(.sa-button:disabled)):hover {
+      --sa-extrude-current-depth: var(--sa-extrude-depth-hover);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sa-select__field { transition: none; }
+  }
+
+  @media (forced-colors: active) {
+    .sa-select__field:focus-visible {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+    }
+  }
+}

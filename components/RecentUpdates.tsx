@@ -63,10 +63,10 @@ const RecentUpdates: React.FC = () => {
   return (
     <div className="h-full w-full p-3 sm:p-6 overflow-y-auto flex flex-col gap-4 sm:gap-6 justify-between">
       {/* Latest Blog Post Section */}
-      <div className="latest-post-cell md:mb-2 lg:mb-4">
+      <div className="sa-extrude latest-post-cell md:mb-2 lg:mb-4" data-sa-extrude="interactive">
         <Link
           href={`/blog/${latestPostSlug}`}
-          className="latest-post-card"
+          className="sa-extrude__face latest-post-card"
           data-sketch="off"
         >
           <div className="space-y-3">
@@ -106,7 +106,7 @@ const RecentUpdates: React.FC = () => {
             rel="noopener noreferrer"
           >
             <RecommendationIcon kind="show" />
-            <span data-sketch-target className="tracking-tight leading-tight font-medium">{currentLanguage}</span>
+            <span className="sa-mark tracking-tight leading-tight font-medium" data-sa-mark="underline" data-sa-trigger="interaction">{currentLanguage}</span>
           </Link>
 
           <Link
@@ -116,7 +116,7 @@ const RecentUpdates: React.FC = () => {
             rel="noopener noreferrer"
           >
             <RecommendationIcon kind="recipe" />
-            <span data-sketch-target className="tracking-tight leading-tight font-medium">{currentFood}</span>
+            <span className="sa-mark tracking-tight leading-tight font-medium" data-sa-mark="underline" data-sa-trigger="interaction">{currentFood}</span>
           </Link>
 
           <Link
@@ -126,7 +126,7 @@ const RecentUpdates: React.FC = () => {
             rel="noopener noreferrer"
           >
             <RecommendationIcon kind="song" />
-            <span data-sketch-target className="tracking-tight leading-tight font-medium">{currentSong}</span>
+            <span className="sa-mark tracking-tight leading-tight font-medium" data-sa-mark="underline" data-sa-trigger="interaction">{currentSong}</span>
           </Link>
         </div>
       </div>

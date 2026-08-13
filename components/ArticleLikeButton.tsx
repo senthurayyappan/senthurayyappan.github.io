@@ -68,9 +68,9 @@ export function ArticleLikeButton({ slug }: { slug: string }) {
   }
 
   return (
-    <span className="article-like-cell">
+    <span className="sa-extrude article-like-cell" data-sa-extrude="interactive">
       <button
-        className={`article-like-button${liked ? ' is-liked' : ''}`}
+        className={`sa-extrude__face article-like-button${liked ? ' is-liked' : ''}`}
         type="button"
         aria-pressed={liked}
         aria-label={liked ? 'Remove your like' : 'Like this post'}

@@ -1,0 +1,32 @@
+/* src/fonts.css */
+@font-face {
+  font-family: "Senthur Handwriting";
+  src: url("./fonts/senthur-handwriting.woff") format("woff");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}
+@layer sa.tokens {
+  :where(.sa-root) {
+    --sa-font-handwriting: "Senthur Handwriting", cursive;
+    --font-handwriting: var(--sa-font-handwriting);
+    --font-display: var(--font-handwriting);
+  }
+}
+.font-handwritten {
+  --font-reading: var(--font-handwriting);
+}
+.font-handwritten body {
+  font-synthesis: none;
+  font-variant-ligatures: common-ligatures contextual;
+  letter-spacing: .08em;
+  word-spacing: .16em;
+}
+.font-handwritten :where(code, pre, kbd, samp) {
+  font-family:
+    var(--font-geist-mono),
+    ui-monospace,
+    monospace;
+  letter-spacing: normal;
+  word-spacing: normal;
+}

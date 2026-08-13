@@ -3,6 +3,7 @@ const nextConfig = {
   output: 'export',
   trailingSlash: true,
   reactStrictMode: true,
+  transpilePackages: ['@senthur/sa-ui'],
   
   images: {
     unoptimized: true,
@@ -46,4 +47,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig; 
+module.exports = nextConfig;

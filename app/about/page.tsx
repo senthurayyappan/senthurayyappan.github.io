@@ -59,48 +59,46 @@ export default function Page() {
         </div>
       </ComicPanel>
 
-      <ComicPanel 
-        className="col-span-2 md:col-span-1 row-span-2 h-full" 
-        title="Consultant @ Robotics and AI Institute"
-        titlePosition="top-right"
-        imageSrc='/about/rai.jpg'
-        href='https://rai-inst.com/'
-        description='Worked on co-design of the next-generation Ultra-Mobility Vehicle (UMV)'
-      >
-      </ComicPanel>
+      <div className="about-experience col-span-2 md:col-span-3 grid grid-cols-1 gap-4 md:grid-cols-3 md:grid-rows-2 md:gap-[22px]">
+        <ComicPanel
+          className="h-full md:col-start-1 md:row-start-1"
+          title="Research Intern @ DRDO | DEBEL"
+          imageSrc='/about/exo.jpg'
+          imagePosition='0% 90%'
+          titlePosition="top-right"
+          href='https://www.drdo.gov.in/drdo/labs-and-establishments/defence-bio-engineering-electro-medical-laboratory-debel'
+          description='Worked on 2D modeling and simulation of a lower-limb powered exoskeleton'
+        />
 
-      <ComicPanel 
-        className="col-span-2 md:col-span-1 row-span-1 h-full" 
-        title="Research Intern @ DRDO | DEBEL"
-        imageSrc='/about/exo.jpg'
-        imagePosition='0% 90%'
-        titlePosition="top-right"
-        href='https://www.drdo.gov.in/drdo/labs-and-establishments/defence-bio-engineering-electro-medical-laboratory-debel'
-        description='Worked on 2D modeling and simulation of a lower-limb powered exoskeleton'
-      >
-      </ComicPanel>
+        <ComicPanel
+          className="h-full md:col-start-1 md:row-start-2"
+          title="Research Intern @ IIT Madras"
+          imageSrc='/about/iitm.jpg'
+          imagePosition='10% 0%'
+          titlePosition="top-right"
+          href='https://ed.iitm.ac.in/~robotics_lab/index.html'
+          description='Developed a transformation-based approach to determine impedance parameters for teleoperated surgical robots'
+        />
 
-      <ComicPanel 
-        className="col-span-2 md:col-span-1 row-span-1 h-full" 
-        title="Research Intern @ IIT Madras"
-        imageSrc='/about/iitm.jpg'
-        imagePosition='10% 0%'
-        titlePosition="top-right"
-        href='https://ed.iitm.ac.in/~robotics_lab/index.html'
-        description='Developed a transformation-based approach to determine impedance parameters for teleoperated surgical robots'
-      >
-      </ComicPanel>
+        <ComicPanel
+          className="h-full md:col-start-2 md:row-start-1 md:col-span-2 md:row-span-2"
+          title="Consultant @ Robotics and AI Institute"
+          titlePosition="top-right"
+          imageSrc='/about/rai.jpg'
+          href='https://rai-inst.com/'
+          description='Worked on co-design of the next-generation Ultra-Mobility Vehicle (UMV)'
+        />
 
-      <ComicPanel 
-        className="col-span-2 row-span-1 h-full" 
-        title="Team Lead @ Spider Tronix, NITT"
-        imageSrc='/about/spider.jpg'
-        imagePosition='0% 30%'
-        titlePosition="top-right"
-        href='https://spider.nitt.edu/'
-        description='Led a team of around 30 self-motivated undergraduate students working on various robotics and machine learning projects'
-      >
-      </ComicPanel>
+        <ComicPanel
+          className="h-full md:col-span-3"
+          title="Team Lead @ Spider Tronix, NITT"
+          imageSrc='/about/spider.jpg'
+          imagePosition='0% 30%'
+          titlePosition="top-right"
+          href='https://spider.nitt.edu/'
+          description='Led a team of around 30 self-motivated undergraduate students working on various robotics and machine learning projects'
+        />
+      </div>
       
       {/* Education Panel */}
       <ComicPanel 
