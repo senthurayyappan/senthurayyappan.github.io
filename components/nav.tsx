@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { FontSwitch } from './font-switch'
 import { ThemeSwitch } from './theme-switch'
 import { SketchArrow } from './SketchArrow'
+import { SAButton } from './SAButton'
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation'
 
@@ -155,7 +156,7 @@ export function Navbar() {
         <Link href="/" onClick={() => setSidebarOpen(false)} className="mobile-masthead-logo" data-sketch="off">
           <Image src="/logo/800.png" alt="SA" fill sizes="112px" unoptimized priority />
         </Link>
-        <button
+        <SAButton
           ref={menuButtonRef}
           onClick={() => setSidebarOpen(true)}
           aria-label="Open navigation"
@@ -163,10 +164,10 @@ export function Navbar() {
           aria-controls="mobile-navigation"
           aria-hidden={isSidebarOpen}
           tabIndex={isSidebarOpen ? -1 : undefined}
-          className={`comic-menu-button mobile-masthead-menu ${isSidebarOpen ? 'is-drawer-open' : ''}`}
-        >
-          <MenuIcon open={isSidebarOpen} />
-        </button>
+          className="comic-menu-button"
+          cellClassName={`mobile-masthead-menu ${isSidebarOpen ? 'is-drawer-open' : ''}`}
+          icon={<MenuIcon open={isSidebarOpen} />}
+        />
       </div>
 
       {isSidebarOpen && (
@@ -181,9 +182,7 @@ export function Navbar() {
           <Link href="/" onClick={() => setSidebarOpen(false)} className="relative w-28 h-12 overflow-hidden" data-sketch="off">
             <Image src="/logo/400.png" alt="SA" fill style={{ objectFit: 'contain', objectPosition: 'left center' }} />
           </Link>
-          <button ref={drawerCloseButtonRef} onClick={closeSidebar} aria-label="Close navigation" className="comic-menu-button">
-            <MenuIcon open />
-          </button>
+          <SAButton ref={drawerCloseButtonRef} onClick={closeSidebar} aria-label="Close navigation" className="comic-menu-button" icon={<MenuIcon open />} />
         </div>
         <nav aria-label="Mobile sections"><NavList pathname={pathname} onClick={() => setSidebarOpen(false)} /></nav>
         <SocialRow />

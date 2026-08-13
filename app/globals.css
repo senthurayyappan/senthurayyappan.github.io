@@ -81,6 +81,8 @@
   mask: var(--sketch-rule-v) center / 100% 100% no-repeat;
 }
 
+.sidenav::after { bottom: -56px; }
+
 .sidenav-mark {
   position: relative;
   display: flex;
@@ -302,16 +304,12 @@
 }
 
 .comic-menu-button {
-  position: relative;
   width: 40px;
   height: 40px;
-  display: grid;
-  place-items: center;
-  border: 0;
+  min-height: 40px;
+  padding: 0;
   background: var(--background);
   color: var(--text);
-  box-shadow: 4px 4px 0 var(--sa-blue);
-  cursor: pointer;
 }
 
 .comic-menu-icon {
@@ -642,8 +640,7 @@ html::before {
 
 .panel .text::after,
 .latest-post-card::after,
-.latest-post-date::before,
-.comic-menu-button::after {
+.latest-post-date::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -660,8 +657,7 @@ html::before {
 .sketch-box::after,
 .panel .text::after,
 .latest-post-card::after,
-.latest-post-date::before,
-.comic-menu-button::after {
+.latest-post-date::before {
   -webkit-mask-image: var(--sketch-rule-h), var(--sketch-rule-h), var(--sketch-rule-v), var(--sketch-rule-v);
   mask-image: var(--sketch-rule-h), var(--sketch-rule-h), var(--sketch-rule-v), var(--sketch-rule-v);
   -webkit-mask-position: top center, bottom center, left center, right center;
@@ -753,11 +749,7 @@ html::before {
   max-width: none;
 }
 
-.dark .panel .text {
-  background-color: var(--white);
-  color: var(--black);
-  border-color: var(--black);
-}
+.footer-handwriting { font-family: var(--font-handwriting); }
 
 
 .panel .top-left {

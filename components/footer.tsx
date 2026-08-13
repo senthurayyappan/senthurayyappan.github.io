@@ -58,13 +58,13 @@ export default function Footer() {
           </a>
         </li>
       </ul>
-      <span className="text-sm font-semibold flex flex-row text-[var(--accent)]">
+      <span className="footer-handwriting text-sm font-semibold flex flex-row text-[var(--accent)]">
           <EyeIcon />
           {views !== null ? (
               <span className="ml-1">{views}</span>
           ) : '000'}
       </span>
-      <p className="text-muted text-sm">
+      <p className="footer-handwriting text-muted text-sm">
         © {new Date().getFullYear()} <span className="hidden sm:inline">Senthur Ayyappan</span><span className="sm:hidden">SA</span>
       </p>
     </footer>
