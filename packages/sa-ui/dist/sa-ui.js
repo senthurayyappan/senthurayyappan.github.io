@@ -361,7 +361,7 @@ function _(t2, e2) {
 }
 
 // src/enhance.ts
-var cleanups = /* @__PURE__ */ new WeakMap();
+var roots = /* @__PURE__ */ new WeakMap();
 function getNumber(value, fallback) {
   const number = Number.parseFloat(value);
   return Number.isFinite(number) ? number : fallback;
@@ -386,12 +386,13 @@ function getElement(target) {
   return element ?? void 0;
 }
 function enhance(root = document) {
-  const existing = cleanups.get(root);
-  if (existing) return existing;
+  const existing = roots.get(root);
+  if (existing) {
+    existing.rescan();
+    return existing.cleanup;
+  }
   const active = /* @__PURE__ */ new Map();
-  const elements = Array.from(root.querySelectorAll(".sa-mark[data-sa-mark]"));
-  const self = typeof Element !== "undefined" && root instanceof Element && isMarkElement(root) ? [root] : [];
-  const marks = new Set(self.concat(elements));
+  const marks = /* @__PURE__ */ new Set();
   const reducedMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const remove = (element) => {
     const mark = active.get(element);
@@ -469,16 +470,24 @@ function enhance(root = document) {
     if (event.relatedTarget instanceof Node && element.contains(event.relatedTarget)) return;
     remove(element);
   };
+  const rescan = () => {
+    const elements = Array.from(root.querySelectorAll(".sa-mark[data-sa-mark]"));
+    const self = typeof Element !== "undefined" && root instanceof Element && isMarkElement(root) ? [root] : [];
+    self.concat(elements).forEach((element) => {
+      if (marks.has(element)) return;
+      marks.add(element);
+      if (reducedMotion) return;
+      if (getTrigger(element) === "interaction") element.dataset.saEnhanced = "idle";
+      else show(element);
+    });
+  };
   if (!reducedMotion) {
     root.addEventListener("pointerover", onPointerOver);
     root.addEventListener("pointerout", onPointerOut);
     root.addEventListener("focusin", onFocusIn);
     root.addEventListener("focusout", onFocusOut);
-    marks.forEach((element) => {
-      if (getTrigger(element) === "interaction") element.dataset.saEnhanced = "idle";
-      else show(element);
-    });
   }
+  rescan();
   const cleanup = () => {
     root.removeEventListener("pointerover", onPointerOver);
     root.removeEventListener("pointerout", onPointerOut);
@@ -486,9 +495,9 @@ function enhance(root = document) {
     root.removeEventListener("focusout", onFocusOut);
     for (const element of Array.from(active.keys())) remove(element);
     marks.forEach((element) => element.removeAttribute("data-sa-enhanced"));
-    cleanups.delete(root);
+    roots.delete(root);
   };
-  cleanups.set(root, cleanup);
+  roots.set(root, { cleanup, rescan });
   return cleanup;
 }
 export {

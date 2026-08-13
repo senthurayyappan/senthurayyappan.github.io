@@ -489,7 +489,7 @@
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
   }
-  .sa-tag:is([data-sa-active=true], [aria-pressed=true], [aria-current]) {
+  .sa-tag:is([data-sa-active=true], [aria-pressed=true], [aria-current]:not([aria-current=false])) {
     font-weight: 700;
     text-decoration: underline 2px;
     text-underline-offset: .18em;
@@ -507,7 +507,7 @@
     --sa-tone-text: var(--sa-red-text);
   }
   @media (forced-colors: active) {
-    .sa-tag:is([data-sa-active=true], [aria-pressed=true], [aria-current]) {
+    .sa-tag:is([data-sa-active=true], [aria-pressed=true], [aria-current]:not([aria-current=false])) {
       outline: 2px solid Highlight;
       outline-offset: 2px;
     }

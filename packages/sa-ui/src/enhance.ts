@@ -9,7 +9,7 @@ type ActiveMark = {
   frames: number[]
 }
 
-const cleanups = new WeakMap<object, () => void>()
+const roots = new WeakMap<object, { cleanup: () => void, rescan: () => void }>()
 
 function getNumber(value: string, fallback: number): number {
   const number = Number.parseFloat(value)
@@ -41,13 +41,14 @@ function getElement(target: EventTarget | null): HTMLElement | undefined {
 }
 
 export function enhance(root: EnhanceRoot = document): () => void {
-  const existing = cleanups.get(root)
-  if (existing) return existing
+  const existing = roots.get(root)
+  if (existing) {
+    existing.rescan()
+    return existing.cleanup
+  }
 
   const active = new Map<HTMLElement, ActiveMark>()
-  const elements = Array.from(root.querySelectorAll<HTMLElement>('.sa-mark[data-sa-mark]'))
-  const self = typeof Element !== 'undefined' && root instanceof Element && isMarkElement(root) ? [root] : []
-  const marks = new Set(self.concat(elements))
+  const marks = new Set<HTMLElement>()
   const reducedMotion = typeof window !== 'undefined'
     && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
@@ -137,17 +138,25 @@ export function enhance(root: EnhanceRoot = document): () => void {
     remove(element)
   }
 
+  const rescan = () => {
+    const elements = Array.from(root.querySelectorAll<HTMLElement>('.sa-mark[data-sa-mark]'))
+    const self = typeof Element !== 'undefined' && root instanceof Element && isMarkElement(root) ? [root] : []
+    self.concat(elements).forEach((element) => {
+      if (marks.has(element)) return
+      marks.add(element)
+      if (reducedMotion) return
+      if (getTrigger(element) === 'interaction') element.dataset.saEnhanced = 'idle'
+      else show(element)
+    })
+  }
+
   if (!reducedMotion) {
     root.addEventListener('pointerover', onPointerOver)
     root.addEventListener('pointerout', onPointerOut)
     root.addEventListener('focusin', onFocusIn)
     root.addEventListener('focusout', onFocusOut)
-
-    marks.forEach((element) => {
-      if (getTrigger(element) === 'interaction') element.dataset.saEnhanced = 'idle'
-      else show(element)
-    })
   }
+  rescan()
 
   const cleanup = () => {
     root.removeEventListener('pointerover', onPointerOver)
@@ -156,8 +165,8 @@ export function enhance(root: EnhanceRoot = document): () => void {
     root.removeEventListener('focusout', onFocusOut)
     for (const element of Array.from(active.keys())) remove(element)
     marks.forEach((element) => element.removeAttribute('data-sa-enhanced'))
-    cleanups.delete(root)
+    roots.delete(root)
   }
-  cleanups.set(root, cleanup)
+  roots.set(root, { cleanup, rescan })
   return cleanup
 }

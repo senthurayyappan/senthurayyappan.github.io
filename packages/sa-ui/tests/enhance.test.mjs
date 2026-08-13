@@ -18,6 +18,50 @@ test('enhance is idempotent and cleanup removes listeners', () => {
   assert.equal(events.size, 0)
 })
 
+test('repeated enhance calls initialize new marks without duplicate listeners', () => {
+  const previousWindow = globalThis.window
+  const previousElement = globalThis.Element
+  const listeners = new Map()
+  const marks = []
+
+  class Element {
+    constructor() {
+      this.dataset = { saMark: 'underline', saTrigger: 'interaction' }
+    }
+
+    removeAttribute(name) {
+      const key = name.replace(/^data-/, '').replace(/-([a-z])/g, (_, letter) => letter.toUpperCase())
+      delete this.dataset[key]
+    }
+  }
+
+  globalThis.Element = Element
+  globalThis.window = { matchMedia: () => ({ matches: false }) }
+
+  try {
+    const root = {
+      querySelectorAll: () => marks,
+      addEventListener: (name, handler) => {
+        assert.equal(listeners.has(name), false, `${name} was added twice`)
+        listeners.set(name, handler)
+      },
+      removeEventListener: (name) => listeners.delete(name),
+    }
+    const first = enhance(root)
+    const added = new Element()
+    marks.push(added)
+    const second = enhance(root)
+
+    assert.equal(second, first)
+    assert.equal(added.dataset.saEnhanced, 'idle')
+    assert.equal(listeners.size, 4)
+    first()
+  } finally {
+    globalThis.window = previousWindow
+    globalThis.Element = previousElement
+  }
+})
+
 test('enhance keeps an interaction mark during focus moves between descendants', () => {
   const previousWindow = globalThis.window
   const previousNode = globalThis.Node

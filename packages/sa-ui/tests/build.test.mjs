@@ -7,7 +7,7 @@ const packageRoot = new URL('../', import.meta.url)
 test('package exposes the CSS entry points', async () => {
   const manifest = JSON.parse(await readFile(new URL('package.json', packageRoot), 'utf8'))
   assert.equal(manifest.name, '@senthur/sa-ui')
-  assert.equal(manifest.version, '0.1.1')
+  assert.equal(manifest.version, '0.1.2')
   assert.equal(manifest.exports['./styles.css'], './dist/sa-ui.css')
   assert.equal(manifest.exports['./fonts.css'], './dist/sa-ui-fonts.css')
   assert.equal(manifest.exports['./tokens.css'], './src/tokens.css')

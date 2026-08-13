@@ -98,7 +98,7 @@ test('all tag and callout tone pairs meet normal-text contrast', async () => {
 
 test('active tags use native state and a forced-colors structural cue', async () => {
   const css = await readFile(new URL('../src/components/tag.css', import.meta.url), 'utf8')
-  const activeSelector = /\.sa-tag:is\(\[data-sa-active='true'\], \[aria-pressed='true'\], \[aria-current\]\)/
+  const activeSelector = /\.sa-tag:is\(\[data-sa-active='true'\], \[aria-pressed='true'\], \[aria-current\]:not\(\[aria-current='false'\]\)\)/
 
   assert.match(css, activeSelector)
   assert.match(css, new RegExp(`${activeSelector.source}\\s*\\{[^}]*text-decoration:`, 's'))
