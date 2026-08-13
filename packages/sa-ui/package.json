@@ -23,6 +23,7 @@
   },
   "scripts": {
     "build": "node build.mjs",
+    "demo": "node examples/serve.mjs",
     "test": "npm run build && node --test tests/*.test.mjs"
   },
   "dependencies": {
