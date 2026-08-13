@@ -13,7 +13,7 @@ If you use this as a starting point, I would recommend changing the visual langu
 - MDX for blog posts
 - CSS-first styling with custom comic-panel and sketch effects
 - RSS feed, sitemap, robots file, and article metadata
-- Optional lightweight likes API through `NEXT_PUBLIC_LIKES_API_URL`
+- Optional lightweight blog engagement API through `NEXT_PUBLIC_LIKES_API_URL`
 
 ## Project structure
 
@@ -136,9 +136,9 @@ Post content goes here.
 
 The site automatically reads the post metadata for the blog index, individual article pages, RSS feed, sitemap, and structured article data.
 
-The blog supports an optional like count per post. The static site can render the button and count, but the actual persistence requires a small backend: a VPS, a serverless function, Supabase, or any other API that can store and return likes per post.
+The blog supports optional view and like counts for each post. The site records one view for each anonymous browser and post pair. A database constraint ignores reloads from the same browser.
 
-Set `NEXT_PUBLIC_LIKES_API_URL` to point the frontend at that service. Without it, the site still builds and runs, but likes are only treated as a local/browser-side interaction.
+Set `NEXT_PUBLIC_LIKES_API_URL` to point the frontend at that service. The variable name stays unchanged for deployment compatibility. Without it, the site still builds and runs without remote engagement controls.
 
 ## License
 

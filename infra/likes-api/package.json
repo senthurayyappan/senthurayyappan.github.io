@@ -1,5 +1,8 @@
 {
   "private": true,
+  "scripts": {
+    "test": "node --test server.test.js"
+  },
   "dependencies": {
     "postgres": "^3.4.7"
   }

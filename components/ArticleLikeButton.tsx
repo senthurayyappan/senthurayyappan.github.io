@@ -1,16 +1,13 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { getLocalLiked, getVisitorId, setLocalLiked } from './likeStorage'
-
-type LikeResponse = {
-  likes: number
-  liked: boolean
-}
+import { EyeIcon } from './EyeIcon'
+import { getLocalLiked, getVisitorId, recordPostView, setLocalLiked, type PostEngagementResponse } from './likeStorage'
 
 export function ArticleLikeButton({ slug }: { slug: string }) {
   const apiUrl = process.env.NEXT_PUBLIC_LIKES_API_URL?.replace(/\/$/, '')
   const [likes, setLikes] = useState<number | null>(null)
+  const [views, setViews] = useState(0)
   const [liked, setLiked] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [hasRemoteState, setHasRemoteState] = useState(false)
@@ -18,17 +15,16 @@ export function ArticleLikeButton({ slug }: { slug: string }) {
   useEffect(() => {
     if (!apiUrl) return
 
-    const visitor = getVisitorId()
     const localLiked = getLocalLiked(slug)
     setLiked(localLiked)
     setLikes(localLiked ? 1 : 0)
 
-    fetch(`${apiUrl}/v1/posts/${encodeURIComponent(slug)}/likes?viewer=${encodeURIComponent(visitor)}`)
-      .then((response) => (response.ok ? response.json() : Promise.reject()))
-      .then((data: LikeResponse) => {
+    recordPostView(apiUrl, slug)
+      .then((data) => {
         setHasRemoteState(true)
         setLikes(data.likes)
         setLiked(data.liked)
+        setViews(data.views ?? 0)
       })
       .catch(() => setHasRemoteState(false))
   }, [apiUrl, slug])
@@ -52,9 +48,10 @@ export function ArticleLikeButton({ slug }: { slug: string }) {
         body: JSON.stringify({ visitor: getVisitorId() }),
       })
       if (!response.ok) throw new Error('Unable to save like')
-      const data: LikeResponse = await response.json()
+      const data: PostEngagementResponse = await response.json()
       setLikes(data.likes)
       setLiked(data.liked)
+      if (typeof data.views === 'number') setViews(data.views)
       setHasRemoteState(true)
     } catch {
       if (hasRemoteState) {
@@ -68,20 +65,26 @@ export function ArticleLikeButton({ slug }: { slug: string }) {
   }
 
   return (
-    <span className="sa-extrude article-like-cell" data-sa-extrude="interactive">
-      <button
-        className={`sa-extrude__face article-like-button${liked ? ' is-liked' : ''}`}
-        type="button"
-        aria-pressed={liked}
-        aria-label={liked ? 'Remove your like' : 'Like this post'}
-        onClick={toggleLike}
-        disabled={isSaving}
-      >
-        <span className="article-like-button__face" aria-hidden="true" />
-        <span className="article-like-button__icon" aria-hidden="true">{liked ? '\u2665' : '\u2661'}</span>
-        <span>{liked ? 'Liked' : 'Like this post'}</span>
-        {likes !== null && <strong>{likes}</strong>}
-      </button>
-    </span>
+    <div className="article-engagement-actions">
+      <span className="article-view-count" aria-label={`${views} views`}>
+        <EyeIcon className="engagement-eye-icon" />
+        <strong>{views}</strong>
+      </span>
+      <span className="sa-extrude article-like-cell" data-sa-extrude="interactive">
+        <button
+          className={`sa-extrude__face article-like-button${liked ? ' is-liked' : ''}`}
+          type="button"
+          aria-pressed={liked}
+          aria-label={liked ? 'Remove your like' : 'Like this post'}
+          onClick={toggleLike}
+          disabled={isSaving}
+        >
+          <span className="article-like-button__face" aria-hidden="true" />
+          <span className="article-like-button__icon" aria-hidden="true">{liked ? '\u2665' : '\u2661'}</span>
+          <span>{liked ? 'Liked' : 'Like this post'}</span>
+          {likes !== null && <strong>{likes}</strong>}
+        </button>
+      </span>
+    </div>
   )
 }

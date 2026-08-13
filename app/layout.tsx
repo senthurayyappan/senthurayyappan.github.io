@@ -5,8 +5,6 @@ import type { Metadata } from 'next'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import { Navbar } from '@/components/nav'
-import { Analytics } from '@vercel/analytics/react'
-import { SpeedInsights } from '@vercel/speed-insights/next'
 import Footer from '@/components/footer'
 import { baseUrl } from './sitemap'
 import { ThemeProvider } from 'next-themes'
@@ -74,8 +72,6 @@ export default function RootLayout({
             <div className="site-content">{children}</div>
           </main>
           <div className="site-footer"><Footer /></div>
-          <Analytics />
-          <SpeedInsights />
           <PerformanceMonitor />
         </ThemeProvider>
       </body>

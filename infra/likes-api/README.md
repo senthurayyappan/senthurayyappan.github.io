@@ -1,20 +1,22 @@
-# Blog likes API
+# Blog engagement API
 
 This is the only stateful part of the blog. GitHub Pages stays fully static; browser requests go to `api.senthurayyappan.com`.
 
 ## What it records
 
-- one anonymous browser identifier per post, hashed server-side with `VISITOR_SALT`;
+- one view for each anonymous browser and post pair;
+- one optional like for each anonymous browser and post pair;
 - the aggregate like total;
+- the aggregate view total;
 - no name, email, account, or raw visitor identifier is stored.
 
-The API uses a small in-memory IP rate limit as a basic abuse guard. It is intentionally a light reception signal, not a vote that needs to be fraud-proof.
+The API uses a small in-memory IP rate limit as a basic abuse guard. The counts are approximate engagement signals. A new browser, device, or cleared browser store creates a new identifier.
 
 ## VPS deployment
 
-1. Copy this directory to the VPS and run `sudo bash deploy.sh`. It creates `/opt/senthur-likes-api/.env` with fresh secrets on the first run and starts the service.
-3. Add the `Caddyfile.example` site block to the VPS Caddy configuration, then reload Caddy. Keep port 8791 bound only to localhost as the Compose file does.
-4. Point the `api.senthurayyappan.com` DNS record at the VPS and verify `https://api.senthurayyappan.com/v1/posts/ballbot-always-wins/likes?viewer=<uuid>` returns JSON.
-5. In GitHub repository settings, add the Actions secret `LIKES_API_URL` with the value `https://api.senthurayyappan.com`, then redeploy Pages.
+1. Copy this directory to the VPS and run `sudo bash deploy.sh`. The script keeps the existing database and secrets.
+2. Add the `Caddyfile.example` site block to the VPS Caddy configuration, then reload Caddy. Keep port 8791 bound only to localhost.
+3. Verify `https://api.senthurayyappan.com/v1/posts/ballbot-always-wins/likes?viewer=<uuid>` returns JSON with `likes`, `liked`, and `views`.
+4. Keep the Actions secret `LIKES_API_URL` set to `https://api.senthurayyappan.com`, then redeploy Pages.
 
-Back up the Docker volume `likes-postgres`; it contains the aggregate counts. The public website never depends on this service to render: without the build-time URL secret, the control is omitted; if the API later has downtime, articles still render normally.
+Back up the Docker volume `likes-postgres`; it contains all engagement records. The website still renders if this API is unavailable.
