@@ -26,3 +26,13 @@ test('portfolio does not retain the temporary public font', async () => {
     { code: 'ENOENT' },
   )
 })
+
+test('deploy verifies the package distribution before publication', async () => {
+  const workflow = await readFile(new URL('../.github/workflows/nextjs.yml', import.meta.url), 'utf8')
+  const buildStep = workflow.split('- name: Build with Next.js', 2)[1].split('- name: Upload artifact', 1)[0]
+
+  assert.match(buildStep, /npm run test:ui/)
+  assert.match(buildStep, /npm run build/)
+  assert.match(buildStep, /git diff --exit-code -- packages\/sa-ui\/dist/)
+  assert.doesNotMatch(buildStep, /npx --no-install next build/)
+})

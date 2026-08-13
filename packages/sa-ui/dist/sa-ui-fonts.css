@@ -11,11 +11,6 @@
     --sa-font-handwriting: "Senthur Handwriting", cursive;
     --font-handwriting: var(--sa-font-handwriting);
     --font-display: var(--font-handwriting);
-    --font-reading:
-      var(--font-geist-sans),
-      ui-sans-serif,
-      system-ui,
-      sans-serif;
   }
 }
 .font-handwritten {

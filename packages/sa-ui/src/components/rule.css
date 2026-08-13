@@ -62,5 +62,5 @@
     transform: rotate(-1deg);
   }
 
-  .sa-mark[data-sa-enhanced='true']::after { display: none; }
+  .sa-mark[data-sa-enhanced]::after { display: none; }
 }

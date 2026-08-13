@@ -21,3 +21,13 @@ test('bundle exports portable layouts and container recipes', async () => {
   assert.match(css, /data-sa-layout=(?:['"])?title(?:['"])?/)
   assert.match(css, /data-sa-layout=(?:['"])?split(?:['"])?/)
 })
+
+test('printed slides release screen clipping and start new pages', async () => {
+  const css = await readFile(cssUrl, 'utf8')
+  const print = css.slice(css.indexOf('@media print'))
+
+  assert.match(print, /\.sa-slide\s*\{[^}]*aspect-ratio:\s*auto/s)
+  assert.match(print, /\.sa-slide\s*\{[^}]*overflow:\s*visible/s)
+  assert.match(print, /\.sa-slide\s*\{[^}]*break-after:\s*page/s)
+  assert.match(print, /\.sa-slide:last-child\s*\{[^}]*break-after:\s*auto/s)
+})

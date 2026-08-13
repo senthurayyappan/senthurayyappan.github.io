@@ -36,8 +36,11 @@ components/
   SAPanel.tsx           shared panel adapter
   nav.tsx               sidebar and mobile navigation
 
-styles/
-  sa-ui.css             framework-neutral SA component styles
+packages/sa-ui/
+  src/                   CSS source modules and the enhancer source
+  react/                 thin React adapters
+  dist/                  committed CSS and JavaScript files
+  examples/              plain HTML examples
 
 public/
   images, logos, icons, and static assets
@@ -55,6 +58,22 @@ import '@senthur/sa-ui/fonts.css'
 ```
 
 The font import is optional. Omit it when the application does not use the handwriting font.
+
+For a smaller CSS contract, import the required source modules directly:
+
+```ts
+import '@senthur/sa-ui/tokens.css'
+import '@senthur/sa-ui/base.css'
+import '@senthur/sa-ui/layouts.css'
+import '@senthur/sa-ui/effects.css'
+import '@senthur/sa-ui/components/button.css'
+```
+
+Load `tokens.css` before every direct module. Load `effects.css` before button or panel CSS when the component uses extrusion.
+
+Use `data-sa-active="true"` for the visual state of a noninteractive tag. Use `aria-pressed="true"` on a toggle button.
+
+Use `aria-current` on a current link. The native attributes apply the same active style and preserve the state semantics.
 
 Import the React adapters when the application uses React:
 

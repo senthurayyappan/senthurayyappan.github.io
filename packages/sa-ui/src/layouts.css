@@ -43,4 +43,19 @@
     padding: var(--sa-slide-padding, clamp(2rem, 6cqi, 6rem));
     overflow: hidden;
   }
+
+  @media print {
+    .sa-slide {
+      width: 100%;
+      aspect-ratio: auto;
+      overflow: visible;
+      break-after: page;
+      page-break-after: always;
+    }
+
+    .sa-slide:last-child {
+      break-after: auto;
+      page-break-after: auto;
+    }
+  }
 }

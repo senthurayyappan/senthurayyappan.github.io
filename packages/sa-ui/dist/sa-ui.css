@@ -9,6 +9,14 @@
     --sa-yellow: #f9c90a;
     --sa-red: #ef2841;
     --sa-blue: #007d7e;
+    --sa-yellow-text: #15130d;
+    --sa-blue-text: #f6f4ee;
+    --sa-red-text: #000000;
+    --sa-font-reading:
+      var(--font-geist-sans, ui-sans-serif),
+      system-ui,
+      sans-serif;
+    --font-reading: var(--sa-font-reading);
     --sa-surface: var(--sa-white);
     --sa-text: var(--sa-black);
     --sa-accent: var(--sa-red);
@@ -111,6 +119,19 @@
     aspect-ratio: var(--sa-slide-ratio, 16 / 9);
     padding: var(--sa-slide-padding, clamp(2rem, 6cqi, 6rem));
     overflow: hidden;
+  }
+  @media print {
+    .sa-slide {
+      width: 100%;
+      aspect-ratio: auto;
+      overflow: visible;
+      break-after: page;
+      page-break-after: always;
+    }
+    .sa-slide:last-child {
+      break-after: auto;
+      page-break-after: auto;
+    }
   }
 }
 
@@ -221,7 +242,7 @@
     --sa-extrude-edge: var(--sa-edge-color, var(--sa-black));
     --sa-button-border-width: 0px;
     --sa-button-rule-h: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 5' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='white' stroke-linecap='round' vector-effect='non-scaling-stroke'%3E%3Cpath d='M0 2.63 C13 1.57 23 3.37 36 2.3 S61 3.1 74 2.23 S91 3.03 100 2.37' stroke-width='1.2'/%3E%3Cpath d='M0 3.27 C18 2.6 31 3.47 48 2.87 S77 3.53 100 2.93' stroke-width='.55' opacity='.55'/%3E%3C/g%3E%3C/svg%3E");
-    --sa-button-rule-v: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5 100' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='white' stroke-linecap='round' vector-effect='non-scaling-stroke'%3E%3Cpath d='M2.63 0 C1.57 13 3.37 23 2.3 36 S3.1 61 2.23 74 S3.03 91 2.37 100' stroke-width='1.2'/%3E%3Cpath d='M3.27 0 C2.6 18 3.47 31 2.87 48 S3.53 77 3.53 100 2.93' stroke-width='.55' opacity='.55'/%3E%3C/g%3E%3C/svg%3E");
+    --sa-button-rule-v: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5 100' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='white' stroke-linecap='round' vector-effect='non-scaling-stroke'%3E%3Cpath d='M2.63 0 C1.57 13 3.37 23 2.3 36 S3.1 61 2.23 74 S3.03 91 2.37 100' stroke-width='1.2'/%3E%3Cpath d='M3.27 0 C2.6 18 3.47 31 2.87 48 S3.53 77 2.93 100' stroke-width='.55' opacity='.55'/%3E%3C/g%3E%3C/svg%3E");
     display: inline-flex;
   }
   .sa-button {
@@ -334,6 +355,9 @@
   .sa-select__field:disabled {
     cursor: not-allowed;
     opacity: .55;
+  }
+  .sa-control:has(.sa-button:not(:disabled):focus-visible) {
+    --sa-extrude-current-depth: var(--sa-extrude-depth-hover);
   }
   @media (hover: hover) {
     .sa-control:not(:has(.sa-button:disabled)):hover {
@@ -465,17 +489,28 @@
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
   }
+  .sa-tag:is([data-sa-active=true], [aria-pressed=true], [aria-current]) {
+    font-weight: 700;
+    text-decoration: underline 2px;
+    text-underline-offset: .18em;
+  }
   .sa-tag[data-sa-tone=yellow] {
     --sa-tone-surface: var(--sa-yellow);
-    --sa-tone-text: var(--sa-black);
+    --sa-tone-text: var(--sa-yellow-text);
   }
   .sa-tag[data-sa-tone=blue] {
     --sa-tone-surface: var(--sa-blue);
-    --sa-tone-text: var(--sa-white);
+    --sa-tone-text: var(--sa-blue-text);
   }
   .sa-tag[data-sa-tone=red] {
     --sa-tone-surface: var(--sa-red);
-    --sa-tone-text: var(--sa-white);
+    --sa-tone-text: var(--sa-red-text);
+  }
+  @media (forced-colors: active) {
+    .sa-tag:is([data-sa-active=true], [aria-pressed=true], [aria-current]) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+    }
   }
 }
 
@@ -529,15 +564,15 @@
   }
   .sa-callout[data-sa-tone=yellow] {
     --sa-tone-surface: var(--sa-yellow);
-    --sa-tone-text: var(--sa-black);
+    --sa-tone-text: var(--sa-yellow-text);
   }
   .sa-callout[data-sa-tone=blue] {
     --sa-tone-surface: var(--sa-blue);
-    --sa-tone-text: var(--sa-white);
+    --sa-tone-text: var(--sa-blue-text);
   }
   .sa-callout[data-sa-tone=red] {
     --sa-tone-surface: var(--sa-red);
-    --sa-tone-text: var(--sa-white);
+    --sa-tone-text: var(--sa-red-text);
   }
 }
 
@@ -598,7 +633,7 @@
     opacity: .32;
     transform: rotate(-1deg);
   }
-  .sa-mark[data-sa-enhanced=true]::after {
+  .sa-mark[data-sa-enhanced]::after {
     display: none;
   }
 }

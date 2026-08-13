@@ -25,18 +25,31 @@
     mask-repeat: no-repeat;
   }
 
+  .sa-tag:is([data-sa-active='true'], [aria-pressed='true'], [aria-current]) {
+    font-weight: 700;
+    text-decoration: underline 2px;
+    text-underline-offset: .18em;
+  }
+
   .sa-tag[data-sa-tone='yellow'] {
     --sa-tone-surface: var(--sa-yellow);
-    --sa-tone-text: var(--sa-black);
+    --sa-tone-text: var(--sa-yellow-text);
   }
 
   .sa-tag[data-sa-tone='blue'] {
     --sa-tone-surface: var(--sa-blue);
-    --sa-tone-text: var(--sa-white);
+    --sa-tone-text: var(--sa-blue-text);
   }
 
   .sa-tag[data-sa-tone='red'] {
     --sa-tone-surface: var(--sa-red);
-    --sa-tone-text: var(--sa-white);
+    --sa-tone-text: var(--sa-red-text);
+  }
+
+  @media (forced-colors: active) {
+    .sa-tag:is([data-sa-active='true'], [aria-pressed='true'], [aria-current]) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+    }
   }
 }
