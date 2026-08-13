@@ -158,13 +158,15 @@
     top: var(--sa-extrude-face-top, calc(var(--sa-extrude-current-depth) * -1));
     left: var(--sa-extrude-face-left, calc(var(--sa-extrude-current-depth) * -1));
   }
+  .sa-extrude[data-sa-extrude=interactive]:focus-within,
+  .sa-panel-cell[data-sa-extrude=interactive]:focus-within,
+  .sa-panel-cell--interactive:focus-within {
+    --sa-extrude-current-depth: var(--sa-extrude-depth-hover, 15px);
+  }
   @media (hover: hover) {
     .sa-extrude[data-sa-extrude=interactive]:hover,
-    .sa-extrude[data-sa-extrude=interactive]:focus-within,
     .sa-panel-cell[data-sa-extrude=interactive]:hover,
-    .sa-panel-cell[data-sa-extrude=interactive]:focus-within,
-    .sa-panel-cell--interactive:hover,
-    .sa-panel-cell--interactive:focus-within {
+    .sa-panel-cell--interactive:hover {
       --sa-extrude-current-depth: var(--sa-extrude-depth-hover, 15px);
     }
   }
@@ -331,6 +333,12 @@
       transition: none;
     }
   }
+  @media (forced-colors: active) {
+    .sa-select__field:focus-visible {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+    }
+  }
 }
 
 /* src/components/panel.css */
@@ -444,18 +452,15 @@
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
   }
-  .sa-tag[data-sa-tone=yellow],
-  .sa-callout[data-sa-tone=yellow] {
+  .sa-tag[data-sa-tone=yellow] {
     --sa-tone-surface: var(--sa-yellow);
     --sa-tone-text: var(--sa-black);
   }
-  .sa-tag[data-sa-tone=blue],
-  .sa-callout[data-sa-tone=blue] {
+  .sa-tag[data-sa-tone=blue] {
     --sa-tone-surface: var(--sa-blue);
     --sa-tone-text: var(--sa-white);
   }
-  .sa-tag[data-sa-tone=red],
-  .sa-callout[data-sa-tone=red] {
+  .sa-tag[data-sa-tone=red] {
     --sa-tone-surface: var(--sa-red);
     --sa-tone-text: var(--sa-white);
   }
@@ -507,6 +512,18 @@
       5px 100%;
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
+  }
+  .sa-callout[data-sa-tone=yellow] {
+    --sa-tone-surface: var(--sa-yellow);
+    --sa-tone-text: var(--sa-black);
+  }
+  .sa-callout[data-sa-tone=blue] {
+    --sa-tone-surface: var(--sa-blue);
+    --sa-tone-text: var(--sa-white);
+  }
+  .sa-callout[data-sa-tone=red] {
+    --sa-tone-surface: var(--sa-red);
+    --sa-tone-text: var(--sa-white);
   }
 }
 

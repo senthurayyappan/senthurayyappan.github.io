@@ -21,4 +21,19 @@
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
   }
+
+  .sa-callout[data-sa-tone='yellow'] {
+    --sa-tone-surface: var(--sa-yellow);
+    --sa-tone-text: var(--sa-black);
+  }
+
+  .sa-callout[data-sa-tone='blue'] {
+    --sa-tone-surface: var(--sa-blue);
+    --sa-tone-text: var(--sa-white);
+  }
+
+  .sa-callout[data-sa-tone='red'] {
+    --sa-tone-surface: var(--sa-red);
+    --sa-tone-text: var(--sa-white);
+  }
 }

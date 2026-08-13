@@ -63,13 +63,16 @@
     left: var(--sa-extrude-face-left, calc(var(--sa-extrude-current-depth) * -1));
   }
 
+  .sa-extrude[data-sa-extrude='interactive']:focus-within,
+  .sa-panel-cell[data-sa-extrude='interactive']:focus-within,
+  .sa-panel-cell--interactive:focus-within {
+    --sa-extrude-current-depth: var(--sa-extrude-depth-hover, 15px);
+  }
+
   @media (hover: hover) {
     .sa-extrude[data-sa-extrude='interactive']:hover,
-    .sa-extrude[data-sa-extrude='interactive']:focus-within,
     .sa-panel-cell[data-sa-extrude='interactive']:hover,
-    .sa-panel-cell[data-sa-extrude='interactive']:focus-within,
-    .sa-panel-cell--interactive:hover,
-    .sa-panel-cell--interactive:focus-within {
+    .sa-panel-cell--interactive:hover {
       --sa-extrude-current-depth: var(--sa-extrude-depth-hover, 15px);
     }
   }
