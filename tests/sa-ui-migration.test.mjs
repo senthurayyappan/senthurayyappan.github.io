@@ -36,3 +36,11 @@ test('deploy verifies the package distribution before publication', async () => 
   assert.match(buildStep, /git diff --exit-code -- packages\/sa-ui\/dist/)
   assert.doesNotMatch(buildStep, /npx --no-install next build/)
 })
+
+test('portfolio rescans sketch links after each client route change', async () => {
+  const sketches = await readFile(new URL('../components/LinkSketches.tsx', import.meta.url), 'utf8')
+
+  assert.match(sketches, /import \{ usePathname \} from 'next\/navigation'/)
+  assert.match(sketches, /const pathname = usePathname\(\)/)
+  assert.match(sketches, /useEffect\(\(\) => enhance\(document\), \[pathname\]\)/)
+})
