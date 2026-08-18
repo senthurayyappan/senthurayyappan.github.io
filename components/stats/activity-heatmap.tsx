@@ -3,7 +3,7 @@
 import * as React from 'react'
 
 import { duration, longDayLabel, monthOf } from '@/lib/stats/format'
-import type { HeatCell } from '@/lib/stats/types'
+import type { HeatCell, HeatColumn } from '@/lib/stats/types'
 
 /**
  * GitHub-style calendar: one column per week, Sunday at the top.
@@ -19,6 +19,10 @@ const GAP = 3
 const STEP = CELL + GAP
 const LEFT_GUTTER = 24 // weekday labels
 const TOP_GUTTER = 14 // month labels
+// A collapsed run of empty weeks gets its own narrow column. Wide enough for the
+// break rules to read as a deliberate mark rather than a rendering fault, and much
+// narrower than the ~240 week columns it stands in for.
+const BREAK_WIDTH = 26
 
 const MONTHS = [
   'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
@@ -38,44 +42,65 @@ interface Hover {
   y: number
 }
 
+/** Years describe a multi-year break better than a day count does. */
+function breakLabel(days: number): string {
+  const years = Math.floor(days / 365)
+  const months = Math.round((days % 365) / 30.4)
+  if (years && months) return `${years}y ${months}m`
+  if (years) return `${years}y`
+  return `${Math.max(1, months)}m`
+}
+
 export function ActivityHeatmap({
   weeks,
   bestDay,
 }: {
-  weeks: (HeatCell | null)[][]
+  weeks: HeatColumn[]
   bestDay: { day: string; seconds: number } | null
 }) {
   const [hover, setHover] = React.useState<Hover | null>(null)
-  const width = LEFT_GUTTER + weeks.length * STEP
-  const height = TOP_GUTTER + 7 * STEP
+
+  // Columns are no longer a fixed pitch: a break column is narrower than a week, so
+  // every x has to be accumulated rather than derived from the index.
+  const layout = React.useMemo(() => {
+    let x = LEFT_GUTTER
+    const out = weeks.map((column) => {
+      const at = x
+      x += column.gapDays > 0 ? BREAK_WIDTH : STEP
+      return { column, x: at }
+    })
+    return { columns: out, width: x }
+  }, [weeks])
+
+  // The break label sits under the grid, so the canvas needs room for it. Only when
+  // there is a break: an uninterrupted range keeps exactly the height it had.
+  const hasBreak = weeks.some((c) => c.gapDays > 0)
+  const height = TOP_GUTTER + 7 * STEP + (hasBreak ? 14 : 0)
 
   // A month tick sits above the first column that contains a day of that month.
   const monthTicks = React.useMemo(() => {
     const ticks: { x: number; label: string }[] = []
     let previous = ''
-    weeks.forEach((column, index) => {
-      const first = column.find((c): c is HeatCell => c !== null)
+    layout.columns.forEach(({ column, x }) => {
+      const first = column.cells.find((c): c is HeatCell => c !== null)
       if (!first) return
       const month = monthOf(first.day)
       if (month === previous) return
       previous = month
-      ticks.push({
-        x: LEFT_GUTTER + index * STEP,
-        label: MONTHS[Number(month.slice(5, 7)) - 1],
-      })
+      ticks.push({ x, label: MONTHS[Number(month.slice(5, 7)) - 1] })
     })
     // Drop a tick that would collide with the next one on a short range.
     return ticks.filter((t, i) => i === 0 || t.x - ticks[i - 1].x >= 26)
-  }, [weeks])
+  }, [layout])
 
   return (
     <div className="stats-heat-wrap">
       <div className="stats-heat-scroll">
         <svg
           className="stats-heat"
-          width={width}
+          width={layout.width}
           height={height}
-          viewBox={`0 0 ${width} ${height}`}
+          viewBox={`0 0 ${layout.width} ${height}`}
           role="img"
           aria-label="Calendar heatmap of daily coding time. Darker cells are longer days."
           onMouseLeave={() => setHover(null)}
@@ -90,14 +115,29 @@ export function ActivityHeatmap({
               {label}
             </text>
           ))}
-          {weeks.map((column, columnIndex) =>
-            column.map((cell, rowIndex) =>
-              cell ? (
+          {layout.columns.map(({ column, x }) =>
+            column.gapDays > 0 ? (
+              <g className="stats-heat-break" key={`break-${x}`}>
+                <title>{`${column.gapDays.toLocaleString()} days with no recorded time`}</title>
+                <line x1={x + 7} y1={TOP_GUTTER} x2={x + 7} y2={TOP_GUTTER + 7 * STEP - GAP} />
+                <line
+                  x1={x + BREAK_WIDTH - 7}
+                  y1={TOP_GUTTER}
+                  x2={x + BREAK_WIDTH - 7}
+                  y2={TOP_GUTTER + 7 * STEP - GAP}
+                />
+                <text x={x + BREAK_WIDTH / 2} y={TOP_GUTTER + 7 * STEP + 9} textAnchor="middle">
+                  {breakLabel(column.gapDays)}
+                </text>
+              </g>
+            ) : (
+              column.cells.map((cell, rowIndex) =>
+                cell ? (
                 <rect
                   key={cell.day}
                   className="stats-heat-cell"
                   data-level={cell.level}
-                  x={LEFT_GUTTER + columnIndex * STEP}
+                  x={x}
                   y={TOP_GUTTER + rowIndex * STEP}
                   width={CELL}
                   height={CELL}
@@ -116,7 +156,8 @@ export function ActivityHeatmap({
                   }}
                   onBlur={() => setHover(null)}
                 />
-              ) : null,
+                ) : null,
+              )
             ),
           )}
         </svg>

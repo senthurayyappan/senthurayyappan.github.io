@@ -70,6 +70,14 @@ export interface Bar {
   other: number
   total: number
   aiShare: number
+  /**
+   * 0 for a real bucket. Above zero this is not a bucket at all but a marker
+   * standing in for that many consecutive empty months, so a history with years
+   * missing from the middle neither fills the chart with whitespace nor closes the
+   * hole and implies 2020 sat next to 2025. Never first or last: only interior runs
+   * collapse, so the axis still begins and ends on real data.
+   */
+  gapMonths: number
 }
 
 export interface HeatCell {
@@ -77,6 +85,14 @@ export interface HeatCell {
   seconds: number
   /** 0..4, where 0 means no recorded time. */
   level: number
+}
+
+/** One column of the calendar: a week, or a marker for a collapsed empty run. */
+export interface HeatColumn {
+  /** Seven entries for a real week (null is calendar padding); empty for a marker. */
+  cells: (HeatCell | null)[]
+  /** 0 for a real week; otherwise how many days the marker stands for. */
+  gapDays: number
 }
 
 /** One bar in a breakdown panel. */
@@ -112,6 +128,6 @@ export interface Stats {
   aiShare: number
   trend: Bar[]
   /** Week columns x weekday rows; row 0 is Sunday, null is calendar padding. */
-  heatmap: (HeatCell | null)[][]
+  heatmap: HeatColumn[]
   breakdowns: Record<BreakdownKey, Breakdown>
 }

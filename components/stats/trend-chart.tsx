@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
+import { Bar, BarChart, CartesianGrid, ReferenceLine, XAxis, YAxis } from 'recharts'
 
 import { ChartContainer, ChartTooltip, type ChartConfig } from '@/components/ui/chart'
 import { duration } from '@/lib/stats/format'
@@ -50,6 +50,8 @@ interface Datum {
   otherSeconds: number
   totalSeconds: number
   aiShare: number
+  /** >0 when this column is a marker for collapsed months, not a bucket. */
+  gapMonths: number
 }
 
 /** Square baseline, rounded data end. Radius collapses on a segment too short for it. */
@@ -133,8 +135,12 @@ function TrendTooltip({
 
   return (
     <div className="stats-tip" role="status">
-      <div className="stats-tip-head">{row.label}</div>
-      {row.totalSeconds === 0 ? (
+      <div className="stats-tip-head">
+        {row.gapMonths > 0 ? `${row.label} not shown` : row.label}
+      </div>
+      {row.gapMonths > 0 ? (
+        <div className="stats-tip-name">no recorded time in this stretch</div>
+      ) : row.totalSeconds === 0 ? (
         <div className="stats-tip-name">no recorded time</div>
       ) : (
         <>
@@ -172,9 +178,15 @@ export function TrendChart({ bars, bucket }: { bars: TrendBar[]; bucket: Bucket 
         otherSeconds: b.other,
         totalSeconds: b.total,
         aiShare: b.aiShare,
+        gapMonths: b.gapMonths,
       })),
     [bars],
   )
+
+  // Columns that stand in for collapsed history, marked on the axis so the jump is
+  // visible. Without this the chart would put 2020 next to 2025 and read as though
+  // they were consecutive months.
+  const breaks = React.useMemo(() => data.filter((d) => d.gapMonths > 0), [data])
 
   const lastIndex = data.length - 1
   const interval = Math.max(0, Math.ceil(data.length / MAX_AXIS_LABELS) - 1)
@@ -209,6 +221,22 @@ export function TrendChart({ bars, bucket }: { bars: TrendBar[]; bucket: Bucket 
           content={<TrendTooltip />}
           animationDuration={110}
         />
+        {breaks.map((d) => (
+          <ReferenceLine
+            key={d.key}
+            x={d.label}
+            stroke="var(--stats-axis)"
+            strokeDasharray="3 4"
+            strokeWidth={1.5}
+            opacity={0.55}
+            label={{
+              value: d.label,
+              position: 'insideTop',
+              className: 'stats-trend-break-label',
+              offset: -14,
+            }}
+          />
+        ))}
         {STACK_ORDER.map((series) => (
           <Bar
             key={series}

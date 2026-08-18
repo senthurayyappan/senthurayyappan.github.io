@@ -510,6 +510,28 @@
   outline: none;
 }
 
+.stats-trend-break-label {
+  fill: var(--stats-muted);
+  font-size: .58rem;
+  letter-spacing: normal;
+}
+
+/* The collapsed-gap marker. Two hairlines and a span label, deliberately quiet: it
+   marks history that is not being drawn to scale, so it should read as a seam in the
+   calendar rather than as data. */
+.stats-heat-break line {
+  stroke: var(--stats-axis);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 4;
+  opacity: .55;
+}
+
+.stats-heat-break text {
+  fill: var(--stats-muted);
+  font-size: .58rem;
+  letter-spacing: normal;
+}
+
 .stats-heat-legend {
   display: flex;
   flex-wrap: wrap;

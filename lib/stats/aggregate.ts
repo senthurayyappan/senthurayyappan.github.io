@@ -23,6 +23,7 @@ import type {
   Bundle,
   DimKey,
   HeatCell,
+  HeatColumn,
   NameEntry,
   Row,
   Series,
@@ -132,18 +133,124 @@ function heatThresholds(values: number[]): [number, number, number] {
   return [q(0.25), q(0.5), q(0.75)]
 }
 
+/**
+ * A history with years missing from the middle -- an account that predates the
+ * self-hosted server, say -- would otherwise draw either as a chart that is mostly
+ * whitespace or, worse, as one that quietly closes the hole and puts 2020 next to
+ * 2025 as though they were consecutive. Runs of empty buckets longer than these
+ * collapse to a single marker that says how much time it stands for. Shorter runs
+ * stay as real empty columns: a fortnight off is information, and hiding it would be
+ * the same lie in miniature.
+ *
+ * views.py applies the identical rule over the same data -- see GAP_MIN_MONTHS there.
+ * If you change a threshold here, change it there, or the page and /api/stats.json
+ * will disagree about the same history.
+ */
+const GAP_MIN_MONTHS = 2
+const GAP_MIN_WEEKS = 6
+
+/** Every `YYYY-MM` the range touches, inclusive, including the empty ones. */
+function monthsBetween(start: string, end: string): string[] {
+  const out: string[] = []
+  let [y, m] = [Number(start.slice(0, 4)), Number(start.slice(5, 7))]
+  const [ey, em] = [Number(end.slice(0, 4)), Number(end.slice(5, 7))]
+  while (y < ey || (y === ey && m <= em)) {
+    out.push(`${String(y).padStart(4, '0')}-${String(m).padStart(2, '0')}`)
+    if (m === 12) {
+      y += 1
+      m = 1
+    } else {
+      m += 1
+    }
+  }
+  return out
+}
+
+/** `4 yr 7 mo` -- short enough to sit inside a collapsed chart column. */
+export function gapLabel(months: number): string {
+  const years = Math.floor(months / 12)
+  const rest = months % 12
+  const parts: string[] = []
+  if (years) parts.push(`${years} yr`)
+  if (rest || !years) parts.push(`${rest} mo`)
+  return parts.join(' ')
+}
+
+/**
+ * Replace interior runs of >= GAP_MIN_MONTHS empty months with one marker.
+ *
+ * Leading and trailing empty months are dropped outright rather than marked: the axis
+ * should begin and end on real data, and a range with nothing in it should render as
+ * "no recorded time" rather than as a chart of zeroes.
+ */
+function collapseMonths(bars: Bar[]): Bar[] {
+  const filled = bars.map((b, i) => (b.total > 0 ? i : -1)).filter((i) => i >= 0)
+  if (!filled.length) return []
+  const trimmed = bars.slice(filled[0], filled[filled.length - 1] + 1)
+  const out: Bar[] = []
+  let run: Bar[] = []
+  const flush = () => {
+    if (run.length >= GAP_MIN_MONTHS) {
+      out.push({
+        key: `gap:${run[0].key}..${run[run.length - 1].key}`,
+        label: gapLabel(run.length),
+        human: 0,
+        ai: 0,
+        other: 0,
+        total: 0,
+        aiShare: 0,
+        gapMonths: run.length,
+      })
+    } else {
+      out.push(...run)
+    }
+    run = []
+  }
+  for (const bar of trimmed) {
+    if (bar.total === 0) {
+      run.push(bar)
+      continue
+    }
+    flush()
+    out.push(bar)
+  }
+  return out
+}
+
+/** The same rule for the calendar, counting week columns instead of months. */
+function collapseWeeks(weeks: HeatColumn[]): HeatColumn[] {
+  const isEmpty = (column: HeatColumn) => !column.cells.some((c) => c && c.seconds > 0)
+  const out: HeatColumn[] = []
+  let run: HeatColumn[] = []
+  for (const column of weeks) {
+    if (isEmpty(column) && out.length) {
+      run.push(column)
+      continue
+    }
+    if (run.length >= GAP_MIN_WEEKS) {
+      const days = run.reduce((n, c) => n + c.cells.filter(Boolean).length, 0)
+      out.push({ cells: [], gapDays: days })
+    } else {
+      out.push(...run)
+    }
+    run = []
+    out.push(column)
+  }
+  return out
+}
+
 function buildHeatmap(
   byDay: Map<string, number>,
   start: string,
   end: string,
-): (HeatCell | null)[][] {
+): HeatColumn[] {
   const thresholds = heatThresholds(Array.from(byDay.values()))
   const level = (seconds: number) =>
     seconds <= 0 ? 0 : 1 + thresholds.filter((t) => seconds > t).length
 
   // Start the grid on the Sunday on or before `start` so every column is a full week.
   let cursor = addDays(start, -weekday(start))
-  const weeks: (HeatCell | null)[][] = []
+  const weeks: HeatColumn[] = []
   while (cursor <= end) {
     const column: (HeatCell | null)[] = []
     for (let i = 0; i < 7; i += 1) {
@@ -155,9 +262,9 @@ function buildHeatmap(
       }
       cursor = addDays(cursor, 1)
     }
-    weeks.push(column)
+    weeks.push({ cells: column, gapDays: 0 })
   }
-  return weeks
+  return collapseWeeks(weeks)
 }
 
 /** Current and longest run of consecutive days with recorded time. */
@@ -275,6 +382,12 @@ export function aggregate(bundle: Bundle, slice: Slice): Stats {
     for (let day = slice.start; day <= slice.end; day = addDays(day, 1)) {
       split.set(day, emptyBar())
     }
+  } else {
+    // Every month in the range, not just the ones with rows. Seeding only from the
+    // rows silently welds the two sides of a gap together -- a chart that drew
+    // 2020-12 next to 2025-08 as adjacent columns. collapseMonths then turns a long
+    // enough run of the empties into one labelled marker.
+    for (const month of monthsBetween(slice.start, slice.end)) split.set(month, emptyBar())
   }
   for (const [day, , dims] of rows) {
     const bucketKey = slice.bucket === 'month' ? monthOf(day) : day
@@ -288,7 +401,7 @@ export function aggregate(bundle: Bundle, slice: Slice): Stats {
     }
   }
 
-  const trend: Bar[] = Array.from(split.entries())
+  const built: Bar[] = Array.from(split.entries())
     .sort((a, b) => a[0].localeCompare(b[0]))
     .map(([key, v]) => {
       const total = v.human + v.ai + v.other
@@ -299,8 +412,10 @@ export function aggregate(bundle: Bundle, slice: Slice): Stats {
         ...v,
         total,
         aiShare: coded ? percent(v.ai, coded) : 0,
+        gapMonths: 0,
       }
     })
+  const trend: Bar[] = slice.bucket === 'month' ? collapseMonths(built) : built
 
   // --- breakdowns ------------------------------------------------------------
   const totalsByDim = new Map<DimKey, Map<number, number>>()
