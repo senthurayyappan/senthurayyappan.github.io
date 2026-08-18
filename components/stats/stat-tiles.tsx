@@ -78,8 +78,8 @@ export function StatTiles({ stats }: { stats: Stats }) {
       <Tile
         label="Longest streak"
         value={String(stats.longestStreak)}
-        unit="d"
-        sub={`current streak ${stats.currentStreak} d`}
+        unit={plural(stats.longestStreak, 'day')}
+        sub={`current streak ${stats.currentStreak} ${plural(stats.currentStreak, 'day')}`}
       />
     </div>
   )
