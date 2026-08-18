@@ -205,6 +205,15 @@
       --sa-extrude-current-depth: var(--sa-extrude-depth-hover, 15px);
     }
   }
+  .sa-control:has(.sa-button:not(:disabled):focus-visible),
+  .sa-control:has(+ [popover]:popover-open) {
+    --sa-extrude-current-depth: var(--sa-extrude-depth-hover);
+  }
+  @media (hover: hover) {
+    .sa-control:not(:has(.sa-button:disabled)):hover {
+      --sa-extrude-current-depth: var(--sa-extrude-depth-hover);
+    }
+  }
   @media (prefers-reduced-motion: reduce) {
     .sa-extrude,
     .sa-panel-cell,
@@ -312,9 +321,6 @@
     cursor: not-allowed;
     opacity: .55;
   }
-  .sa-control:has(+ [popover]:popover-open) {
-    --sa-extrude-current-depth: var(--sa-extrude-depth-hover);
-  }
   .sa-select {
     position: relative;
     display: inline-flex;
@@ -357,14 +363,6 @@
   .sa-select__field:disabled {
     cursor: not-allowed;
     opacity: .55;
-  }
-  .sa-control:has(.sa-button:not(:disabled):focus-visible) {
-    --sa-extrude-current-depth: var(--sa-extrude-depth-hover);
-  }
-  @media (hover: hover) {
-    .sa-control:not(:has(.sa-button:disabled)):hover {
-      --sa-extrude-current-depth: var(--sa-extrude-depth-hover);
-    }
   }
   @media (prefers-reduced-motion: reduce) {
     .sa-select__field {

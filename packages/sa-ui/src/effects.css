@@ -77,6 +77,23 @@
     }
   }
 
+  /* Controls need no `interactive` opt-in -- a button is interactive by definition.
+     These three rules MUST stay in this layer, next to the `.sa-control` rest rule
+     they override. They lived in button.css (sa.components) until they were found to
+     have never fired: layer order is resolved BEFORE specificity, so this file's
+     plain `.sa-control` beat that file's `.sa-control:hover` and every sa-button on
+     every page sat flat. Specificity cannot rescue a rule in an earlier layer. */
+  .sa-control:has(.sa-button:not(:disabled):focus-visible),
+  .sa-control:has(+ [popover]:popover-open) {
+    --sa-extrude-current-depth: var(--sa-extrude-depth-hover);
+  }
+
+  @media (hover: hover) {
+    .sa-control:not(:has(.sa-button:disabled)):hover {
+      --sa-extrude-current-depth: var(--sa-extrude-depth-hover);
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .sa-extrude,
     .sa-panel-cell,

@@ -57,9 +57,9 @@
     opacity: .55;
   }
 
-  .sa-control:has(+ [popover]:popover-open) {
-    --sa-extrude-current-depth: var(--sa-extrude-depth-hover);
-  }
+  /* The three rules that lift a control on hover, focus and popover-open used to sit
+     here. They now live in effects.css -- see the note there. Do not move them back:
+     in this layer they are silently dead. */
 
   .sa-select {
     position: relative;
@@ -106,16 +106,6 @@
   .sa-select__field:disabled {
     cursor: not-allowed;
     opacity: .55;
-  }
-
-  .sa-control:has(.sa-button:not(:disabled):focus-visible) {
-    --sa-extrude-current-depth: var(--sa-extrude-depth-hover);
-  }
-
-  @media (hover: hover) {
-    .sa-control:not(:has(.sa-button:disabled)):hover {
-      --sa-extrude-current-depth: var(--sa-extrude-depth-hover);
-    }
   }
 
   @media (prefers-reduced-motion: reduce) {
