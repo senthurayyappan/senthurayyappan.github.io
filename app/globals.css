@@ -1,5 +1,76 @@
 @import 'tailwindcss';
 
+/* ---------------------------------------------------------------------------
+   shadcn/ui bridge.
+
+   shadcn components are written against Tailwind semantic utilities
+   (bg-background, text-muted-foreground, border-input, ring-ring). Those resolve
+   through Tailwind's --color-* namespace, which is what this block defines.
+
+   It maps them onto sa-ui's tokens, so every shadcn component inherits this
+   site's palette and flips with .dark automatically -- no second theme to keep
+   in sync, and no shadcn grey anywhere.
+
+   IMPORTANT: this deliberately does NOT define shadcn's usual bare tokens
+   (--background, --accent, --muted, ...). Three of those names are already in
+   use here and mean something different -- sa-ui's --accent is the brand red /
+   yellow, and globals.css sets --muted to --sa-blue below. Defining them the
+   shadcn way would silently repaint existing components. Mapping --color-*
+   straight to sa-ui vars gets the same result and touches nothing that exists.
+   --------------------------------------------------------------------------- */
+
+/* next-themes sets .dark on <html>; teach Tailwind's dark: variant to match it. */
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--sa-surface);
+  --color-foreground: var(--sa-text);
+
+  --color-card: var(--sa-surface);
+  --color-card-foreground: var(--sa-text);
+  --color-popover: var(--sa-surface);
+  --color-popover-foreground: var(--sa-text);
+
+  --color-primary: var(--sa-blue);
+  --color-primary-foreground: var(--sa-blue-text);
+  --color-secondary: color-mix(in srgb, var(--sa-text) 8%, transparent);
+  --color-secondary-foreground: var(--sa-text);
+
+  --color-muted: color-mix(in srgb, var(--sa-text) 6%, transparent);
+  --color-muted-foreground: color-mix(in srgb, var(--sa-text) 62%, transparent);
+
+  /* shadcn's "accent" is a hover wash, not a brand accent. Keeping it neutral is
+     what stops it colliding with sa-ui's meaning of the same word. */
+  --color-accent: color-mix(in srgb, var(--sa-text) 9%, transparent);
+  --color-accent-foreground: var(--sa-text);
+
+  --color-destructive: var(--sa-red);
+  --color-destructive-foreground: var(--sa-red-text);
+
+  --color-border: color-mix(in srgb, var(--sa-text) 20%, transparent);
+  --color-input: color-mix(in srgb, var(--sa-text) 32%, transparent);
+  --color-ring: var(--sa-blue);
+}
+
+/* NOTE: --radius-* is deliberately NOT overridden here. sa-ui is square, so the
+   temptation is to zero it globally -- but Tailwind inlines radius values at build
+   time rather than emitting var() references, so zeroing the theme would flatten
+   the site's own `rounded-md` code blocks and inline <code>, not just shadcn's
+   parts. Squaring off is done in the stats page's own stylesheet, where it is
+   scoped to the components that want it. */
+
+/* components/footer.tsx carries `text-muted`, which was never a defined class on
+   this site -- it did nothing, and the copyright line simply inherited its colour.
+   Defining --color-muted above (which shadcn needs for bg-muted / fill-muted) has
+   the side effect of making `text-muted` a real utility, which would repaint that
+   line. Unlayered, so it beats the generated utility: this pins the footer to the
+   appearance it has always had.
+
+   Worth deciding separately: that class looks like it was *meant* to mute the
+   copyright. If so the fix is a real muted colour here rather than inherit -- but
+   that is a visual change, so it is not being made silently. */
+.text-muted { color: inherit; }
+
 :root {
   --dot-spacing: 4px;
   --dot-opacity: 0.01;
