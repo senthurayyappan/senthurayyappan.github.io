@@ -46,12 +46,59 @@ test('interactive extrusions expand on keyboard focus without hover support', as
   assert.match(keyboardRules, /\.sa-panel-cell--interactive:focus-within/)
 })
 
-test('enabled buttons expand on keyboard focus without hover support', async () => {
-  const css = await readFile(new URL('../src/components/button.css', import.meta.url), 'utf8')
-  const keyboardRules = css.slice(0, css.indexOf('@media (hover: hover)'))
+/** Map a byte offset in the bundle to the name of the @layer block containing it. */
+function layerAt(css, index) {
+  const open = /@layer\s+([\w.]+)\s*\{/g
+  let match
+  while ((match = open.exec(css))) {
+    let cursor = match.index + match[0].length
+    let depth = 1
+    while (depth > 0 && cursor < css.length) {
+      if (css[cursor] === '{') depth += 1
+      else if (css[cursor] === '}') depth -= 1
+      cursor += 1
+    }
+    if (index >= match.index && index < cursor) return match[1]
+  }
+  return null
+}
 
-  assert.match(keyboardRules, /\.sa-control:has\(\.sa-button:not\(:disabled\):focus-visible\)/)
-  assert.doesNotMatch(keyboardRules, /\.sa-control:focus-within/)
+test('enabled buttons expand on keyboard focus and hover', async () => {
+  const css = await readFile(new URL('../dist/sa-ui.css', import.meta.url), 'utf8')
+
+  assert.match(css, /\.sa-control:has\(\.sa-button:not\(:disabled\):focus-visible\)/)
+  assert.match(css, /\.sa-control:not\(:has\(\.sa-button:disabled\)\):hover/)
+  assert.doesNotMatch(css, /\.sa-control:focus-within/)
+})
+
+test('control interaction rules are in a layer that can win', async () => {
+  // The bug this guards: these three rules lived in sa.components while the
+  // `.sa-control` rest declaration lives in sa.effects, a later layer. The cascade
+  // sorts by layer BEFORE specificity, so the rest rule won and no button extruded
+  // on hover anywhere on the site. Asserting the rule merely EXISTS cannot catch
+  // that -- it existed the whole time. Only its layer was wrong.
+  const css = await readFile(new URL('../dist/sa-ui.css', import.meta.url), 'utf8')
+  const order = css.match(/@layer\s+([^;]+);/)[1].split(',').map((name) => name.trim())
+
+  const rest = css.indexOf('--sa-extrude-current-depth: var(--sa-extrude-depth-rest')
+  assert.ok(rest > 0, 'could not find the .sa-control rest declaration')
+  const restLayer = order.indexOf(layerAt(css, rest))
+  assert.ok(restLayer >= 0, 'rest declaration is outside every declared layer')
+
+  for (const selector of [
+    '.sa-control:has(.sa-button:not(:disabled):focus-visible)',
+    '.sa-control:has(+ [popover]:popover-open)',
+    '.sa-control:not(:has(.sa-button:disabled)):hover',
+  ]) {
+    const at = css.indexOf(selector)
+    assert.ok(at > 0, `missing ${selector}`)
+    const layer = order.indexOf(layerAt(css, at))
+    assert.ok(
+      layer >= restLayer,
+      `${selector} is in layer ${order[layer]}, which loses to ${order[restLayer]} `
+      + 'no matter how specific it is',
+    )
+  }
 })
 
 test('select fields keep a forced-colors keyboard focus indicator', async () => {
