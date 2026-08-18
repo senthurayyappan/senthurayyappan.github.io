@@ -9,9 +9,11 @@
     --sa-yellow: #f9c90a;
     --sa-red: #ef2841;
     --sa-blue: #007d7e;
+    --sa-green: #728c16;
     --sa-yellow-text: #15130d;
     --sa-blue-text: #f6f4ee;
     --sa-red-text: #000000;
+    --sa-green-text: #15130d;
     --sa-font-reading:
       var(--font-geist-sans, ui-sans-serif),
       system-ui,
