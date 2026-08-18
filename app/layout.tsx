@@ -37,9 +37,18 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  // All six files exist under /logo/favicons, but only favicon.ico was ever declared,
+  // so the apple-touch and android icons were generated, shipped and never asked for
+  // -- an iOS home-screen shortcut fell back to a screenshot of the page.
   icons: {
-    icon: '/logo/favicons/favicon.ico',
+    icon: [
+      { url: '/logo/favicons/favicon.ico', sizes: '16x16 32x32 48x48' },
+      { url: '/logo/favicons/favicon-16x16.png', type: 'image/png', sizes: '16x16' },
+      { url: '/logo/favicons/favicon-32x32.png', type: 'image/png', sizes: '32x32' },
+    ],
+    apple: '/logo/favicons/apple-touch-icon.png',
   },
+  manifest: '/logo/favicons/site.webmanifest',
 }
 
 const cx = (...classes) => classes.filter(Boolean).join(' ')

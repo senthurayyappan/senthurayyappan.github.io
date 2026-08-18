@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { CalendarIcon } from 'lucide-react'
 
-import { Calendar } from '@/components/ui/calendar'
+import { Calendar, CalendarDayButton } from '@/components/ui/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { SAButton } from '@/components/SAButton'
 import { CUSTOM_RANGE, RANGES } from '@/lib/stats/aggregate'
@@ -32,6 +32,27 @@ function toISO(date: Date | undefined): string | null {
   const pad = (n: number) => String(n).padStart(2, '0')
   // The Calendar hands back a local-midnight Date, so read the local fields.
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
+}
+
+/**
+ * Each day carries the site's hover mark, so pointing at one draws the same rough
+ * circle the nav links and social icons draw rather than washing the cell grey.
+ *
+ * No enhancer rescan on open, deliberately. `enhance()` listens on `document`, and
+ * pointer events from a portal bubble there like any other, so the animated circle
+ * works on a cell the enhancer has never seen. Rescanning would add all 42 cells to
+ * its permanent mark set on every open, for nothing. Until the pointer arrives the
+ * CSS ellipse stands in, held at opacity 0 by stats.css.
+ */
+function DayCircle(props: React.ComponentProps<typeof CalendarDayButton>) {
+  return (
+    <CalendarDayButton
+      {...props}
+      className={`sa-mark stats-day${props.className ? ` ${props.className}` : ''}`}
+      data-sa-mark="circle"
+      data-sa-trigger="interaction"
+    />
+  )
 }
 
 /**
@@ -67,22 +88,30 @@ function DateField({
         </button>
       </PopoverTrigger>
       <PopoverContent className="stats-date-popover" align="start">
-        <Calendar
-          mode="single"
-          selected={selected}
-          defaultMonth={selected}
-          startMonth={toDate(min)}
-          endMonth={toDate(max)}
-          disabled={{ before: toDate(min)!, after: toDate(max)! }}
-          onSelect={(date) => {
-            const iso = toISO(date)
-            if (iso) {
-              onChange(iso)
-              setOpen(false)
-            }
-          }}
-          autoFocus
-        />
+        {/* The popover is stripped bare and the panel inside it does the work, so the
+            calendar sits in the same extruded box as every other surface on the page
+            rather than under an offset drop shadow imitating one. */}
+        <div className="sa-panel-cell stats-date-cell">
+          <div className="sa-panel stats-date-panel">
+            <Calendar
+              mode="single"
+              selected={selected}
+              defaultMonth={selected}
+              startMonth={toDate(min)}
+              endMonth={toDate(max)}
+              disabled={{ before: toDate(min)!, after: toDate(max)! }}
+              onSelect={(date) => {
+                const iso = toISO(date)
+                if (iso) {
+                  onChange(iso)
+                  setOpen(false)
+                }
+              }}
+              components={{ DayButton: DayCircle }}
+              autoFocus
+            />
+          </div>
+        </div>
       </PopoverContent>
     </Popover>
   )

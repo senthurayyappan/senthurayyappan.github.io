@@ -189,6 +189,18 @@
 
 .stats-empty { margin: .4rem 0 0; color: var(--stats-muted); font-size: .86rem; }
 
+/* The one link on a page that has failed to load anything, so it has to look like a
+   way out. Carries the site's hand-drawn underline: the CSS rule stands in at rest
+   and the enhancer draws over it on hover, same as the nav. */
+.stats-empty a {
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.stats-empty a:hover,
+.stats-empty a:focus-visible { color: var(--sa-blue); }
+
 /* ------------------------------------------------------------------- filters */
 
 /* Two rows, above everything they scope: the window as a readable sentence, then the
@@ -268,12 +280,15 @@
 
 .stats-preset-cell { display: flex; min-width: 0; }
 
+/* An opaque face, not a transparent one. The side and bottom faces are drawn behind
+   the button, so a see-through face lets its own far edge show through and the lift
+   reads as a smudge instead of a solid thing standing off the page. */
 .stats-presets .sa-button {
   width: 100%;
   min-height: 30px;
   padding: .3rem .2rem;
   color: var(--text);
-  background: transparent;
+  background: var(--background);
   font-size: .8rem;
   font-weight: 500;
   white-space: nowrap;
@@ -292,16 +307,33 @@
   .stats-rangebar-span { width: 100%; margin-left: 0; }
 }
 
-/* Portalled, so it cannot be reached through a `.stats` descendant selector. */
+/* Portalled, so it cannot be reached through a `.stats` descendant selector.
+
+   The popover itself is stripped to nothing -- no border, no background, no shadow --
+   and the panel inside it carries the whole look. That is deliberate: a box-shadow
+   offset by 4px only imitates the extrusion, and it was the one surface on this page
+   drawing its own flat imitation instead of the real thing. The real one is a pair of
+   skewed faces plus the hand-drawn edge mask, and it comes free with .sa-panel-cell. */
 .stats-date-popover {
   width: auto;
-  padding: .5rem;
-  border: 1.5px solid var(--text);
+  padding: 0;
+  border: 0;
   border-radius: 0;
-  background: var(--background);
+  background: none;
   color: var(--text);
-  box-shadow: 4px 4px 0 0 var(--sa-blue);
+  box-shadow: none;
 }
+
+/* No `data-sa-extrude="interactive"`: a popover is not a hover target, so the depth
+   stays where it is rather than breathing under the pointer. */
+.stats-date-cell {
+  --sa-panel-depth-rest: 5px;
+  --sa-panel-depth-hover: 5px;
+  --sa-panel-edge-width: 1.5px;
+  display: block;
+}
+
+.stats-date-panel { padding: .5rem; }
 
 .stats-date-popover .rdp-day_button:hover { border-radius: 0; }
 .stats-date-popover [data-selected-single='true'] {
@@ -309,6 +341,35 @@
   background: var(--sa-blue);
   color: var(--sa-blue-text);
 }
+
+/* --- the circle, instead of a grey wash ---------------------------------- */
+
+/* Every day is an .sa-mark, so hovering one draws the same rough circle the nav and
+   the social icons draw. That means killing the shadcn ghost variant's grey fill --
+   otherwise the circle lands on top of a rounded rectangle and neither reads.
+
+   Blue rather than the usual accent: selection in this popover is already blue, so a
+   red ring around the day you are about to pick would announce the wrong thing.
+   `display` is restated because .sa-mark ships `inline`, which would collapse the
+   button's flex layout. */
+.stats-date-popover .stats-day {
+  --sa-mark-color: var(--sa-blue);
+  display: flex;
+}
+
+.stats-date-popover .stats-day:hover,
+.stats-date-popover .stats-day:focus-visible {
+  background: transparent;
+  color: var(--text);
+}
+
+/* The mark's CSS fallback is a plain ellipse, shown only until the enhancer claims
+   the element (it sets data-sa-enhanced, which hides this). Inside a portal that
+   handover happens on open rather than at page load, so without this the whole grid
+   would flash 42 static circles. Draw it only under the pointer. */
+.stats-date-popover .stats-day::after { opacity: 0; }
+.stats-date-popover .stats-day:hover::after,
+.stats-date-popover .stats-day:focus-visible::after { opacity: 1; }
 
 /* --------------------------------------------------------------------- tiles */
 

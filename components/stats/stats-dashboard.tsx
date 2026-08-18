@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import Link from 'next/link'
 
 import './stats.css'
 import { ActivityHeatmap } from './activity-heatmap'
@@ -35,7 +36,7 @@ const API_BASE = process.env.NEXT_PUBLIC_STATS_API ?? 'https://stats.senthurayya
 
 type Load =
   | { state: 'loading' }
-  | { state: 'error'; message: string }
+  | { state: 'error' }
   | { state: 'ready'; bundle: Bundle }
 
 interface RangeState {
@@ -98,10 +99,10 @@ export function StatsDashboard() {
       .then((bundle) => setLoad({ state: 'ready', bundle }))
       .catch((error: unknown) => {
         if (controller.signal.aborted) return
-        setLoad({
-          state: 'error',
-          message: error instanceof Error ? error.message : 'the stats API is unreachable',
-        })
+        // The reason goes to the console, not the page. A visitor cannot act on
+        // "Load failed"; whoever is debugging this still needs it.
+        console.warn('[stats] could not reach the stats API:', error)
+        setLoad({ state: 'error' })
       })
     return () => controller.abort()
   }, [])
@@ -125,8 +126,16 @@ export function StatsDashboard() {
       <div className="stats">
         <StatsPanel title="Coding statistics">
           <p className="stats-empty">
-            Could not reach the stats API — {load.message}. The collector runs on a
-            self-hosted box, so this page goes quiet when that box does.
+            My VPS is probably down, please stay tuned.{' '}
+            <Link
+              href="/blog"
+              className="sa-mark"
+              data-sa-mark="underline"
+              data-sa-trigger="interaction"
+            >
+              Read one of my blogs
+            </Link>{' '}
+            maybe?
           </p>
         </StatsPanel>
       </div>

@@ -204,6 +204,11 @@
 
 .sidenav-list li:last-child::after { display: none; }
 
+/* No letter-spacing here on purpose. .sidenav-list is one of the selectors in the
+   display-font group below, which sets var(--font-display) and .08em together --
+   that font is the handwriting in every mode, so the tracking it was tuned with
+   should ride along. This rule used to pin -0.01em, a Geist value, and being the
+   more specific selector it won everywhere and cramped the labels. */
 .sidenav-list a {
   display: flex;
   align-items: center;
@@ -214,7 +219,6 @@
   font-size: 15px;
   font-weight: 500;
   line-height: 1.2;
-  letter-spacing: -0.01em;
   transition: color 180ms ease;
 }
 
