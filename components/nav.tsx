@@ -144,7 +144,17 @@ export function Navbar() {
     <>
       <aside className="sidenav hidden md:block tracking-tight">
         <Link href="/" className="sidenav-mark" aria-label="Senthur Ayyappan - home" data-sketch="off">
-          <Image src="/logo/640.png" alt="Senthur Ayyappan" width={220} height={120} priority />
+          {/* One file for all three marks, deliberately.
+
+              The desktop sidebar and the two mobile marks are all in the DOM at every
+              width -- only CSS hides them -- and a display:none <img> with a src still
+              downloads. Picking a per-breakpoint size therefore costs every visitor
+              BOTH files. 500 is sized for the largest of the three (188 CSS px here,
+              so 2.7x) and is then free for the other two.
+
+              The art is square: the old 220x120 reserved the wrong shape and shifted
+              the sidebar on first paint. */}
+          <Image src="/logo/500.png" alt="Senthur Ayyappan" width={192} height={192} priority />
         </Link>
         <nav aria-label="Sections"><NavList pathname={pathname} /></nav>
         <SocialRow />
@@ -155,7 +165,8 @@ export function Navbar() {
           <PreferenceControls />
         </div>
         <Link href="/" onClick={() => setSidebarOpen(false)} className="mobile-masthead-logo" data-sketch="off">
-          <Image src="/logo/800.png" alt="SA" fill sizes="112px" unoptimized priority />
+          {/* 112 CSS px wide, cover-cropped to a 48px band -- 4.5x from the shared file. */}
+          <Image src="/logo/500.png" alt="SA" fill sizes="112px" unoptimized priority />
         </Link>
         <SAButton
           ref={menuButtonRef}
@@ -181,7 +192,8 @@ export function Navbar() {
       >
         <div className="flex items-center justify-between">
           <Link href="/" onClick={() => setSidebarOpen(false)} className="relative w-28 h-12 overflow-hidden" data-sketch="off">
-            <Image src="/logo/400.png" alt="SA" fill style={{ objectFit: 'contain', objectPosition: 'left center' }} />
+            {/* Contained into a 48px-tall box, so this needs 48 CSS px at most. */}
+            <Image src="/logo/500.png" alt="SA" fill style={{ objectFit: 'contain', objectPosition: 'left center' }} />
           </Link>
           <SAButton ref={drawerCloseButtonRef} onClick={closeSidebar} aria-label="Close navigation" className="comic-menu-button" icon={<MenuIcon open />} />
         </div>
