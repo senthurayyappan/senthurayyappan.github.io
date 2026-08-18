@@ -15,6 +15,7 @@ const navItems = [
   { href: '/projects', label: 'Projects' },
   { href: '/blog', label: 'Blog' },
   { href: '/publications', label: 'Publications' },
+  { href: '/stats', label: 'Stats' },
 ]
 
 function GitHubIcon() {

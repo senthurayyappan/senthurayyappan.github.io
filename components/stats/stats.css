@@ -1,0 +1,651 @@
+/* Coding statistics page.
+   ---------------------------------------------------------------------------
+   Scoped to `.stats`. Everything here is deliberately UNLAYERED: sa-ui ships its
+   rules inside @layer sa.*, and Tailwind ships utilities inside @layer utilities,
+   so an unlayered rule beats both without !important and without depending on
+   which stylesheet the bundler happens to emit first.
+
+   This is also where shadcn's parts get squared off. It is done here rather than
+   by zeroing --radius-* in the theme because Tailwind inlines radius values at
+   build time -- a global zero would flatten the site's own rounded code blocks,
+   not just the components on this page.
+
+   CHART COLOUR. Two hues carry every chart, both taken straight from the brand
+   palette: --sa-blue = worked by hand, --sa-green = AI-assisted. Measured against
+   this site's own surfaces (#f6f4ee light, #15130d dark), the pair clears the
+   lightness band, CVD separation (worst adjacent ΔE 14.4 protan), the
+   normal-vision floor (15.6) and 3:1 contrast -- in BOTH modes, which is why
+   there is no re-stepped dark column for them.
+
+   One measured deviation, deliberate: --sa-blue has OKLCH chroma 0.091 against a
+   0.10 floor. It cannot be fixed at this hue. #007d7e sits on the sRGB gamut
+   boundary for hue 196 at L 0.53 -- the most chromatic colour available there is
+   0.093 -- so clearing the floor means lightening away from the token, which is
+   exactly the near-miss teal this page used to have. Identity never rests on the
+   hue alone here (a legend is always present, the endpoint is directly labelled,
+   and segments are separated by surface gaps), so the token wins.
+
+   The activity heatmap is a magnitude ramp rather than a second categorical set, so
+   it is stepped on the green's hue with the token as one of its four steps. Its own
+   legend ("less … more") says it is measuring quantity, not repeating the bar chart's
+   human/ai split.
+
+   Brand red stays reserved for UI accent and never becomes a series colour.
+
+   TRACKING. The site ships two faces and they want opposite tracking: the sans
+   face is set tight, the handwriting face carries .08em/.16em from `body` and
+   collides without it. Hard-coding either one is what made this page render the
+   handwriting "raw". Every tracked rule below reads a token instead, and the
+   whole set is redefined under .font-handwritten.
+   --------------------------------------------------------------------------- */
+
+.stats {
+  /* Series identity -- brand tokens, unchanged in both themes. */
+  --stats-human: var(--sa-blue);
+  --stats-ai: var(--sa-green);
+  --stats-other: color-mix(in srgb, var(--text) 24%, transparent);
+
+  /* Sequential ramp: one hue (122, the brand green's), monotone lightness. A ramp
+     needs four separable lightnesses, so it cannot be four copies of the token --
+     but the token itself is one of the steps. */
+  --stats-heat-0: color-mix(in srgb, var(--text) 8%, transparent);
+  --stats-heat-1: #9bba33;
+  --stats-heat-2: #83a103;
+  --stats-heat-3: var(--sa-green);
+  --stats-heat-4: #576f00;
+
+  /* Tracking, per face. See TRACKING above. */
+  --stats-track: -0.01em;
+  --stats-track-label: .07em;
+  --stats-track-value: -0.035em;
+  --stats-track-hero: -0.045em;
+
+  /* Chart chrome: recessive, solid hairlines, never dashed */
+  --stats-grid: color-mix(in srgb, var(--text) 12%, transparent);
+  --stats-axis: color-mix(in srgb, var(--text) 28%, transparent);
+  --stats-hover: color-mix(in srgb, var(--text) 6%, transparent);
+  --stats-muted: color-mix(in srgb, var(--text) 62%, transparent);
+  --stats-rule: color-mix(in srgb, var(--text) 18%, transparent);
+
+  font-size: 15px;
+  line-height: 1.5;
+  letter-spacing: var(--stats-track);
+}
+
+/* The handwriting face brings its own metrics -- body sets .08em/.16em and the
+   glyphs need them. Display sizes take a smaller positive step rather than the
+   negative one, because tracking that reads as tight at 54px reads as a collision
+   in a face with this much overshoot. */
+.font-handwritten .stats {
+  --stats-track: .08em;
+  --stats-track-label: .09em;
+  --stats-track-value: .03em;
+  --stats-track-hero: .015em;
+}
+
+/* Chrome's UA sheet resets letter- and word-spacing on form controls, and `font:
+   inherit` does not carry them back -- they are not part of the font shorthand.
+   Without this the presets and the date fields are the only text on the page that
+   ignores the font preference. */
+.stats button,
+.stats input,
+.stats-date-popover button {
+  letter-spacing: inherit;
+  word-spacing: inherit;
+}
+
+/* Only the ramp is re-stepped for the dark surface; the two series hues clear
+   every check against both surfaces unchanged. */
+.dark .stats {
+  --stats-heat-0: color-mix(in srgb, var(--text) 10%, transparent);
+  --stats-heat-1: #485c00;
+  --stats-heat-2: #576f00;
+  --stats-heat-3: var(--sa-green);
+  --stats-heat-4: #83a103;
+}
+
+/* -------------------------------------------------------------------- layout */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 1.5rem 1.35rem;
+  margin-bottom: 1.9rem;
+}
+
+/* Two by two rather than auto-fit. The site shell caps the content column at about
+   900px, which auto-fit resolves to three columns -- leaving the fourth tile alone
+   on a second row beside a hole. A fixed pair also gives the hero figure room to
+   stay on one line. */
+.stats-grid-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+@media (max-width: 33rem) {
+  .stats-grid-tiles { grid-template-columns: minmax(0, 1fr); }
+}
+
+.stats-grid-halves {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+}
+
+.stats-span { margin-bottom: 1.9rem; }
+
+/* ---------------------------------------------------------------------- card */
+
+/* Deliberately does NOT pin the extrusion colours. sa-ui's default is
+
+     .sa-panel-cell { --sa-extrude-side: var(--sa-side-color, var(--sa-accent)); }
+
+   and --sa-accent is brand red in light and yellow in dark, which is how every other
+   panel on this site behaves. Pinning the side face yellow made these cards the only
+   ones that did not answer the theme toggle. Only the edge width is set, matching
+   `.latest-post-cell` and `.article-like-cell`; the bottom face already defaults to
+   --sa-blue. */
+.stats-card {
+  --sa-panel-edge-width: 1.5px;
+}
+
+.stats-card > .sa-panel {
+  height: 100%;
+  padding: 1.05rem 1.15rem 1.15rem;
+}
+
+/* Panels whose footnote is pinned to the bottom edge. */
+.stats-panel-column { display: flex; flex-direction: column; }
+.stats-panel-column .stats-bars { margin-bottom: .75rem; }
+
+.stats-card-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .75rem;
+  margin-bottom: .2rem;
+}
+
+.stats-card-title {
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+  margin: 0;
+  color: var(--stats-muted);
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: var(--stats-track-label);
+  text-transform: uppercase;
+}
+
+.stats-card-note { color: var(--stats-muted); font-size: .78rem; }
+
+/* margin-top:auto pins this to the panel floor, so a four-row panel still reads as a
+   finished block rather than a short list with a sentence stuck under it. */
+.stats-card-footnote {
+  margin: 0;
+  padding-top: .7rem;
+  margin-top: auto;
+  border-top: 1px solid color-mix(in srgb, var(--text) 9%, transparent);
+  color: var(--stats-muted);
+  font-size: .76rem;
+  line-height: 1.45;
+}
+
+.stats-empty { margin: .4rem 0 0; color: var(--stats-muted); font-size: .86rem; }
+
+/* ------------------------------------------------------------------- filters */
+
+/* Two rows, above everything they scope: the window as a readable sentence, then the
+   shortcuts that write into it. Every chart, tile and panel below reads the same
+   slice, so the numbers on screen always agree with each other. */
+.stats-filters { margin-bottom: 1.6rem; }
+
+/* --- row 1: the window itself ------------------------------------------- */
+
+.stats-rangebar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: .1rem .5rem;
+  padding: .55rem .8rem;
+  border: 1px solid var(--stats-rule);
+  background: color-mix(in srgb, var(--text) 3%, transparent);
+  font-size: .92rem;
+}
+
+.stats-rangebar-icon {
+  align-self: center;
+  width: 14px;
+  height: 14px;
+  margin-right: .1rem;
+  color: var(--stats-muted);
+}
+
+.stats-rangebar-key { color: var(--stats-muted); font-size: .8rem; }
+
+/* A value you can edit, not a button. Underlined so it reads as a field, and the
+   dotted rule promises it is changeable without shouting about it. */
+.stats-date-field {
+  padding: 0 .1rem;
+  border: 0;
+  border-bottom: 1px dashed color-mix(in srgb, var(--text) 45%, transparent);
+  border-radius: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.stats-date-field:hover,
+.stats-date-field[data-state='open'] {
+  border-bottom-style: solid;
+  border-bottom-color: var(--sa-blue);
+  color: var(--sa-blue);
+}
+
+.stats-date-field:focus-visible { outline: 2px solid var(--sa-blue); outline-offset: 2px; }
+
+.stats-rangebar-span {
+  margin-left: auto;
+  color: var(--stats-muted);
+  font-size: .78rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- row 2: the shortcuts ------------------------------------------------ */
+
+/* sa-ui's Button, not a bespoke one: these are the same kind of control as the nav
+   and the blog's tag filters, so they get the same extruded frame and the same
+   hand-drawn edge. The row is a grid because seven equal columns beat wrapping.
+
+   .sa-control offsets itself by its own rest depth (margin: 2px 0 0 2px) and grows
+   that depth on hover, which is what makes the face lift. It ships `inline-flex`, so
+   it needs `flex` here to fill its grid cell. */
+.stats-presets {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: .35rem;
+  margin-top: .45rem;
+}
+
+.stats-preset-cell { display: flex; min-width: 0; }
+
+.stats-presets .sa-button {
+  width: 100%;
+  min-height: 30px;
+  padding: .3rem .2rem;
+  color: var(--text);
+  background: transparent;
+  font-size: .8rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.stats-presets .sa-button:hover { color: var(--sa-blue); }
+
+.stats-presets .sa-button.is-active {
+  color: var(--sa-blue-text);
+  background: var(--sa-blue);
+  font-weight: 600;
+}
+
+@media (max-width: 40rem) {
+  .stats-presets { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .stats-rangebar-span { width: 100%; margin-left: 0; }
+}
+
+/* Portalled, so it cannot be reached through a `.stats` descendant selector. */
+.stats-date-popover {
+  width: auto;
+  padding: .5rem;
+  border: 1.5px solid var(--text);
+  border-radius: 0;
+  background: var(--background);
+  color: var(--text);
+  box-shadow: 4px 4px 0 0 var(--sa-blue);
+}
+
+.stats-date-popover .rdp-day_button:hover { border-radius: 0; }
+.stats-date-popover [data-selected-single='true'] {
+  border-radius: 0;
+  background: var(--sa-blue);
+  color: var(--sa-blue-text);
+}
+
+/* --------------------------------------------------------------------- tiles */
+
+/* Tiles sit in a grid, so every panel is as tall as the tallest in its row. Pinning
+   the supporting line to the bottom is what stops "Daily average" -- which shares a
+   row with the much taller hero -- from leaving a hole under its sentence.
+
+   The margin is written as a single shorthand on purpose: it was previously split
+   across two rules, and the later `margin: .55rem 0 0` silently reset the earlier
+   `margin-top: auto`, so nothing was pinned at all. */
+.stats-tile-body { display: flex; flex-direction: column; }
+
+/* One figure treatment for all four tiles. They were split -- a display size for the
+   total and a smaller one for the rest -- which read as three lesser panels beside a
+   headline rather than four readings of the same range. */
+.stats-tile-value {
+  margin: .55rem 0 0;
+  font-size: clamp(2.6rem, 6vw, 3.4rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: var(--stats-track-hero);
+}
+
+/* Figures are proportional, not tabular: tabular-nums reads loose at this size. */
+.stats-tile-unit {
+  color: var(--stats-muted);
+  font-size: .42em;
+  font-weight: 500;
+  letter-spacing: var(--stats-track);
+}
+
+.stats-tile-sub {
+  margin: auto 0 0;
+  padding-top: .55rem;
+  color: var(--stats-muted);
+  font-size: .8rem;
+}
+
+.stats-hint {
+  display: inline-flex;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--stats-muted);
+  cursor: help;
+  line-height: 0;
+}
+
+.stats-hint:hover { color: var(--text); }
+.stats-hint svg { width: 12px; height: 12px; }
+
+/* Radix portals this to <body>, so it is outside `.stats` and cannot read the
+   tracking tokens -- and it would otherwise inherit body's tracking as a computed
+   px value, which is .08em of a 16px body applied to 12px text. Restated here at
+   the size it is actually set in. */
+.stats-hint-content {
+  max-width: 22rem;
+  border-radius: 0;
+  font-size: .78rem;
+  line-height: 1.45;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.font-handwritten .stats-hint-content { letter-spacing: .08em; }
+
+/* -------------------------------------------------------------------- charts */
+
+.stats-chart {
+  aspect-ratio: auto;
+  width: 100%;
+  height: clamp(230px, 34vw, 320px);
+}
+
+.stats-chart text {
+  fill: var(--stats-muted);
+  font-size: 10.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.stats-chart .recharts-cartesian-axis-tick text { fill: var(--stats-muted); }
+.stats-chart .recharts-cartesian-grid line { shape-rendering: crispEdges; }
+
+.stats-seg-human path { fill: var(--stats-human); }
+.stats-seg-ai path { fill: var(--stats-ai); }
+.stats-seg-other path { fill: var(--stats-other); }
+
+.stats-direct-label {
+  fill: var(--text);
+  font-size: 10.5px;
+  font-weight: 600;
+}
+
+/* -------------------------------------------------------------------- legend */
+
+/* Always present for two or more series: identity never rests on colour alone. */
+.stats-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .2rem 1rem;
+  margin: .35rem 0 .5rem;
+  color: var(--stats-muted);
+  font-size: .8rem;
+}
+
+.stats-legend span { display: inline-flex; align-items: center; gap: .38rem; }
+
+.stats-key {
+  display: inline-block;
+  flex: none;
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+}
+
+.stats-key-human { background: var(--stats-human); }
+.stats-key-ai { background: var(--stats-ai); }
+.stats-key-other { background: var(--stats-other); }
+
+/* ------------------------------------------------------------------- heatmap */
+
+.stats-heat-wrap { position: relative; }
+.stats-heat-scroll { overflow-x: auto; padding-bottom: .35rem; }
+.stats-heat { display: block; }
+.stats-heat text { fill: var(--stats-muted); font-size: 9.5px; }
+
+.stats-heat-cell { rx: 2; cursor: pointer; }
+.stats-heat-cell[data-level='0'] { fill: var(--stats-heat-0); }
+.stats-heat-cell[data-level='1'] { fill: var(--stats-heat-1); }
+.stats-heat-cell[data-level='2'] { fill: var(--stats-heat-2); }
+.stats-heat-cell[data-level='3'] { fill: var(--stats-heat-3); }
+.stats-heat-cell[data-level='4'] { fill: var(--stats-heat-4); }
+
+.stats-heat-cell:hover,
+.stats-heat-cell:focus-visible {
+  stroke: var(--text);
+  stroke-width: 1.5;
+  outline: none;
+}
+
+.stats-heat-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .35rem;
+  margin: .5rem 0 0;
+  color: var(--stats-muted);
+  font-size: .74rem;
+}
+
+.stats-heat-legend i {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+}
+
+.stats-heat-legend i[data-level='0'] { background: var(--stats-heat-0); }
+.stats-heat-legend i[data-level='1'] { background: var(--stats-heat-1); }
+.stats-heat-legend i[data-level='2'] { background: var(--stats-heat-2); }
+.stats-heat-legend i[data-level='3'] { background: var(--stats-heat-3); }
+.stats-heat-legend i[data-level='4'] { background: var(--stats-heat-4); }
+
+/* Pushed to the far edge so the ramp key and the fact sit at opposite ends of the
+   row, rather than the fact trailing the swatches like a sixth one. */
+.stats-heat-best { margin-left: auto; }
+
+@media (max-width: 32rem) {
+  .stats-heat-best { margin-left: 0; }
+}
+
+/* ----------------------------------------------------------------- bar lists */
+
+.stats-bars {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  margin: .35rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stats-bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: .1rem .6rem;
+  align-items: baseline;
+}
+
+.stats-bar-name {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  min-width: 0;
+  font-size: .86rem;
+}
+
+.stats-bar-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Glyphs wear text ink, never brand colour -- see language-icons.ts. Slightly
+   recessed so the name still leads. */
+.stats-glyph {
+  display: inline-flex;
+  flex: none;
+  width: 14px;
+  height: 14px;
+  color: color-mix(in srgb, var(--text) 55%, transparent);
+}
+
+.stats-glyph svg { width: 100%; height: 100%; }
+
+.stats-bar-lock {
+  flex: none;
+  width: 11px;
+  height: 11px;
+  color: var(--stats-muted);
+}
+
+.stats-bar-value {
+  color: var(--stats-muted);
+  font-size: .78rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.stats-bar-track {
+  grid-column: 1 / -1;
+  height: 7px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+}
+
+.stats-bar-fill {
+  display: block;
+  height: 100%;
+  background: var(--stats-human);
+  border-radius: 0 3px 3px 0;
+}
+
+/* The fold row is not a name, so it is drawn in the recessive neutral to say so. */
+.stats-bar[data-fold] .stats-bar-fill { background: var(--stats-other); }
+.stats-bar[data-fold] .stats-bar-name { color: var(--stats-muted); }
+
+
+/* ------------------------------------------------------------------ tooltips */
+
+.stats-tip {
+  min-width: 8.5rem;
+  max-width: 16rem;
+  padding: .5rem .6rem;
+  border: 1px solid color-mix(in srgb, var(--text) 42%, transparent);
+  background: var(--background);
+  color: var(--text);
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--sa-black) 18%, transparent);
+  font-size: .8rem;
+  pointer-events: none;
+}
+
+.stats-tip-floating {
+  position: fixed;
+  z-index: 60;
+  transform: translate(-50%, calc(-100% - 8px));
+}
+
+.stats-tip-head {
+  margin-bottom: .3rem;
+  color: var(--stats-muted);
+  font-size: .74rem;
+}
+
+.stats-tip-row { display: flex; align-items: baseline; gap: .45rem; }
+
+/* Values lead, labels follow: the reader already has the series and wants the number. */
+.stats-tip-val { font-weight: 600; font-variant-numeric: tabular-nums; }
+.stats-tip-name { color: var(--stats-muted); font-size: .76rem; }
+.stats-tip .stats-key { align-self: center; width: 10px; height: 2px; border-radius: 1px; }
+
+.stats-tip-total {
+  margin-top: .35rem;
+  padding-top: .3rem;
+  border-top: 1px solid var(--stats-rule);
+  color: var(--stats-muted);
+  font-size: .74rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* -------------------------------------------------------------------- footer */
+
+.stats-foot {
+  margin: 2.2rem 0 0;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--stats-rule);
+  color: var(--stats-muted);
+  font-size: .8rem;
+}
+
+.stats-foot a { text-decoration: underline; text-underline-offset: .2em; }
+.stats-stale { color: var(--sa-red); font-weight: 600; }
+
+/* ------------------------------------------------------------------ skeleton */
+
+.stats-skeleton {
+  border-radius: 0;
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+  animation: stats-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes stats-pulse {
+  50% { opacity: .55; }
+}
+
+.stats-skeleton-filters { height: 1.85rem; margin-bottom: 1.5rem; }
+.stats-skeleton-tile { height: 8.5rem; }
+.stats-skeleton-chart { height: clamp(280px, 36vw, 380px); margin-bottom: 1.9rem; }
+.stats-skeleton-heat { height: 10rem; margin-bottom: 1.9rem; }
+.stats-skeleton-panel { height: 15rem; }
+
+/* --------------------------------------------------------------------- a11y */
+
+/* Phones get the shallower extrusion the site uses for `.comic-cell`. */
+@media (max-width: 767px) {
+  .stats-card { --sa-panel-depth-rest: 6px; }
+  .stats-filters { gap: .35rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stats-skeleton { animation: none; }
+}
+
+@media (forced-colors: active) {
+  .stats-seg-human path,
+  .stats-seg-ai path,
+  .stats-seg-other path,
+  .stats-bar-fill { forced-color-adjust: none; }
+  .stats-heat-cell { stroke: CanvasText; stroke-width: .5; }
+}
+
+@media print {
+  .stats-filters,
+  .stats-tip { display: none !important; }
+}
