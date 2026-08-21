@@ -68,7 +68,7 @@ export function StatTiles({ stats }: { stats: Stats }) {
       <Tile
         label="AI-assisted"
         value={`${stats.aiShare.toFixed(0)}%`}
-        sub="of coding time in this range"
+        sub="of tracked time in this range"
         // The number is real but it measures something narrower than it sounds like,
         // and a reader who sees a month at 100% will otherwise draw the wrong
         // conclusion. Kept to a hint so it does not become a wall of text.

@@ -43,6 +43,8 @@
   /* Series identity -- brand tokens, unchanged in both themes. */
   --stats-human: var(--sa-blue);
   --stats-ai: var(--sa-green);
+  /* Not a series: the recessive neutral a breakdown's "other (n)" fold row draws
+     in, because a tail of mixed names has no identity to keep. */
   --stats-other: color-mix(in srgb, var(--text) 24%, transparent);
 
   /* Sequential ramp: one hue (122, the brand green's), monotone lightness. A ramp
@@ -455,7 +457,6 @@
 
 .stats-seg-human path { fill: var(--stats-human); }
 .stats-seg-ai path { fill: var(--stats-ai); }
-.stats-seg-other path { fill: var(--stats-other); }
 
 .stats-direct-label {
   fill: var(--text);
@@ -487,7 +488,6 @@
 
 .stats-key-human { background: var(--stats-human); }
 .stats-key-ai { background: var(--stats-ai); }
-.stats-key-other { background: var(--stats-other); }
 
 /* ------------------------------------------------------------------- heatmap */
 
@@ -723,7 +723,6 @@
 @media (forced-colors: active) {
   .stats-seg-human path,
   .stats-seg-ai path,
-  .stats-seg-other path,
   .stats-bar-fill { forced-color-adjust: none; }
   .stats-heat-cell { stroke: CanvasText; stroke-width: .5; }
 }

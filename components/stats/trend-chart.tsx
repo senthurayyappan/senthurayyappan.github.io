@@ -8,8 +8,10 @@ import { duration } from '@/lib/stats/format'
 import type { Bar as TrendBar, Bucket } from '@/lib/stats/types'
 
 /**
- * The headline chart: coding time per day or per month, split into hand-written
- * coding, AI-assisted coding, and everything else.
+ * The headline chart: coding time per day or per month, split into human time and
+ * AI-agent time. Two series only -- the non-coding categories (docs, tests,
+ * debugging, unknown) are the human working too, so they count as human rather
+ * than as a third series belonging to nobody.
  *
  * Recharts owns the plumbing -- scales, responsive sizing, axis ticks, tooltip
  * placement. It does not own the mark, because the house spec for a stacked bar is
@@ -20,7 +22,7 @@ import type { Bar as TrendBar, Bucket } from '@/lib/stats/types'
  */
 
 /** Bottom to top, matching the order the <Bar> elements are declared in. */
-const STACK_ORDER = ['human', 'ai', 'other'] as const
+const STACK_ORDER = ['human', 'ai'] as const
 type SeriesKey = (typeof STACK_ORDER)[number]
 
 const BAR_MAX_WIDTH = 24
@@ -36,7 +38,6 @@ const MAX_AXIS_LABELS = 14
 const CONFIG = {
   human: { label: 'human', color: 'var(--stats-human)' },
   ai: { label: 'ai', color: 'var(--stats-ai)' },
-  other: { label: 'other', color: 'var(--stats-other)' },
 } satisfies ChartConfig
 
 interface Datum {
@@ -44,10 +45,8 @@ interface Datum {
   label: string
   human: number
   ai: number
-  other: number
   humanSeconds: number
   aiSeconds: number
-  otherSeconds: number
   totalSeconds: number
   aiShare: number
   /** >0 when this column is a marker for collapsed months, not a bucket. */
@@ -130,7 +129,6 @@ function TrendTooltip({
   const parts: [SeriesKey, number][] = [
     ['human', row.humanSeconds],
     ['ai', row.aiSeconds],
-    ['other', row.otherSeconds],
   ]
 
   return (
@@ -172,10 +170,8 @@ export function TrendChart({ bars, bucket }: { bars: TrendBar[]; bucket: Bucket 
         // ride along for the tooltip, which should not show a rounded value.
         human: b.human / 3600,
         ai: b.ai / 3600,
-        other: b.other / 3600,
         humanSeconds: b.human,
         aiSeconds: b.ai,
-        otherSeconds: b.other,
         totalSeconds: b.total,
         aiShare: b.aiShare,
         gapMonths: b.gapMonths,

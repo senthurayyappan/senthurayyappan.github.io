@@ -14,7 +14,7 @@
  * crosses the wire at all.
  */
 
-export type Series = 'human' | 'ai' | 'other'
+export type Series = 'human' | 'ai'
 
 export type DimKey = 'category' | 'language' | 'project' | 'editor' | 'os'
 
@@ -27,7 +27,7 @@ export interface NameEntry {
   private?: boolean
   /** editor only: true when the "editor" is actually an AI agent reporting itself. */
   ai?: boolean
-  /** category only: which of the three series this category rolls up into. */
+  /** category only: which of the two series this category rolls up into. */
   series?: Series
 }
 
@@ -67,7 +67,6 @@ export interface Bar {
   label: string
   human: number
   ai: number
-  other: number
   total: number
   aiShare: number
   /**

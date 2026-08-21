@@ -122,7 +122,11 @@ export function pickableBounds(bundle: Bundle): { min: string; max: string } {
 // ----------------------------------------------------------------------- internals
 
 function seriesOf(bundle: Bundle, categoryIndex: number): Series {
-  return bundle.dims.category[categoryIndex]?.series ?? 'other'
+  // Anything the server did not mark as AI is the human working -- docs, tests,
+  // debugging, the unknown bucket. Deciding *ai-ness* stays the server's job; this
+  // only refuses to invent a third series, which also keeps a bundle from an older
+  // server (one that still said 'other') rendering correctly.
+  return bundle.dims.category[categoryIndex]?.series === 'ai' ? 'ai' : 'human'
 }
 
 /** Quartile thresholds over the non-zero days, so the ramp adapts to the workload. */
@@ -196,7 +200,6 @@ function collapseMonths(bars: Bar[]): Bar[] {
         label: gapLabel(run.length),
         human: 0,
         ai: 0,
-        other: 0,
         total: 0,
         aiShare: 0,
         gapMonths: run.length,
@@ -375,8 +378,8 @@ export function aggregate(bundle: Bundle, slice: Slice): Stats {
   //
   // Day buckets emit an entry for every day in the range including empty ones, so a
   // quiet week reads as a gap in the axis rather than silently closing up.
-  const split = new Map<string, { human: number; ai: number; other: number }>()
-  const emptyBar = () => ({ human: 0, ai: 0, other: 0 })
+  const split = new Map<string, { human: number; ai: number }>()
+  const emptyBar = () => ({ human: 0, ai: 0 })
 
   if (slice.bucket === 'day') {
     for (let day = slice.start; day <= slice.end; day = addDays(day, 1)) {
@@ -404,14 +407,13 @@ export function aggregate(bundle: Bundle, slice: Slice): Stats {
   const built: Bar[] = Array.from(split.entries())
     .sort((a, b) => a[0].localeCompare(b[0]))
     .map(([key, v]) => {
-      const total = v.human + v.ai + v.other
-      const coded = v.human + v.ai
+      const total = v.human + v.ai
       return {
         key,
         label: slice.bucket === 'month' ? monthLabel(key) : dayLabel(key),
         ...v,
         total,
-        aiShare: coded ? percent(v.ai, coded) : 0,
+        aiShare: total ? percent(v.ai, total) : 0,
         gapMonths: 0,
       }
     })
@@ -447,7 +449,7 @@ export function aggregate(bundle: Bundle, slice: Slice): Stats {
 
   const { current, longest } = streaks(active, slice.end)
   const aiTotal = trend.reduce((sum, b) => sum + b.ai, 0)
-  const codedTotal = trend.reduce((sum, b) => sum + b.human + b.ai, 0)
+  const trendTotal = trend.reduce((sum, b) => sum + b.total, 0)
 
   return {
     slice,
@@ -458,7 +460,7 @@ export function aggregate(bundle: Bundle, slice: Slice): Stats {
     bestDay,
     currentStreak: current,
     longestStreak: longest,
-    aiShare: percent(aiTotal, codedTotal),
+    aiShare: percent(aiTotal, trendTotal),
     trend,
     heatmap: buildHeatmap(byDay, slice.start, slice.end),
     breakdowns,
