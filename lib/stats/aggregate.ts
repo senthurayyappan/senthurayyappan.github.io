@@ -17,11 +17,13 @@ import { addDays, clamp, daysBetween, todayISO, weekday } from './dates'
 import { dayLabel, monthLabel, monthOf, percent } from './format'
 import type {
   Bar,
+  Basis,
   Breakdown,
   BreakdownKey,
   Bucket,
   Bundle,
   DimKey,
+  DimPair,
   HeatCell,
   HeatColumn,
   NameEntry,
@@ -129,6 +131,70 @@ function seriesOf(bundle: Bundle, categoryIndex: number): Series {
   return bundle.dims.category[categoryIndex]?.series === 'ai' ? 'ai' : 'human'
 }
 
+/**
+ * Python's `round`, which is half-to-even where JavaScript's is half-up.
+ *
+ * Worth the five lines: this rounds the one number the server also rounds, and
+ * /api/stats.json is published as this page's machine-readable twin. A one-second
+ * disagreement on an exact .5 boundary is still a disagreement.
+ */
+function roundHalfEven(value: number): number {
+  const floor = Math.floor(value)
+  const diff = value - floor
+  if (diff > 0.5) return floor + 1
+  if (diff < 0.5) return floor
+  return floor % 2 === 0 ? floor : floor + 1
+}
+
+interface DaySplit {
+  human: number
+  ai: number
+  basis: Basis
+}
+
+/**
+ * One day's split, measured where there is evidence and inferred where there is not.
+ * A port of `views._split_day`; keep the two in step.
+ *
+ * With producer evidence the day's *ratio* is applied to the day total rather than
+ * the producer seconds being used directly -- see the note on `Bundle.producers`.
+ * Without it, `category` is all there is, and the bucket says so.
+ */
+function splitDay(
+  bundle: Bundle,
+  day: string,
+  total: number,
+  pairs: DimPair[] | undefined,
+): DaySplit {
+  if (total <= 0) return { human: 0, ai: 0, basis: '' }
+
+  const evidence = bundle.producers?.[day]
+  if (evidence) {
+    const [agent, editor] = evidence
+    const measured = agent + editor
+    if (measured > 0) {
+      const ai = roundHalfEven(total * (agent / measured))
+      return { human: total - ai, ai, basis: 'producer' }
+    }
+  }
+
+  let human = 0
+  let ai = 0
+  for (const [index, seconds] of pairs ?? []) {
+    if (seriesOf(bundle, index) === 'ai') ai += seconds
+    else human += seconds
+  }
+  return { human, ai, basis: 'panel-focus' }
+}
+
+/** The basis of a bucket built from several days. */
+function combineBasis(parts: Basis[]): Basis {
+  const seen = new Set(parts.filter((b) => b !== ''))
+  if (seen.size === 0) return ''
+  if (seen.size === 1) return seen.values().next().value as Basis
+  return 'mixed'
+}
+
 /** Quartile thresholds over the non-zero days, so the ramp adapts to the workload. */
 function heatThresholds(values: number[]): [number, number, number] {
   const nonzero = values.filter((v) => v > 0).sort((a, b) => a - b)
@@ -202,6 +268,7 @@ function collapseMonths(bars: Bar[]): Bar[] {
         ai: 0,
         total: 0,
         aiShare: 0,
+        basis: '',
         gapMonths: run.length,
       })
     } else {
@@ -378,8 +445,16 @@ export function aggregate(bundle: Bundle, slice: Slice): Stats {
   //
   // Day buckets emit an entry for every day in the range including empty ones, so a
   // quiet week reads as a gap in the axis rather than silently closing up.
-  const split = new Map<string, { human: number; ai: number }>()
-  const emptyBar = () => ({ human: 0, ai: 0 })
+  // Split each day before bucketing. The basis is a per-day property, so a month
+  // straddling the day the evidence begins has to be able to report that it holds
+  // both kinds -- summing category rows straight into a month would lose that.
+  const daySplits = new Map<string, DaySplit>()
+  for (const [day, total, dims] of rows) {
+    daySplits.set(day, splitDay(bundle, day, total, dims.category))
+  }
+
+  const split = new Map<string, { human: number; ai: number; bases: Basis[] }>()
+  const emptyBar = () => ({ human: 0, ai: 0, bases: [] as Basis[] })
 
   if (slice.bucket === 'day') {
     for (let day = slice.start; day <= slice.end; day = addDays(day, 1)) {
@@ -392,16 +467,16 @@ export function aggregate(bundle: Bundle, slice: Slice): Stats {
     // enough run of the empties into one labelled marker.
     for (const month of monthsBetween(slice.start, slice.end)) split.set(month, emptyBar())
   }
-  for (const [day, , dims] of rows) {
+  for (const [day, d] of Array.from(daySplits.entries())) {
     const bucketKey = slice.bucket === 'month' ? monthOf(day) : day
     let entry = split.get(bucketKey)
     if (!entry) {
       entry = emptyBar()
       split.set(bucketKey, entry)
     }
-    for (const [index, seconds] of dims.category ?? []) {
-      entry[seriesOf(bundle, index)] += seconds
-    }
+    entry.human += d.human
+    entry.ai += d.ai
+    entry.bases.push(d.basis)
   }
 
   const built: Bar[] = Array.from(split.entries())
@@ -411,9 +486,11 @@ export function aggregate(bundle: Bundle, slice: Slice): Stats {
       return {
         key,
         label: slice.bucket === 'month' ? monthLabel(key) : dayLabel(key),
-        ...v,
+        human: v.human,
+        ai: v.ai,
         total,
         aiShare: total ? percent(v.ai, total) : 0,
+        basis: combineBasis(v.bases),
         gapMonths: 0,
       }
     })
@@ -448,8 +525,20 @@ export function aggregate(bundle: Bundle, slice: Slice): Stats {
   ) as Record<BreakdownKey, Breakdown>
 
   const { current, longest } = streaks(active, slice.end)
-  const aiTotal = trend.reduce((sum, b) => sum + b.ai, 0)
-  const trendTotal = trend.reduce((sum, b) => sum + b.total, 0)
+
+  // The headline comes from measured days alone wherever the range has any. Averaging
+  // a measured 86% together with an inferred 98% yields a figure that describes
+  // neither half of the history, and one that drifts as the measured window grows --
+  // which reads as a change in behaviour rather than a change of ruler.
+  const dayEntries = Array.from(daySplits.entries())
+  const measured = dayEntries.filter(([, d]) => d.basis === 'producer')
+  const scored = measured.length ? measured : dayEntries.filter(([, d]) => d.basis !== '')
+  const aiTotal = scored.reduce((sum, [, d]) => sum + d.ai, 0)
+  const codedTotal = scored.reduce((sum, [, d]) => sum + d.ai + d.human, 0)
+  const aiShareBasis: Basis = measured.length ? 'producer' : scored.length ? 'panel-focus' : ''
+  const aiShareSince = scored.length
+    ? scored.map(([day]) => day).sort((a, b) => a.localeCompare(b))[0]
+    : null
 
   return {
     slice,
@@ -460,7 +549,9 @@ export function aggregate(bundle: Bundle, slice: Slice): Stats {
     bestDay,
     currentStreak: current,
     longestStreak: longest,
-    aiShare: percent(aiTotal, trendTotal),
+    aiShare: percent(aiTotal, codedTotal),
+    aiShareBasis,
+    aiShareSince,
     trend,
     heatmap: buildHeatmap(byDay, slice.start, slice.end),
     breakdowns,

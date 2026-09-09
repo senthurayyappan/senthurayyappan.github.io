@@ -4,7 +4,7 @@ import { InfoIcon } from 'lucide-react'
 
 import { StatsPanel } from './panel'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { duration, hours, plural } from '@/lib/stats/format'
+import { dayLabel, duration, hours, plural } from '@/lib/stats/format'
 import type { Stats } from '@/lib/stats/types'
 
 /**
@@ -68,11 +68,21 @@ export function StatTiles({ stats }: { stats: Stats }) {
       <Tile
         label="AI-assisted"
         value={`${stats.aiShare.toFixed(0)}%`}
-        sub="of tracked time in this range"
-        // The number is real but it measures something narrower than it sounds like,
-        // and a reader who sees a month at 100% will otherwise draw the wrong
-        // conclusion. Kept to a hint so it does not become a wall of text.
-        hint="Editors report this from chat-panel focus, cleared after a typing debounce. A high share means the work ran through an assistant."
+        // Measured days only, wherever the range has any, so the tile has to say which
+        // days it is speaking for rather than implying the whole range.
+        sub={
+          stats.aiShareBasis === 'producer' && stats.aiShareSince
+            ? `of tracked time since ${dayLabel(stats.aiShareSince)}`
+            : 'of tracked time in this range'
+        }
+        // Which ruler produced the number. `panel-focus` is the weaker one and
+        // overstates AI, so it says so outright rather than letting the reader assume
+        // both halves of the history were measured the same way.
+        hint={
+          stats.aiShareBasis === 'producer'
+            ? 'Measured from which process wrote each heartbeat: agent sessions carry the model that ran them, an editor does not. Typing counts as yours, including completions you accept.'
+            : 'Inferred from the editor\u2019s category field, which reports AI whenever an AI panel held focus \u2014 so it overstates it. This range predates the heartbeat evidence.'
+        }
       />
 
       <Tile

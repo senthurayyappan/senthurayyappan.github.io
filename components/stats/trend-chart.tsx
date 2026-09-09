@@ -5,13 +5,19 @@ import { Bar, BarChart, CartesianGrid, ReferenceLine, XAxis, YAxis } from 'recha
 
 import { ChartContainer, ChartTooltip, type ChartConfig } from '@/components/ui/chart'
 import { duration } from '@/lib/stats/format'
-import type { Bar as TrendBar, Bucket } from '@/lib/stats/types'
+import type { Bar as TrendBar, Basis, Bucket } from '@/lib/stats/types'
 
 /**
  * The headline chart: coding time per day or per month, split into human time and
  * AI-agent time. Two series only -- the non-coding categories (docs, tests,
  * debugging, unknown) are the human working too, so they count as human rather
  * than as a third series belonging to nobody.
+ *
+ * A column's split is measured from which process produced its heartbeats wherever
+ * that evidence exists, and inferred from the editor's `category` field where it does
+ * not. The second is much weaker and overstates AI, so the tooltip names it: drawing
+ * both identically without a word would claim one continuous measurement across a
+ * history that has two.
  *
  * Recharts owns the plumbing -- scales, responsive sizing, axis ticks, tooltip
  * placement. It does not own the mark, because the house spec for a stacked bar is
@@ -49,6 +55,8 @@ interface Datum {
   aiSeconds: number
   totalSeconds: number
   aiShare: number
+  /** How this column's split was measured; anything but `producer` gets a caveat. */
+  basis: Basis
   /** >0 when this column is a marker for collapsed months, not a bucket. */
   gapMonths: number
 }
@@ -154,6 +162,13 @@ function TrendTooltip({
           <div className="stats-tip-total">
             {duration(row.totalSeconds)} total · {row.aiShare.toFixed(0)}% ai
           </div>
+          {row.basis !== 'producer' && (
+            <div className="stats-tip-name">
+              {row.basis === 'mixed'
+                ? 'part of this month predates the measurement'
+                : 'estimated from panel focus; overstates ai'}
+            </div>
+          )}
         </>
       )}
     </div>
@@ -174,6 +189,7 @@ export function TrendChart({ bars, bucket }: { bars: TrendBar[]; bucket: Bucket 
         aiSeconds: b.ai,
         totalSeconds: b.total,
         aiShare: b.aiShare,
+        basis: b.basis,
         gapMonths: b.gapMonths,
       })),
     [bars],

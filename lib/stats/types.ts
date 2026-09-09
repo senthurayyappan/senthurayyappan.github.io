@@ -16,6 +16,20 @@
 
 export type Series = 'human' | 'ai'
 
+/**
+ * How a bucket's human/AI split was arrived at. Published with every bucket because
+ * the two are not the same measurement, and drawing them identically would claim a
+ * precision the older half of the history does not have.
+ *
+ * - `producer`   measured: which process actually wrote the heartbeat.
+ * - `panel-focus` inferred from WakaTime's `category`, which reports AI whenever an
+ *   AI panel held focus and therefore overstates it -- often wildly. The fallback for
+ *   days before the server held its own heartbeats.
+ * - `mixed`      a month straddling the day the evidence starts.
+ * - `''`         nothing recorded, or a collapsed-gap marker.
+ */
+export type Basis = 'producer' | 'panel-focus' | 'mixed' | ''
+
 export type DimKey = 'category' | 'language' | 'project' | 'editor' | 'os'
 
 /** The dimensions that get their own breakdown panel. `category` feeds the trend. */
@@ -45,7 +59,22 @@ export interface Bundle {
   stale: boolean
   dims: Record<DimKey, NameEntry[]>
   days: DayRow[]
+  /**
+   * `{day: [agentSeconds, editorSeconds]}` -- the evidence for how a day splits.
+   *
+   * Apply the day's *ratio* to its `totalSeconds` from `days`; never sum these as
+   * durations. They are a ratio estimator built on a single global timeline and run
+   * well below wakapi's own per-dimension durations, which is why the server applies
+   * the ratio to the summaries total instead of publishing these as time.
+   *
+   * A day absent here has no evidence and must fall back to `category`, marked
+   * `panel-focus`. Optional so a bundle from a server predating schema 2 still
+   * renders -- every day falls back, exactly as it did before.
+   */
+  producers?: Record<string, [number, number]>
   note: string
+  /** Plain-language statement of the above, for the page to show the reader. */
+  classification?: string
 }
 
 // --------------------------------------------------------------------- view model
@@ -69,6 +98,8 @@ export interface Bar {
   ai: number
   total: number
   aiShare: number
+  /** How this bucket's split was measured. Anything but `producer` needs a caveat. */
+  basis: Basis
   /**
    * 0 for a real bucket. Above zero this is not a bucket at all but a marker
    * standing in for that many consecutive empty months, so a history with years
@@ -125,6 +156,13 @@ export interface Stats {
   currentStreak: number
   longestStreak: number
   aiShare: number
+  /**
+   * Which ruler produced `aiShare`, and the first day it covers. The headline is
+   * taken from measured days alone wherever the range has any, so it never averages
+   * a measured 86% with an inferred 98% into a figure describing neither.
+   */
+  aiShareBasis: Basis
+  aiShareSince: string | null
   trend: Bar[]
   /** Week columns x weekday rows; row 0 is Sunday, null is calendar padding. */
   heatmap: HeatColumn[]

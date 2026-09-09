@@ -10,7 +10,8 @@
     "test:ui": "npm test --workspace @senthur/sa-ui",
     "build": "npm run build:ui && next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "stats:parity": "esbuild scripts/stats-parity.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/stats-parity.mjs --log-level=error && node node_modules/.cache/stats-parity.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^9.0.0",
