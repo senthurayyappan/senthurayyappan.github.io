@@ -526,18 +526,23 @@ export function aggregate(bundle: Bundle, slice: Slice): Stats {
 
   const { current, longest } = streaks(active, slice.end)
 
-  // The headline comes from measured days alone wherever the range has any. Averaging
-  // a measured 86% together with an inferred 98% yields a figure that describes
-  // neither half of the history, and one that drifts as the measured window grows --
-  // which reads as a change in behaviour rather than a change of ruler.
-  const dayEntries = Array.from(daySplits.entries())
-  const measured = dayEntries.filter(([, d]) => d.basis === 'producer')
-  const scored = measured.length ? measured : dayEntries.filter(([, d]) => d.basis !== '')
+  // The headline covers every day in the range that recorded time, each split by the
+  // best ruler available for it, and reports 'mixed' when it spans both. A port of the
+  // same block in views.build; keep the two in step.
+  //
+  // It used to take measured days alone wherever the range held any. That aimed at the
+  // wrong days: the inflated `category` readings sit inside the measured window, while
+  // what it dropped was the imported era -- 0.2% AI through 2026-02, and 72% of every
+  // hour tracked. "All time" then reported the last 27 days of it.
+  const scored = Array.from(daySplits.entries()).filter(([, d]) => d.basis !== '')
   const aiTotal = scored.reduce((sum, [, d]) => sum + d.ai, 0)
   const codedTotal = scored.reduce((sum, [, d]) => sum + d.ai + d.human, 0)
-  const aiShareBasis: Basis = measured.length ? 'producer' : scored.length ? 'panel-focus' : ''
-  const aiShareSince = scored.length
-    ? scored.map(([day]) => day).sort((a, b) => a.localeCompare(b))[0]
+  const aiShareBasis: Basis = combineBasis(scored.map(([, d]) => d.basis))
+  // Where the trustworthy ruler starts, which is what a blended figure has to
+  // disclose -- not where the number starts, which is now the range itself.
+  const measuredDays = scored.filter(([, d]) => d.basis === 'producer').map(([day]) => day)
+  const aiMeasuredSince = measuredDays.length
+    ? measuredDays.sort((a, b) => a.localeCompare(b))[0]
     : null
 
   return {
@@ -551,7 +556,7 @@ export function aggregate(bundle: Bundle, slice: Slice): Stats {
     longestStreak: longest,
     aiShare: percent(aiTotal, codedTotal),
     aiShareBasis,
-    aiShareSince,
+    aiMeasuredSince,
     trend,
     heatmap: buildHeatmap(byDay, slice.start, slice.end),
     breakdowns,

@@ -157,12 +157,13 @@ export interface Stats {
   longestStreak: number
   aiShare: number
   /**
-   * Which ruler produced `aiShare`, and the first day it covers. The headline is
-   * taken from measured days alone wherever the range has any, so it never averages
-   * a measured 86% with an inferred 98% into a figure describing neither.
+   * Which ruler produced `aiShare`. It covers every day in the range that recorded
+   * time, so a range spanning both eras reads 'mixed' and `aiMeasuredSince` marks
+   * where the trustworthy half begins -- null when nothing in range was measured.
+   * Everything before that date is inferred from `category` and overstates AI.
    */
   aiShareBasis: Basis
-  aiShareSince: string | null
+  aiMeasuredSince: string | null
   trend: Bar[]
   /** Week columns x weekday rows; row 0 is Sunday, null is calendar padding. */
   heatmap: HeatColumn[]

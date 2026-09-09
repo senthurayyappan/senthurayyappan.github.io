@@ -4,7 +4,7 @@ import { InfoIcon } from 'lucide-react'
 
 import { StatsPanel } from './panel'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { dayLabel, duration, hours, plural } from '@/lib/stats/format'
+import { duration, hours, longDayLabel, plural } from '@/lib/stats/format'
 import type { Stats } from '@/lib/stats/types'
 
 /**
@@ -49,6 +49,33 @@ function Tile({
   )
 }
 
+/**
+ * What the AI tile's tooltip has to admit, given which ruler (or rulers) produced it.
+ *
+ * The blended case is the one that needs the most words: it is a real average of a
+ * measured share and an inferred one, and the reader cannot tell from the figure which
+ * part of the range contributed which.
+ */
+function aiHint(stats: Stats): string {
+  const measured =
+    'Measured from which process wrote each heartbeat: agent sessions carry the model that ran them, an editor does not. Typing counts as yours, including completions you accept.'
+  const inferred =
+    'Inferred from the editor\u2019s category field, which reports AI whenever an AI panel held focus \u2014 so it overstates it. This range predates the heartbeat evidence.'
+
+  if (stats.aiShareBasis === 'producer') return measured
+  if (stats.aiShareBasis === 'mixed' && stats.aiMeasuredSince) {
+    return (
+      `Two rulers blended. From ${longDayLabel(stats.aiMeasuredSince)} onward, measured from ` +
+      'which process wrote each heartbeat: agent sessions carry the model that ran them, an ' +
+      'editor does not. Before that date no heartbeat carried a plugin string, so those days ' +
+      'fall back to the editor\u2019s category field, which reports AI whenever an AI panel held ' +
+      'focus and so overstates it. Typing counts as yours either way, including completions ' +
+      'you accept.'
+    )
+  }
+  return inferred
+}
+
 export function StatTiles({ stats }: { stats: Stats }) {
   return (
     <div className="stats-grid stats-grid-tiles">
@@ -68,21 +95,13 @@ export function StatTiles({ stats }: { stats: Stats }) {
       <Tile
         label="AI-assisted"
         value={`${stats.aiShare.toFixed(0)}%`}
-        // Measured days only, wherever the range has any, so the tile has to say which
-        // days it is speaking for rather than implying the whole range.
-        sub={
-          stats.aiShareBasis === 'producer' && stats.aiShareSince
-            ? `of tracked time since ${dayLabel(stats.aiShareSince)}`
-            : 'of tracked time in this range'
-        }
+        // The figure covers every day in the range that recorded time, so this no
+        // longer has to name a window narrower than the one the reader picked.
+        sub="of tracked time in this range"
         // Which ruler produced the number. `panel-focus` is the weaker one and
-        // overstates AI, so it says so outright rather than letting the reader assume
-        // both halves of the history were measured the same way.
-        hint={
-          stats.aiShareBasis === 'producer'
-            ? 'Measured from which process wrote each heartbeat: agent sessions carry the model that ran them, an editor does not. Typing counts as yours, including completions you accept.'
-            : 'Inferred from the editor\u2019s category field, which reports AI whenever an AI panel held focus \u2014 so it overstates it. This range predates the heartbeat evidence.'
-        }
+        // overstates AI; `mixed` means part of the range came from it. Both say so
+        // outright rather than letting the reader assume one continuous measurement.
+        hint={aiHint(stats)}
       />
 
       <Tile

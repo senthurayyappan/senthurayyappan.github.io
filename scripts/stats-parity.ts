@@ -60,7 +60,7 @@ async function main() {
     eq('longestStreak', mine.longestStreak, api.totals.longest_streak)
     eq('aiShare', mine.aiShare, api.totals.ai_share_pct)
     eq('aiShareBasis', mine.aiShareBasis, api.totals.ai_share_basis)
-    eq('aiShareSince', mine.aiShareSince, api.totals.ai_share_since)
+    eq('aiMeasuredSince', mine.aiMeasuredSince, api.totals.ai_measured_since)
     eq('trendColumns', mine.trend.length, api.trend.points.length)
 
     mine.trend.forEach((bar, i) => {
