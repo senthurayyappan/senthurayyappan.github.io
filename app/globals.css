@@ -76,38 +76,22 @@
   --dot-opacity: 0.01;
   --dot-color: var(--sa-black);
 
-  /* --- Light Mode Syntax Highlighting Vars --- */
-  --sh-class: #4c97f8;        /* Example: Brighter blue */
-  --sh-identifier: #d1d5db;   /* Example: Light gray */
-  --sh-sign: #8996a3;        /* Example: Same as light */
-  --sh-string: #5eead4;       /* Example: Teal */
-  --sh-keyword: #f47067;      /* Example: Brighter red */
-  --sh-comment: #9ca3af;      /* Example: Gray */
-  --sh-jsxliterals: #a5b4fc;  /* Example: Indigo */
-  --sh-property: #f59e0b;     /* Example: Amber */
-  --sh-entity: #f59e0b;      /* Example: Amber */
+  --sh-class: #4c97f8;
+  --sh-identifier: #d1d5db;
+  --sh-sign: #8996a3;
+  --sh-string: #5eead4;
+  --sh-keyword: #f47067;
+  --sh-comment: #9ca3af;
+  --sh-jsxliterals: #a5b4fc;
+  --sh-property: #f59e0b;
+  --sh-entity: #f59e0b;
   --sh-background: var(--sa-black);
 
   --muted: var(--sa-blue);
 }
 
-/* --- Dark Mode Overrides --- */
 .dark {
   --dot-color: var(--sa-white);
-  /* --- Dark Mode Syntax Highlighting Vars --- */
-  /* Replace these with your desired dark mode colors */
-  --sh-class: #4c97f8;        /* Example: Brighter blue */
-  --sh-identifier: #d1d5db;   /* Example: Light gray */
-  --sh-sign: #8996a3;        /* Example: Same as light */
-  --sh-string: #5eead4;       /* Example: Teal */
-  --sh-keyword: #f47067;      /* Example: Brighter red */
-  --sh-comment: #9ca3af;      /* Example: Gray */
-  --sh-jsxliterals: #a5b4fc;  /* Example: Indigo */
-  --sh-property: #f59e0b;     /* Example: Amber */
-  --sh-entity: #f59e0b;      /* Example: Amber */
-  --sh-background: var(--sa-black);
-
-  --muted: var(--sa-blue);
 }
 
 .site-shell {
@@ -282,6 +266,16 @@
   transition: color 180ms ease, transform 180ms ease;
 }
 
+.site-icon-button {
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
 .sidenav-social a:hover,
 .site-icon-button:hover,
 .site-icon-button[aria-pressed='true'] {
@@ -296,16 +290,6 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-}
-
-.site-icon-button {
-  appearance: none;
-  width: 24px;
-  height: 24px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
 }
 
 .site-icon-button:focus-visible {
@@ -665,36 +649,22 @@ html::before {
     radial-gradient(circle, var(--sa-white) 1.5px, transparent 1.5px); /* Use --sa-white for dots */
 }
 
-/* comic book effect */
 .comic {
-  /* Removed original grid styles */
-  display: grid; /* Or flex, depending on your outer layout */
+  display: grid;
   gap: 22px;
   margin-top: 12px;
   padding: 16px 0 22px 16px;
-  box-sizing: border-box; /* Keep this - it's generally good practice */
-  /* Add margin to provide space for hover effects */
-  /* Ensure content doesn't get clipped on hover */
+  box-sizing: border-box;
   overflow: visible;
-  /* The height will now be determined by the grid content */
 }
 
-
-/* Remove previous grid-specific panel rules */
-/* .panel-1 to .panel-5 definitions removed */
-
-/* --- NEW Comic Panel Styles --- */
 .panel {
-  background-color: var(--background-color); /* Fallback color */
+  background-color: var(--background-color);
   border: 0;
   box-shadow: none;
-  /* display:inline-block; Remove, let grid/flex control display */
-  /* flex:1 1; Remove, let grid/flex control sizing */
-  min-height: 200px; /* Set minimum height, allow stretching */
-  /* margin:1vmin; Remove, use grid gap */
-  overflow:hidden;
-  position:relative;
-  /* font-family: 'Comic Sans MS', cursive; Moved to .comic parent */
+  min-height: 200px;
+  overflow: hidden;
+  position: relative;
 }
 
 .panel .text::after,
@@ -727,11 +697,6 @@ html::before {
   mask-repeat: no-repeat;
 }
 
-/* Ensure panel works in dark mode */
-.dark .panel {
-  box-shadow: none;
-}
-
 .panel .text {
   background-color: var(--sa-white);
   color: var(--sa-black);
@@ -740,7 +705,6 @@ html::before {
   padding:3px 16px 6px;
   position: absolute;
   z-index: 1;
-  /* font-weight: 600; */
   font-size: clamp(0.75rem, 2vw, 1rem);
   font-family: var(--font-display);
   font-weight: 500;
@@ -808,15 +772,13 @@ html::before {
 }
 
 .panel .top-left {
-  left:-6px;
-  /* position:absolute; Already set on .text */
-  top:-2px;
+  left: -6px;
+  top: -2px;
 }
 
 .panel .bottom-right {
-  bottom:-2px;
-  /* position:absolute; Already set on .text */
-  right:-6px;
+  bottom: -2px;
+  right: -6px;
 }
 
 .panel .top-right {
@@ -825,9 +787,8 @@ html::before {
 }
 
 .panel .bottom-left {
-  bottom:-2px;
-  /* position:absolute; Already set on .text */
-  left:-6px;
+  bottom: -2px;
+  left: -6px;
 }
 
 .panel .speech {
@@ -846,9 +807,7 @@ html::before {
 
 .dark .panel .speech {
   background-color: var(--sa-white);
-  /* color: var(--sa-black); */ /* Removed previously for utility class compatibility */
   border-color: var(--sa-black);
-  /* NOTE: font-weight will be inherited from the light mode rule unless overridden here */
 }
 
 .panel .speech:before {
@@ -882,15 +841,6 @@ html::before {
   width:0;
 }
 
-.dark .panel .speech:after {
-  border-left-color: var(--sa-white); /* Invert for dark mode */
-  border-top-color: var(--sa-white); /* Invert for dark mode */
-}
-
-/* Remove unused panel definitions */
-/* .panel-5 to .panel-11 definitions removed */
-
-/* --- NEW Description Styles --- */
 .panel .description {
   position: absolute;
   left: 0;
@@ -905,8 +855,6 @@ html::before {
   text-align: justify;
   z-index: 1;
   box-sizing: border-box;
-  /* font-style: italic; */
-  /* font-weight: 600; */
   line-height: normal;
 }
 
@@ -937,9 +885,6 @@ html::before {
 
 .panel .description-bottom::after { top: 0; }
 
-/* --- End NEW Description Styles --- */
-
-/* --- NEW Hover effect for linked panels --- */
 .panel-link-hover {
   position: relative;
   overflow: hidden;

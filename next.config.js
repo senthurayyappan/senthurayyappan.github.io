@@ -14,14 +14,7 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   
-  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
-    // Add rule for GLSL files
-    config.module.rules.push({
-      test: /\.(glsl|vs|fs|vert|frag)$/,
-      exclude: /node_modules/,
-      use: ['raw-loader']
-    });
-
+  webpack: (config, { dev, isServer }) => {
     // Optimize bundle size.
     //
     // `cacheGroups` here replaces Next's own splitChunks config wholesale, which also

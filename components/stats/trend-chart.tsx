@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { Bar, BarChart, CartesianGrid, ReferenceLine, XAxis, YAxis } from 'recharts'
 
-import { ChartContainer, ChartTooltip, type ChartConfig } from '@/components/ui/chart'
+import { ChartContainer, ChartTooltip } from '@/components/ui/chart'
 import { duration } from '@/lib/stats/format'
 import type { Bar as TrendBar, Basis, Bucket } from '@/lib/stats/types'
 
@@ -42,9 +42,9 @@ const MAX_AXIS_LABELS = 14
 // of this page, and the shorter words let the contrast land without the reader parsing
 // two labels that share a word.
 const CONFIG = {
-  human: { label: 'human', color: 'var(--stats-human)' },
-  ai: { label: 'ai', color: 'var(--stats-ai)' },
-} satisfies ChartConfig
+  human: { label: 'human' },
+  ai: { label: 'ai' },
+}
 
 interface Datum {
   key: string
@@ -208,7 +208,7 @@ export function TrendChart({ bars, bucket }: { bars: TrendBar[]; bucket: Bucket 
   }
 
   return (
-    <ChartContainer config={CONFIG} className="stats-chart">
+    <ChartContainer className="stats-chart">
       {/* The right margin is for the direct label, not the bars. It sits centred over
           the final column, so on a daily range -- where bands are narrow and the last
           bar is close to the edge -- it gets clipped without room reserved for it. */}

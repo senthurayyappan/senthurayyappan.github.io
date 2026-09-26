@@ -2,16 +2,18 @@ import { getBlogPosts } from 'app/blog/utils'
 
 export const baseUrl = 'https://senthurayyappan.com'
 
-export default async function sitemap() {
-  let blogs = getBlogPosts().map((post) => ({
-    url: `${baseUrl}/blog/${post.slug}`,
-    lastModified: post.metadata.publishedAt,
-  }))
+const staticRoutes = ['', '/about', '/projects', '/blog', '/publications', '/stats']
 
-  let routes = ['', '/blog'].map((route) => ({
+export default async function sitemap() {
+  const pages = staticRoutes.map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date().toISOString().split('T')[0],
   }))
 
-  return [...routes, ...blogs]
+  const posts = getBlogPosts().map((post) => ({
+    url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: post.metadata.publishedAt,
+  }))
+
+  return [...pages, ...posts]
 }

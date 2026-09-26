@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import { EyeIcon } from './EyeIcon'
-import { getLocalLiked, getVisitorId, recordPostView, setLocalLiked, type PostEngagementResponse } from './likeStorage'
+import { engagementApiUrl, getLocalLiked, getVisitorId, postEngagementUrl, recordPostView, setLocalLiked, type PostEngagementResponse } from './likeStorage'
 
 export function ArticleLikeButton({ slug }: { slug: string }) {
-  const apiUrl = process.env.NEXT_PUBLIC_LIKES_API_URL?.replace(/\/$/, '')
+  const apiUrl = engagementApiUrl()
   const [likes, setLikes] = useState<number | null>(null)
   const [views, setViews] = useState(0)
   const [liked, setLiked] = useState(false)
@@ -32,7 +32,7 @@ export function ArticleLikeButton({ slug }: { slug: string }) {
   if (!apiUrl) return null
 
   async function toggleLike() {
-    if (isSaving) return
+    if (!apiUrl || isSaving) return
 
     setIsSaving(true)
     const nextLiked = !liked
@@ -42,7 +42,7 @@ export function ArticleLikeButton({ slug }: { slug: string }) {
     setLocalLiked(slug, nextLiked)
 
     try {
-      const response = await fetch(`${apiUrl}/v1/posts/${encodeURIComponent(slug)}/likes`, {
+      const response = await fetch(postEngagementUrl(apiUrl, slug, 'likes'), {
         method: nextLiked ? 'POST' : 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ visitor: getVisitorId() }),

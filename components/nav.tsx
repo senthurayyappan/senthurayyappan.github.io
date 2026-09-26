@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { FontSwitch } from './font-switch'
 import { ThemeSwitch } from './theme-switch'
 import { SketchArrow } from './SketchArrow'
-import { SAButton } from './SAButton'
+import { Button } from '@senthur/sa-ui/react'
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation'
 
@@ -168,7 +168,7 @@ export function Navbar() {
           {/* 112 CSS px wide, cover-cropped to a 48px band -- 4.5x from the shared file. */}
           <Image src="/logo/500.png" alt="SA" fill sizes="112px" unoptimized priority />
         </Link>
-        <SAButton
+        <Button
           ref={menuButtonRef}
           onClick={() => setSidebarOpen(true)}
           aria-label="Open navigation"
@@ -195,7 +195,7 @@ export function Navbar() {
             {/* Contained into a 48px-tall box, so this needs 48 CSS px at most. */}
             <Image src="/logo/500.png" alt="SA" fill style={{ objectFit: 'contain', objectPosition: 'left center' }} />
           </Link>
-          <SAButton ref={drawerCloseButtonRef} onClick={closeSidebar} aria-label="Close navigation" className="comic-menu-button" icon={<MenuIcon open />} />
+          <Button ref={drawerCloseButtonRef} onClick={closeSidebar} aria-label="Close navigation" className="comic-menu-button" icon={<MenuIcon open />} />
         </div>
         <nav aria-label="Mobile sections"><NavList pathname={pathname} onClick={() => setSidebarOpen(false)} /></nav>
         <SocialRow />

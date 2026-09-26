@@ -1,5 +1,3 @@
-'use client'
-
 import Image from 'next/image'
 import RecentUpdates from '@/components/RecentUpdates'
 import Link from 'next/link'
@@ -55,11 +53,6 @@ export default function Page() {
           priority={true}
         >
         </ComicPanel>
-
-        {/* <ComicPanel imageSrc="/images/panel-3.jpg">
-
-        </ComicPanel> */}
-
 
         <ComicPanel imageSrc="/sa-publications.jpg" href="/publications" newTab={false}>
           <p className="speech" style={{ position: 'absolute', top: '5%', right: '5%' }}>

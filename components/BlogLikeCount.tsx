@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { EyeIcon } from './EyeIcon'
-import { getLocalLiked, getVisitorId } from './likeStorage'
+import { engagementApiUrl, getLocalLiked, getVisitorId, postEngagementUrl } from './likeStorage'
 
 type LikeResponse = {
   likes: number
@@ -10,7 +10,7 @@ type LikeResponse = {
 }
 
 export function BlogLikeCount({ slug }: { slug: string }) {
-  const apiUrl = process.env.NEXT_PUBLIC_LIKES_API_URL?.replace(/\/$/, '')
+  const apiUrl = engagementApiUrl()
   const [likes, setLikes] = useState(0)
   const [views, setViews] = useState(0)
 
@@ -26,7 +26,7 @@ export function BlogLikeCount({ slug }: { slug: string }) {
 
     if (apiUrl) {
       const visitor = getVisitorId()
-      fetch(`${apiUrl}/v1/posts/${encodeURIComponent(slug)}/likes?viewer=${encodeURIComponent(visitor)}`)
+      fetch(`${postEngagementUrl(apiUrl, slug, 'likes')}?viewer=${encodeURIComponent(visitor)}`)
         .then((response) => (response.ok ? response.json() : Promise.reject()))
         .then((data: LikeResponse) => {
           setLikes(data.likes)

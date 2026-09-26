@@ -5,7 +5,7 @@ import { CalendarIcon } from 'lucide-react'
 
 import { Calendar, CalendarDayButton } from '@/components/ui/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { SAButton } from '@/components/SAButton'
+import { Button } from '@senthur/sa-ui/react'
 import { CUSTOM_RANGE, RANGES } from '@/lib/stats/aggregate'
 import { longDayLabel, plural } from '@/lib/stats/format'
 import { toEpoch } from '@/lib/stats/dates'
@@ -163,7 +163,7 @@ export function RangeFilter({
         {RANGES.map((preset) => {
           const active = !isCustom && preset.key === slice.key
           return (
-            <SAButton
+            <Button
               key={preset.key}
               cellClassName="stats-preset-cell"
               className={active ? 'is-active' : ''}
@@ -171,7 +171,7 @@ export function RangeFilter({
               onClick={() => onPreset(preset.key)}
             >
               {preset.label}
-            </SAButton>
+            </Button>
           )
         })}
       </div>

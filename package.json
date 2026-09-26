@@ -14,8 +14,6 @@
     "stats:parity": "esbuild scripts/stats-parity.ts --bundle --platform=node --format=esm --outfile=node_modules/.cache/stats-parity.mjs --log-level=error && node node_modules/.cache/stats-parity.mjs"
   },
   "dependencies": {
-    "@react-three/drei": "^9.0.0",
-    "@react-three/fiber": "^8.0.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "20.11.17",
     "@types/react": "18.2.55",
@@ -23,7 +21,6 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.4.0",
-    "framer-motion": "^12.7.4",
     "geist": "1.2.2",
     "gray-matter": "^4.0.3",
     "lucide-react": "^1.31.0",
@@ -39,10 +36,6 @@
     "sugar-high": "^0.6.0",
     "tailwind-merge": "^3.2.0",
     "tailwindcss": "^4.3.3",
-    "three": "^0.152.2",
     "typescript": "5.3.3"
-  },
-  "devDependencies": {
-    "raw-loader": "^4.0.2"
   }
 }

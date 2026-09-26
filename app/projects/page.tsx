@@ -7,7 +7,6 @@ const Projects = [
     description: 'An end-to-end open-source powered robotic leg for prosthetics research',
     href: 'https://opensourceleg.org/',
     imageSrc: '/projects/osl-v2.jpg',
-    imagePosition: 'center center',
     className: 'col-span-2 row-span-2'
   },
   {
@@ -15,7 +14,6 @@ const Projects = [
     description: 'A python library to facilitate interaction with Onshape\'s REST API and to export CAD assemblies to URDF/MJCFs',
     href: 'https://github.com/neurobionics/onshape-robotics-toolkit',
     imageSrc: '/about/rai.jpg',
-    imagePosition: 'center center',
     className: 'col-span-1 row-span-2'
   },
   {
@@ -23,7 +21,6 @@ const Projects = [
     description: 'An open-source generative design framework built with Python, Taichi, and Blender',
     href: 'https://github.com/senthurayyappan/anton',
     imageSrc: '/projects/anton.jpg',
-    imagePosition: 'center center',
     className: 'col-span-1 row-span-1'
   },     
   {
@@ -39,7 +36,6 @@ const Projects = [
     description: 'A robot with 3 wheels that can balance on top of a basketball for the inaugural Robotics Undergraduate Curriculum at Michigan Robotics.',
     href: 'https://github.com/michiganrobotics/rob311',
     imageSrc: '/projects/ballbot-main.jpg',
-    imagePosition: 'center center',
     className: 'col-span-2 row-span-2'
   },   
   {
@@ -47,7 +43,6 @@ const Projects = [
     description: 'A garden variety hyper-redundant underwater snake robot',
     href: 'https://github.com/senthurayyappan/Arboc',
     imageSrc: '/projects/arboc.jpg',
-    imagePosition: 'center center',
     className: 'col-span-1 row-span-1'
   },
   {
@@ -55,7 +50,6 @@ const Projects = [
     description: 'Robot with a dynamic wheelbase and an adaptive thrust based friction optimization mechanism',
     href: 'https://ieeexplore.ieee.org/document/9196571',
     imageSrc: '/projects/ibex.jpg',
-    imagePosition: 'center center',
     className: 'col-span-1 row-span-1'
   },
   {
@@ -63,7 +57,6 @@ const Projects = [
     description: 'A ROS package that provides the necessary interfaces to simulate the Open-source leg (OSL) in Gazebo',
     href: 'https://github.com/senthurayyappan/oslsim',
     imageSrc: '/projects/oslsim.jpg',
-    imagePosition: 'center center',
     className: 'col-span-1 row-span-1'
   },
   {
@@ -71,7 +64,6 @@ const Projects = [
     description: 'Imports G-code files into Blender 2.80+ as a collection of layers which can then be animated or exported',
     href: 'https://github.com/senthurayyappan/import-G-code',
     imageSrc: '/projects/gcode.jpg',
-    imagePosition: 'center center',
     className: 'col-span-1 row-span-1'
   },
 
@@ -84,9 +76,9 @@ export const metadata = {
   export default function Page() {
     return (       
         <div className="comic grid grid-cols-2 md:grid-cols-3 gap-2 grid-rows-[minmax(200px,1fr)_minmax(200px,1fr)_auto_auto]">
-          {Projects.map((project, index) => (
+          {Projects.map((project) => (
             <ComicPanel 
-              key={index}
+              key={project.href}
               title={project.title}
               titlePosition='top-right'
               description={project.description}

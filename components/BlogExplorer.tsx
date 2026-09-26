@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react'
 import type { Metadata } from '@/app/blog/utils'
 import ComicPanel from './ComicPanel'
 import { BlogLikeCount } from './BlogLikeCount'
-import { SAButton } from './SAButton'
+import { Button } from '@senthur/sa-ui/react'
 
 export type BlogIndexPost = {
   slug: string
@@ -43,7 +43,7 @@ export function BlogExplorer({ posts }: { posts: BlogIndexPost[] }) {
         </label>
         <div className="blog-tags" aria-label="Filter by topic">
           {tags.map((tag) => (
-            <SAButton
+            <Button
               key={tag}
               cellClassName="blog-tag-cell"
               type="button"
@@ -52,7 +52,7 @@ export function BlogExplorer({ posts }: { posts: BlogIndexPost[] }) {
               onClick={() => setActiveTag(tag)}
             >
               {tag}
-            </SAButton>
+            </Button>
           ))}
         </div>
       </section>

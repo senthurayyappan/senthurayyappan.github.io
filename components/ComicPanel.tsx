@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import React from 'react';
-import { SAPanel } from './SAPanel';
+import { Panel } from '@senthur/sa-ui/react';
 
 interface ComicPanelProps {
   /** Optional: URL for the background image */
@@ -50,7 +50,7 @@ const ComicPanel: React.FC<ComicPanelProps> = ({
   const descriptionClass = `description description-${descriptionPosition}`;
 
   return (
-    <SAPanel
+    <Panel
       className={`${className} comic-cell relative`}
       surfaceClassName={`panel ${href ? 'panel-link-hover' : ''} h-full w-full`}
       interactive={Boolean(href)}
@@ -90,7 +90,7 @@ const ComicPanel: React.FC<ComicPanelProps> = ({
             ></a>
           </Link>
         )}
-    </SAPanel>
+    </Panel>
   );
 };
 

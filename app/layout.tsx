@@ -8,7 +8,6 @@ import { Navbar } from '@/components/nav'
 import Footer from '@/components/footer'
 import { baseUrl } from './sitemap'
 import { ThemeProvider } from 'next-themes'
-import PerformanceMonitor from '@/components/PerformanceMonitor'
 import { LinkSketches } from '@/components/LinkSketches'
 
 export const metadata: Metadata = {
@@ -51,7 +50,6 @@ export const metadata: Metadata = {
   manifest: '/logo/favicons/site.webmanifest',
 }
 
-const cx = (...classes) => classes.filter(Boolean).join(' ')
 const fontPreferenceScript = "const a=matchMedia('(prefers-reduced-motion: reduce)').matches||matchMedia('(forced-colors: active)').matches;let p=null;try{p=localStorage.getItem('sa-font-preference')}catch{}if(p==='full'||(p!=='selective'&&!a))document.documentElement.classList.add('font-handwritten')"
 
 export default function RootLayout({
@@ -62,12 +60,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cx(
-        GeistSans.variable,
-        GeistMono.variable,
-        'h-full',
-        'sa-root',
-      )}
+      className={`${GeistSans.variable} ${GeistMono.variable} h-full sa-root`}
       suppressHydrationWarning
     >
       <head>
@@ -81,7 +74,6 @@ export default function RootLayout({
             <div className="site-content">{children}</div>
           </main>
           <div className="site-footer"><Footer /></div>
-          <PerformanceMonitor />
         </ThemeProvider>
       </body>
     </html>

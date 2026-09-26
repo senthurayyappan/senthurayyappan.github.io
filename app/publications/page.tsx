@@ -6,28 +6,24 @@ const Publications = [
     description: 'A Compensated Open-Loop Impedance Controller Evaluated on the Second-Generation Open-Source Leg Prosthesis, T Kevin Best, Gray C Thomas, Senthur R Ayyappan, Robert D Gregg, Elliott J Rouse',
     href: 'https://ieeexplore.ieee.org/abstract/document/10807510',
     imageSrc: '/publications/osl.jpg',
-    imagePosition: 'center center'
   },
   {
     title: 'IEEE Sensors Journal, 2020',
     description: 'Quantitative Estimation of Dynamic Modulation in Impedance Controlled Remote Environment Sensing, Srikar A, Vijay Kumar P, Senthur Raj, and Asokan T.',
     href: 'https://ieeexplore.ieee.org/document/9279234',
     imageSrc: '/about/iitm.jpg',
-    imagePosition: 'center center'
   },    
   {
     title: 'IEEE International Conference on Robotics and Automation (ICRA), Paris, 2020',
     description: 'Ibex: A reconfigurable ground vehicle with adaptive terrain navigation capability, Senthur Raj, Manu Aatitya R P, Jack Samuel S, J Veejay Karthik and Ezhilarasi D',
     href: 'https://ieeexplore.ieee.org/document/9196571',
     imageSrc: '/publications/ibex.jpg',
-    imagePosition: 'center center'
   },
   {
     title: 'IFAC Conference on Advances in Control and Optimization of Dynamical Systems (ACODS), Chennai, 2020',
     description: 'Parameter Determination Technique for Impedance Control of Interactive Robots Using Transformation Matrices, Srikar A., Senthur Raj, Vijay Kumar P., Asokan T.',
     href: 'https://www.sciencedirect.com/science/article/pii/S2405896320300525',
     imageSrc: '/publications/iitm.jpg',
-    imagePosition: 'center center'
   },
   {
     title: 'International Conference on Advances in Robotics (AIR), Chennai, 2019',
@@ -46,9 +42,9 @@ export const metadata = {
   export default function Page() {
     return (
       <div className="comic grid grid-cols-1 gap-2 h-full">
-        {Publications.map((publication, index) => (
+        {Publications.map((publication) => (
           <ComicPanel 
-            key={index}
+            key={publication.href}
             className="h-full"
             title={publication.title} 
             titlePosition="top-right"

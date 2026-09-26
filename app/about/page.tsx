@@ -20,8 +20,7 @@ export default function Page() {
         titlePosition="top-right"
         href='https://www.opensourceleg.org/'
         description='An end-to-end open-source platform that makes prosthetics research more accessible.'
-      >
-      </ComicPanel>
+      />
 
       <ComicPanel className="col-span-2 md:col-span-3">
         <div className="about-copy">

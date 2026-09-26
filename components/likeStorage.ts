@@ -1,6 +1,15 @@
 export const visitorKey = 'senthur-blog-like-visitor'
 const localLikePrefix = 'senthur-blog-like-local:'
 
+export function engagementApiUrl() {
+  const url = process.env.NEXT_PUBLIC_LIKES_API_URL
+  return url ? url.replace(/\/$/, '') : undefined
+}
+
+export function postEngagementUrl(apiUrl: string, slug: string, resource: 'likes' | 'views') {
+  return `${apiUrl}/v1/posts/${encodeURIComponent(slug)}/${resource}`
+}
+
 export type PostEngagementResponse = {
   likes: number
   liked: boolean
@@ -26,7 +35,7 @@ export function setLocalLiked(slug: string, liked: boolean) {
 }
 
 export async function recordPostView(apiUrl: string, slug: string): Promise<PostEngagementResponse> {
-  const response = await fetch(`${apiUrl}/v1/posts/${encodeURIComponent(slug)}/views`, {
+  const response = await fetch(postEngagementUrl(apiUrl, slug, 'views'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ visitor: getVisitorId() }),

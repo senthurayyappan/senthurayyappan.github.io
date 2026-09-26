@@ -25,64 +25,66 @@ export type TableOfContentsItem = {
   slug: string
 }
 
+function asString(value: unknown): string | undefined {
+  if (typeof value === 'string') return value
+  if (value instanceof Date && !Number.isNaN(value.getTime())) {
+    return value.toISOString().slice(0, 10)
+  }
+  return undefined
+}
+
+function asTags(value: unknown): string[] | undefined {
+  const raw = Array.isArray(value)
+    ? value.map(String)
+    : typeof value === 'string'
+      ? value.split(',')
+      : []
+  const tags = raw.map((tag) => tag.trim()).filter(Boolean)
+  return tags.length > 0 ? tags : undefined
+}
+
 function parseFrontmatter(fileContent: string) {
-  let frontmatterRegex = /---\s*([\s\S]*?)\s*---/
-  let match = frontmatterRegex.exec(fileContent)
-  let frontMatterBlock = match![1]
-  let content = fileContent.replace(frontmatterRegex, '').trim()
-  let frontMatterLines = frontMatterBlock.trim().split('\n')
-  let metadata: Partial<Metadata> = {}
+  const { data, content } = matter(fileContent)
+  const body = content.trim()
 
-  frontMatterLines.forEach((line) => {
-    let [key, ...valueArr] = line.split(': ')
-    let value = valueArr.join(': ').trim()
-    value = value.replace(/^['"](.*)['"]$/, '$1') // Remove quotes
-    
-    const trimmedKey = key.trim() as keyof Metadata
-    
-    // Handle different types of metadata
-    if (trimmedKey === 'tags') {
-      metadata[trimmedKey] = value.split(',').map(tag => tag.trim())
-    } else if (trimmedKey === 'readingTime') {
-      metadata[trimmedKey] = parseInt(value, 10)
-    } else {
-      metadata[trimmedKey] = value
-    }
-  })
-
-  // Calculate reading time
-  metadata.readingTime = calculateReadingTime(content)
-
-  return { metadata: metadata as Metadata, content }
+  return {
+    metadata: {
+      title: asString(data.title) ?? '',
+      publishedAt: asString(data.publishedAt) ?? '',
+      summary: asString(data.summary) ?? '',
+      className: asString(data.className),
+      image: asString(data.image),
+      imagePosition: asString(data.imagePosition),
+      tags: asTags(data.tags),
+      readingTime: calculateReadingTime(body),
+    },
+    content: body,
+  }
 }
 
-function getMDXFiles(dir) {
-  return fs.readdirSync(dir)
-    .filter((file) => path.extname(file) === '.mdx')
-    .filter((file) => file !== 'template.mdx') // Ignore template file
+function getMDXFiles(dir: string) {
+  return fs
+    .readdirSync(dir)
+    .filter((file) => path.extname(file) === '.mdx' && file !== 'template.mdx')
 }
 
-function readMDXFile(filePath) {
-  let rawContent = fs.readFileSync(filePath, 'utf-8')
-  return parseFrontmatter(rawContent)
+function readMDXFile(filePath: string) {
+  return parseFrontmatter(fs.readFileSync(filePath, 'utf-8'))
 }
 
-function getMDXData(dir) {
-  let mdxFiles = getMDXFiles(dir)
-  return mdxFiles.map((file) => {
-    let { metadata, content } = readMDXFile(path.join(dir, file))
-    let slug = path.basename(file, path.extname(file))
-
+function getMDXData(dir: string): BlogPost[] {
+  return getMDXFiles(dir).map((file) => {
+    const { metadata, content } = readMDXFile(path.join(dir, file))
     return {
       metadata,
-      slug,
+      slug: path.basename(file, path.extname(file)),
       content,
     }
   })
 }
 
 export function getBlogPosts() {
-  return getMDXData(path.join(process.cwd(), 'app', 'blog', 'posts')) as BlogPost[]
+  return getMDXData(path.join(process.cwd(), 'app', 'blog', 'posts'))
 }
 
 export function slugifyHeading(value: string) {

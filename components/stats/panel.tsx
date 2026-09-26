@@ -1,4 +1,4 @@
-import { SAPanel } from '@/components/SAPanel'
+import { Panel } from '@senthur/sa-ui/react'
 import { cn } from '@/lib/utils'
 
 /**
@@ -20,7 +20,7 @@ export function StatsPanel({
   children: React.ReactNode
 }) {
   return (
-    <SAPanel className={cn('stats-card', className)} surfaceClassName={bodyClassName}>
+    <Panel className={cn('stats-card', className)} surfaceClassName={bodyClassName}>
       {(title || note) && (
         <div className="stats-card-head">
           {title && <h2 className="stats-card-title">{title}</h2>}
@@ -28,6 +28,6 @@ export function StatsPanel({
         </div>
       )}
       {children}
-    </SAPanel>
+    </Panel>
   )
 }
