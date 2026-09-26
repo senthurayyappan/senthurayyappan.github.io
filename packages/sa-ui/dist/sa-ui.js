@@ -410,7 +410,7 @@ function enhance(root = document) {
     const interaction = getTrigger(element) === "interaction";
     const duration = getDuration(
       style.getPropertyValue("--sa-mark-duration"),
-      interaction ? mark === "circle" ? 900 : 720 : 650
+      interaction ? mark === "circle" ? 360 : 280 : 240
     );
     const strokeWidth = getNumber(
       style.getPropertyValue("--sa-mark-stroke-width"),
@@ -427,7 +427,7 @@ function enhance(root = document) {
       color: color || void 0,
       padding,
       strokeWidth,
-      iterations: 2,
+      iterations: 1,
       animate: !reducedMotion,
       animationDuration: duration
     });

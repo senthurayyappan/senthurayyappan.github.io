@@ -70,7 +70,7 @@ export function enhance(root: EnhanceRoot = document): () => void {
     const interaction = getTrigger(element) === 'interaction'
     const duration = getDuration(
       style.getPropertyValue('--sa-mark-duration'),
-      interaction ? (mark === 'circle' ? 900 : 720) : 650,
+      interaction ? (mark === 'circle' ? 360 : 280) : 240,
     )
     const strokeWidth = getNumber(
       style.getPropertyValue('--sa-mark-stroke-width'),
@@ -87,7 +87,7 @@ export function enhance(root: EnhanceRoot = document): () => void {
       color: color || undefined,
       padding,
       strokeWidth,
-      iterations: 2,
+      iterations: 1,
       animate: !reducedMotion,
       animationDuration: duration,
     })

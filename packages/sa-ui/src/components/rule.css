@@ -25,6 +25,15 @@
     z-index: 0;
     display: inline;
     --sa-mark-color: var(--sa-accent);
+    --sa-mark-duration: var(--sa-motion-sketch-immediate);
+  }
+
+  .sa-mark[data-sa-trigger='interaction'] {
+    --sa-mark-duration: var(--sa-motion-sketch);
+  }
+
+  .sa-mark[data-sa-mark='circle'][data-sa-trigger='interaction'] {
+    --sa-mark-duration: var(--sa-motion-sketch-circle);
   }
 
   .sa-mark::after {

@@ -154,9 +154,9 @@ test('active tags use native state and a forced-colors structural cue', async ()
   assert.match(forcedColors, /outline:\s*2px solid Highlight/)
 })
 
-test('button masks retain the baseline vertical path', async () => {
+test('button masks use the quieter vertical rule', async () => {
   const css = await readFile(new URL('../src/components/button.css', import.meta.url), 'utf8')
 
-  assert.match(css, /M3\.27 0 C2\.6 18 3\.47 31 2\.87 48 S3\.53 77 2\.93 100/)
+  assert.match(css, /M2\.5 0 C2\.5 22 2\.22 28 2\.22 50 C2\.22 72 2\.74 78 2\.5 100/)
   assert.doesNotMatch(css, /S3\.53 77 3\.53 100 2\.93/)
 })
