@@ -81,14 +81,13 @@ const ComicPanel: React.FC<ComicPanelProps> = ({
         {/* Keep one hit area above every decorative layer so titles, captions,
             and artwork all behave as the same link. */}
         {href && (
-          <Link href={href} legacyBehavior>
-            <a 
-              className="panel-hit-area"
-              data-sketch="off"
-              {...(newTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-              aria-label={title || 'Panel link'}
-            ></a>
-          </Link>
+          <Link
+            href={href}
+            className="panel-hit-area"
+            data-sketch="off"
+            {...(newTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+            aria-label={title || 'Panel link'}
+          />
         )}
     </Panel>
   );

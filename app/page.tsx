@@ -4,15 +4,6 @@ import Link from 'next/link'
 import ComicPanel from '@/components/ComicPanel'
 
 export default function Page() {
-  const affiliations = [
-    { name: 'NIT Trichy', logo: '/nitt.png', url: 'https://www.nitt.edu/' },
-    { name: 'IIT Madras', logo: '/iitm.png', url: 'https://www.iitm.ac.in/' },
-    { name: 'DRDO', logo: '/drdo.png', url: 'https://www.drdo.gov.in/' },
-    { name: 'Michigan Robotics', logo: '/mrobotics.png', url: 'https://robotics.umich.edu/' },
-    { name: 'NSF', logo: '/nsf.png', url: 'https://www.nsf.gov/' },
-    { name: 'RAI', logo: '/rai.jpg', url: 'https://rai-inst.com/' },
-  ];
-
   return (
     <>
       <div className="comic grid grid-cols-2 md:grid-cols-3 gap-2 grid-rows-[minmax(200px,1fr)_minmax(200px,1fr)_auto_auto]">
